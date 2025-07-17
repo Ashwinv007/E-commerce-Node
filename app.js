@@ -21,10 +21,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
-db.connect((err)=>{
-  if (err)console.log('Error connecting to database' + err)
-  else console.log('Connected to database')
 
+
+db.connect((err)=>{
+  if(err)console.log('Error connecting to Database '+err)
+    else console.log('Connected to Database')
 })
 
 app.use('/', userRouter);
