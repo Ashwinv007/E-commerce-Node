@@ -1,16 +1,25 @@
 {
-  "name": "e-commerce-project",
+  "name": "e-commerce-website",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",
+    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-fileupload": "^1.4.1",
+    "express-handlebars": "^7.1.2",
+    "express-session": "^1.17.3",
+    "fileupload": "^1.0.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "mongodb": "4.2",
+    "mongoose": "^7.5.3",
+    "morgan": "~1.9.1",
+    "razorpay": "^2.9.2"
   }
 }
