@@ -1,4 +1,7 @@
 <form action="/login" method="POST">
+{{#if loginErr}}
+<p class="error" style="padding: 2em; color:red;">{{loginErr}}</p>
+{{/if}}
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
     <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">

@@ -18,10 +18,14 @@
 
     <tr>
       <th scope="row">{{@index}}</th>
-      <td>{{this.Name}}</td>
+      <td>{{this.productName}}</td>
       <td>{{this.Category}}</td>
       <td>{{this.productDescription}}</td>
       <td><img style="width:50px;height:50px" src="/product-images/{{this._id}}.jpg" alt=""></td>
+      <td>
+        <a href="/admin/edit-product/{{this._id}}" class="btn btn-primary">Edit</a>
+        <a href="/admin/delete-product/{{this._id}}" class="btn btn-danger" onclick="return confirm('Are you  sure to delete {{this.productName}}?')">Delete</a>
+      </td>
     </tr>
     {{/each}}
   
