@@ -77,6 +77,44 @@ router.get('/add-to-cart/:id',(req,res)=>{
     res.json({status:true})
   })
 })
+router.post('/change-product-quantity',(req,res,next)=>{
+userHelpers.changeProductQuantity(req.body).then((response)=>{
+  res.json(response)
+})
+})
 
+router.get('/place-order',verifyLogin,async(req,res)=>{
+  let total=await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('user/place-order',{total,user:req.session.user._id})
+})
+
+router.post('/place-order',async(req,res)=>{
+let products;
+let totalPrice;
+let reOrderStatus=false
+if(!req.body.reOrder){
+  console.log('test')
+  products=await userHelpers.getCartProductList(req.body.userId)
+  totalPrice=await userHelpers.getTotalAmount(req.body.userId)
+  console.log('totalPrice is: ',totalPrice)
+}else{
+  reOrderStatus=true
+  let reOrderDetails=await userHelpers.reOrderProducts(req.body.reOrder)
+  if(reOrderDetails && reOrderDetails.length>0){
+    products=reOrderDetails[0].products;
+    totalPrice=reOrderDetails[0].totalPrice
+  }
+}
+
+userHelpers.placeOrder(req.body,products,totalPrice,reOrderStatus,req.body.reOrder).then((orderId)=>{
+  if(req.body['payment-method'==='COD']){
+    res.json({codSuccess:true})
+  }else{
+    userHelpers.generateRazorpay(orderId,totalPrice).then((response)=>{
+      res.json(response)
+    })
+  }
+})
+})
 
 module.exports = router;
