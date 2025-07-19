@@ -23,8 +23,7 @@
   <div class="form-group">
     <label for="productImage">Image</label>
 <img src="/product-images/{{product._id}}.jpg" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3">
-
-    <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" >
+<input type="file" class="form-control-file" name="productImage" onchange="viewImage(event)" accept="imaage/*">
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
@@ -33,10 +32,8 @@
 
     </div>
 </section>
-
 <script>
-   function viewImage(event){
-    document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
-
+    function viewImage(event){
+        document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
     }
 </script>
