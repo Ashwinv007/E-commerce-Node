@@ -1,0 +1,89 @@
+<section id="ordersList">
+    <div class="container">
+        {{!-- <div class="row mt-4">
+            <a href="admin/add-product" class = 'btn btn-success ml-auto'>Add Product</a>
+        </div> --}}
+        <table class="table mt-5" >
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Address</th>
+      <th scope="col">Pincode</th>
+    <th scope="col">Mobile</th>
+      <th scope="col">Amount</th>
+
+      <th scope="col">Payment</th>
+      <th scope="col">Status</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {{#each orders}}
+    <tr>
+      {{!-- <th scope="row">1</th> --}}
+      <td>{{this.date}}</td>
+      <td>{{this.deliveryDetails.address}}</td>
+      <td>{{this.deliveryDetails.pincode}}</td>
+            <td>{{this.deliveryDetails.mobile}}</td>
+                  {{!-- <td><img style="width: 50px; height 50px" src="/product-images/{{this._id}}.jpg" alt=""></td> --}}
+            <td>{{this.totalAmount}}</td>
+            <td>{{this.paymentMethod}}</td>
+            <td>{{this.status}}</td>
+
+          
+
+<td>
+  <a href="/view-order-products/{{this._id}}" class ="btn btn-primary">View Products</a>
+   {{!-- <a href="/admin/delete-product/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to delete {{this.productName}}?')">Delete</a> </td> --}}
+  {{#if this.userAction}}
+
+  <button onclick="cancelOrderedProducts('{{this._id}}')" class ="btn btn-danger">Cancel</button>
+              {{!-- <a href="/cancel-ordered-products/'{{this._id}}'" ></a> --}}
+
+              {{else}}
+                {{!-- <button onclick="reOrderedProducts('{{this._id}}')" class ="btn btn-"></button> --}}
+
+              <a href="/reorder-products/{{this._id}}" class ="btn btn-success">Reorder</a> 
+
+{{/if}}
+  <a href="/track-order-delivery/{{this._id}}" class ="btn btn-info">Track Order</a>
+
+    </tr>
+    {{/each}}
+  
+
+  </tbody>
+</table>
+    </div>
+</section>
+
+<script>
+     function cancelOrderedProducts(cancelOrderId){
+        $.ajax({
+
+            url:'/cancel-ordered-products',
+            data:{
+                cancelOrderId:cancelOrderId
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.removeOrder){
+                     alert(response.message)
+                     alert(cancelOrderId)
+                        $("#ordersList").load(" #ordersList");
+
+
+
+
+                }else{
+                      alert(response.message)
+                        $("#ordersList").load(" #ordersList");
+
+                    
+                }
+               
+            }
+        })
+    }
+    
+</script>

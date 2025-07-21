@@ -36,12 +36,12 @@
 </head>
 <body>
 <div class="login-form">
-    <form action="/login" method="post">
+    <form action="/admin/login" method="post">
     {{#if loginErr}}
     
     <p class="error" style="color: red">{{loginErr}}</p>
     {{/if}}
-        <h2 class="text-center">Log in</h2>       
+        <h2 class="text-center">Log in Admin Dashboard</h2>       
         <div class="form-group">
             <input type="text" class="form-control" name="username" placeholder="Username" required="required">
         </div>
@@ -52,7 +52,7 @@
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
         </div>    
     </form>
-    <p class="text-center"><a href="/signup">Create an Account</a></p>
+    {{!-- <p class="text-center"><a href="/signup">Create an Account</a></p> --}}
 </div>
 </body>
 </html>

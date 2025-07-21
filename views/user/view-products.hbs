@@ -1,23 +1,80 @@
+{{#if matchingProducts}}
 
+<section>
+  <div id="view-products">
 
-    <section>
-        <div class="container mt-5">
+    <div class="container mt-5">
         <div class="row">
-            {{#each products}}
-            <div class="col-md-3">
-                <div class="card" style="width: 15rem; height:24rem;">
-  <img class="card-img-top" src="/product-images/{{this._id}}.jpg" alt="Card image cap" style="height:14rem;">
+
+        
+
+                {{#each matchingProducts}}
+                    <div class="col-md-3 p-3" >
+                        <div class="card" style="width: 15rem; height: 24rem;">
+                            <img class="card-img-top" src="/product-images/{{this._id}}.jpg" alt="Card image cap" style="height: 12rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.productName}}</h5>
+                                <p class="card-text">{{this.productDescription}}</p>
+                                <h5 class="card-title">{{this.productPrice}}</h5>
+                                <!-- Add other product details here -->
+                                <button class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+
+
+
+
+            
+                              
+            
+        </div>
+    </div>
+      </div>
+
+</section>
+
+{{else}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section>
+    <div id="view-products">
+
+    <div class="container mt-5">
+    <div class="row">
+      {{#each product}}
+        <div class="col-md-3 p-3">
+            <div class="card" style="width: 15rem; height:24rem;">
+  <img class="card-img-top" src="/product-images//{{this._id}}.jpg" alt="Card image cap" style="height:12rem;">
   <div class="card-body">
     <h5 class="card-title">{{this.productName}}</h5>
     <p class="card-text">{{this.productDescription}}</p>
+        <h5 class="card-title">{{this.productPrice}}</h5>
+
     <button class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add to Cart</button>
   </div>
 </div>
-            </div>
-            {{/each}}
-           
-            
         </div>
-        </div>
-    </section>
+        {{/each}}
 
+    </div>
+    </div>
+    </div>
+
+</section>
+
+
+            {{/if}}
