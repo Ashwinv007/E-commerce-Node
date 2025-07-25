@@ -200,7 +200,7 @@ module.exports={
                 }
                 
             ]).toArray()
-            console.log(total)
+            console.log("/n ********* total   "+ total)
             if (!total || total.length === 0 || total[0].total === undefined) {
                 resolve(0); // Resolve with 0 if total is undefined or empty
             } else {
@@ -208,7 +208,7 @@ module.exports={
                 resolve(total[0].total);
             }
 
-            resolve(total[0].total)
+            
         })
         
         
