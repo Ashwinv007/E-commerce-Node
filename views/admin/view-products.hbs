@@ -19,7 +19,7 @@
   <tbody>
     {{#each product}}
     <tr>
-      <th scope="row">1</th>
+      <th scope="row">{{inc @index}}</th>
       <td>{{this.productName}}</td>
       <td>{{this.productDescription}}</td>
       <td>{{this.Category}}</td>
