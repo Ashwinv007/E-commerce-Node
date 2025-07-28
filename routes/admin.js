@@ -93,7 +93,10 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
   productHelpers.updateProduct(id,req.body).then(()=>{
   res.redirect('/admin')
 
+
+  try{
   let image = req.files.productImage
+  
   image.mv('./public/product-images/'+id+'.jpg', (err,done)=>{
     if(!err){
           res.render('admin/add-product')
@@ -104,6 +107,10 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
     }
 
   })
+  }catch{
+
+  }
+
   // if(req.files.productImage){
   //   let image = req.files.productImage
   //   image.mv('./public/product-images/'+id+'.jpg')
