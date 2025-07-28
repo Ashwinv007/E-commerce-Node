@@ -5,7 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var hbs=require('express-handlebars');
 var session = require('express-session')
-
+var Handlebars=require('handlebars')
+Handlebars.registerHelper("inc", function(value, options){
+  return parseInt(value) + 1;
+})
 
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
@@ -37,6 +40,7 @@ db.connect((err)=>{
 })
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

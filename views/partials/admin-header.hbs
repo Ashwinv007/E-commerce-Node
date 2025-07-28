@@ -21,10 +21,30 @@
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
+    {{!-- <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form> --}}
+    <div class="btn-group">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{#if admin}}
+    {{admin.username}}
+    {{else}}
+    Account
+    {{/if}}
+  </button>
+  <div class="dropdown-menu">
+    {{#if admin}}
+
+    <a class="dropdown-item" href="/logout">Logout</a>
+    {{else}}
+        <a class="dropdown-item" href="/login">Login</a>
+
+
+  {{/if}}
+    <div class="dropdown-divider"></div>
+  </div>
+</div>
   </div>
 </nav>
 </header>

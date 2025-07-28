@@ -12,8 +12,9 @@ const verifyLogin=(req,res,next)=>{
 /* GET users listing. */
 
 router.get('/', verifyLogin,function(req, res, next) {
+  let admin=req.session.admin
    productHelpers.getAllProducts().then((product)=>{
-    res.render('admin/view-products', {admin:true , product})
+    res.render('admin/view-products', {adminExist:true ,admin, product})
 
 
    })
