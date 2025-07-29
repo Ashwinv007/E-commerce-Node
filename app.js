@@ -14,6 +14,23 @@ Handlebars.registerHelper('setIndex',function(value,options){
   return value[0].username
 })
 
+Handlebars.registerHelper('getEmail',function(value){
+  console.log('helllllllllllllllllllllllllllllllllo')
+  console.log(value[0])
+  return value[0].email
+})
+
+Handlebars.registerHelper('getOrder',function(value){
+  console.log('testiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii;ng')
+  console.log(value)
+ 
+  console.log(value.productName)
+  return value.product[0].productName
+})
+
+
+
+
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 
