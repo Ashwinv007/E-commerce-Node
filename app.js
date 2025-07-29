@@ -10,6 +10,10 @@ Handlebars.registerHelper("inc", function(value, options){
   return parseInt(value) + 1;
 })
 
+Handlebars.registerHelper('setIndex',function(value,options){
+  return value[0].username
+})
+
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 
