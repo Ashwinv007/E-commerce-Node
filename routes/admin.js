@@ -50,7 +50,9 @@ router.get('/login', (req,res)=>{
 
 
 router.get('/add-product', verifyLogin,function(req,res){
-    res.render('admin/add-product', {admin:true})
+    let admin=req.session.admin
+
+    res.render('admin/add-product', {adminExist:true,admin})
 })
 
 router.post('/add-product', verifyLogin,(req,res)=>{
@@ -81,9 +83,11 @@ router.get('/delete-product/:id',verifyLogin, function(req,res){
 })
 
 router.get('/edit-product/:id', verifyLogin,async (req,res)=>{
+    let admin=req.session.admin
+
   let product =await productHelpers.getProductDetails(req.params.id)
   console.log(product)
-  res.render('admin/edit-product',{product})
+  res.render('admin/edit-product',{adminExist:true, admin, product})
 
 })
 
@@ -116,5 +120,11 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
   //   image.mv('./public/product-images/'+id+'.jpg')
   // }
 })
+})
+router.get('/orders',verifyLogin,async(req,res)=>{
+  let admin=req.session.admin
+  productHelpers.getAllOrders().then((orders)=>{
+    res.render('admin/view-orders',{adminExist:true, admin,orders})
+  })
 })
 module.exports = router;

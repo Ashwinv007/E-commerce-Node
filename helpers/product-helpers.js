@@ -89,6 +89,27 @@ module.exports={
       })
     })
     
+  },
+
+  getAllOrders:()=>{
+    return new Promise(async(resolve,reject)=>{
+      let orders = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+        {
+          $match:{status:'placed'}
+        },
+        {
+          $lookup:{
+            from:collections.USER_COLLECTION,
+            localField:'userId',
+            foreignField:'_id',
+            as:'user'
+          }
+        }
+      ]).toArray()
+      console.log("hi orders.................."+orders[0])
+      console.log('users here:  '+ orders[0].user[0].username)
+      resolve(orders)
+    })
   }
 
 
