@@ -127,4 +127,12 @@ router.get('/orders',verifyLogin,async(req,res)=>{
     res.render('admin/view-orders',{adminExist:true, admin,orders})
   })
 })
+
+
+router.get('/users',verifyLogin,async(req,res)=>{
+  let admin=req.session.admin
+  productHelpers.getAllUsers().then((orders)=>{
+    res.render('admin/view-users',{adminExist:true, admin, orders})
+  })
+})
 module.exports = router;
