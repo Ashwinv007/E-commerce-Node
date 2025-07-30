@@ -36,3 +36,16 @@ function addToCart(proId){
                 })
             }
         }
+//          function updateTrackStatus(orderId,choice){
+//     $.ajax({
+//       url:'/admin/updateProductStatus',
+//       data:{
+//         _id:orderId,
+//         option:choice
+//       },
+//       method:'post',
+//     //   success()=>{
+//     //     $("ordersList").("ordersList");
+//     //   }
+//     })
+//   }
