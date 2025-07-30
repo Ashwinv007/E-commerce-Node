@@ -135,4 +135,12 @@ router.get('/users',verifyLogin,async(req,res)=>{
     res.render('admin/view-users',{adminExist:true, admin, orders})
   })
 })
+
+router.post('/updateProductStatus',async(req,res)=>{
+  console.log("req testing")
+  console.log(req.body)
+productHelpers.updateTrackStatus(req.body._id,req.body.option).then(()=>{
+  res.json(true)
+})
+})
 module.exports = router;

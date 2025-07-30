@@ -1,6 +1,79 @@
 {{#if trackOrder}}
 
+<div class="container">
 
+						<div class="col-12 col-md-10 hh-grayBox pt45 pb20">
+							<div class="row justify-content-between">
+                {{#if trackOrder.ordered}}
+                	<div class="order-tracking completed">
+									<span class="is-complete"></span>
+									<p>Ordered<br><span>Mon, June 24</span></p>
+								</div>
+                {{else}}
+                	<div class="order-tracking">
+									<span class="is-complete"></span>
+									<p>Ordered</p>
+								</div>
+                {{/if}}
+								{{!-- <div class="order-tracking completed">
+									<span class="is-complete"></span>
+									<p>Ordered<br><span>Mon, June 24</span></p>
+								</div> --}}
+                {{#if trackOrder.shipped}}
+								<div class="order-tracking completed">
+									<span class="is-complete"></span>
+									<p>Shipped<br><span>Tue, June 25</span></p>
+								</div>
+                {{else}}
+                <div class="order-tracking">
+									<span class="is-complete"></span>
+									<p>Shipped</p>
+								</div>
+                {{/if}}
+
+                {{#if trackOrder.outForDelivery}}
+								<div class="order-tracking completed">
+									<span class="is-complete"></span>
+									<p>Out for Delivery<br><span>Fri, June 28</span></p>
+								</div>
+                {{else}}
+                	<div class="order-tracking">
+									<span class="is-complete"></span>
+									<p>Out for Delivery</p>
+								</div>
+                {{/if}}
+
+
+                  {{#if trackOrder.delivered}}
+                	<div class="order-tracking completed">
+									<span class="is-complete"></span>
+									<p>Delivered<br><span>Fri, June 28</span></p>
+								</div>
+                {{else if trackOrder.outForDelivery}}
+                <div class="order-tracking">
+									<span class="is-complete"></span>
+									<p>Arriving Today by 6pm<br><span>Fri, June 28</span></p>
+								</div>
+                {{else}}
+                  	<div class="order-tracking">
+									<span class="is-complete"></span>
+									<p>Delivered</p>
+								</div>
+                {{/if}}
+
+							</div>
+						</div>
+					
+</div>
+
+
+
+
+
+
+
+
+{{!-- 
 
 <section>
   <p>{{trackOrder.current6}}</p>
@@ -150,7 +223,7 @@
     </div>
   </div>
 </div>
-</section>
+</section> --}}
 
 
 {{/if}}

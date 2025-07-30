@@ -231,22 +231,15 @@ module.exports={
                     mobile:order.mobile,
                     address:order.address,
                     pincode:order.pincode,
-                    location:{
-                        placed:true,
-                        confirmed:false,
-                        packed:false,
-                        warehouse:false,
-                        courier:false,
+                    trackOrder:{
+                        ordered:true,
+                        shipped:false,
                         outForDelivery:false,
                         delivered:false,
-                        current1:true,
-                        current2:false,
-                        current3:false,
-                        current4:false,
-                        current5:false,
-                        current6:false,
-                        current7:false,
-
+                        stage_od:true,
+                        stage_ship:false,
+                        stage_oad:false,
+                        stage_del:false,
                     },
 
                 },
@@ -333,7 +326,7 @@ module.exports={
             //       var pincode = firstProduct.deliveryDetails.pincode;
             //       var mobile = firstProduct.deliveryDetails.mobile;
             //       var totalAmount = firstProduct.totalAmount;}
-            resolve(trackOrder[0].deliveryDetails.location)
+            resolve(trackOrder[0].deliveryDetails.trackOrder)
         })
     },
     getOrderProducts:(orderId)=>{
