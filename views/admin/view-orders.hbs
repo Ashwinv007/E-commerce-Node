@@ -23,7 +23,7 @@
     {{#each orders}}
     <tr>
       {{!-- <th scope="row">1</th> --}}
-      <td>{{this.date}}</td>
+      <td>{{getStringDate this.date}}</td>
       <td>{{setIndex this.user}}</td>
       <td>{{this.deliveryDetails.address}}</td>
       <td>{{this.deliveryDetails.pincode}}</td>
