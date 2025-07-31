@@ -14,6 +14,10 @@ Handlebars.registerHelper('setIndex',function(value,options){
   return value[0].username
 })
 
+Handlebars.registerHelper('getStringDate',function(value){
+  return value.toDateString()
+})
+
 Handlebars.registerHelper('getEmail',function(value){
   console.log('helllllllllllllllllllllllllllllllllo')
   console.log(value[0])

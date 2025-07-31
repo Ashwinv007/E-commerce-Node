@@ -21,7 +21,7 @@
     {{#each orders}}
     <tr>
       {{!-- <th scope="row">1</th> --}}
-      <td>{{this.date}}</td>
+      <td>{{getStringDate this.date}}</td>
       <td>{{this.deliveryDetails.address}}</td>
       <td>{{this.deliveryDetails.pincode}}</td>
             <td>{{this.deliveryDetails.mobile}}</td>

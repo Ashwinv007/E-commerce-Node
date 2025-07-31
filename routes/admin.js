@@ -26,7 +26,7 @@ router.get('/login', (req,res)=>{
     res.setHeader('Cache-Control', 'no-store, must-revalidate');
 
 
-    res.render('admin/login', {'loginErr':req.session.adminLoginErr})
+    res.render('admin/login', {'loginErr':req.session.adminLoginErr,adminExist:true})
     req.session.adminLoginErr=false
 
 
@@ -124,6 +124,7 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
 router.get('/orders',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
   productHelpers.getAllOrders().then((orders)=>{
+    console.log('date here:::::'+orders[0].date)
     res.render('admin/view-orders',{adminExist:true, admin,orders})
   })
 })
