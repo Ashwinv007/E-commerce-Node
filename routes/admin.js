@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers.js');
+const adminHelpers=require('../helpers/admin-helpers.js')
 const verifyLogin=(req,res,next)=>{
   if(req.session.adminLoggedIn){
     next()
@@ -13,12 +14,29 @@ const verifyLogin=(req,res,next)=>{
 
 router.get('/', verifyLogin,function(req, res, next) {
   let admin=req.session.admin
+  if(admin.role==='seller'){
+      res.render('admin/seller-dashboard')    
+  }
    productHelpers.getAllProducts().then((product)=>{
     res.render('admin/view-products', {adminExist:true ,admin, product})
 
 
    })
 });
+router.get('/seller-register',(req,res)=>{
+  res.render('admin/seller-register',{adminExist:true})
+})
+
+router.post('/seller-register',(req,res)=>{
+  console.log(req.body)
+  adminHelpers.registerSeller(req.body).then((seller)=>{
+    if(seller.role==='pending_seller'){
+      res.render('admin/pending-seller')
+    }else if(seller.role==='seller'){
+      res.render('admin/seller-dashboard',{adminExist:true,seller})
+    }
+  })
+})
 router.get('/login', (req,res)=>{
   if(req.session.admin){
     res.redirect('/')
@@ -34,7 +52,7 @@ router.get('/login', (req,res)=>{
  })
 
  router.post('/login', (req,res)=>{
-  productHelpers.doLogin(req.body).then((response)=>{
+  adminHelpers.doLogin(req.body).then((response)=>{
     if(response.adminStatus){
       req.session.admin = response.admin
       req.session.adminLoggedIn = true
