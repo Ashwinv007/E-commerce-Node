@@ -37,7 +37,7 @@ Handlebars.registerHelper('getOrder',function(value){
 
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
-
+var analyticsRouter = require('./routes/analytics');
 
 var app = express();
 var fileUpload = require('express-fileupload')
@@ -65,6 +65,7 @@ db.connect((err)=>{
 })
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);
+app.use('/analytics', analyticsRouter);
 
 
 // catch 404 and forward to error handler
