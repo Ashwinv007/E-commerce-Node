@@ -21,11 +21,15 @@ router.get('/', verifyLogin,function(req, res, next) {
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller')
   }else{
-       productHelpers.getAllProducts().then((product)=>{
-    res.render('admin/view-products', {adminExist:true ,admin, product})
+
+    adminHelpers.getAllSellers().then((sellers)=>{
+      res.render('admin/view-sellers',{adminExist:true, admin, sellers})
+    })
+  //      productHelpers.getAllProducts().then((product)=>{
+  //   res.render('admin/view-products', {adminExist:true ,admin, product})
 
 
-   })
+  //  })
   }
 
 });
