@@ -14,14 +14,20 @@ const verifyLogin=(req,res,next)=>{
 
 router.get('/', verifyLogin,function(req, res, next) {
   let admin=req.session.admin
-  if(admin.role==='seller'){
+  console.log('<<<<<<<<<<<<<<<<<<<?????????')
+  console.log(admin)
+  if(admin.role=='seller'){
       res.render('admin/seller-dashboard')    
-  }
-   productHelpers.getAllProducts().then((product)=>{
+  }else if(admin.role=='pending_Seller'){
+    res.render('admin/pending-seller')
+  }else{
+       productHelpers.getAllProducts().then((product)=>{
     res.render('admin/view-products', {adminExist:true ,admin, product})
 
 
    })
+  }
+
 });
 router.get('/seller-register',(req,res)=>{
   res.render('admin/seller-register',{adminExist:true})
@@ -29,17 +35,17 @@ router.get('/seller-register',(req,res)=>{
 
 router.post('/seller-register',(req,res)=>{
   console.log(req.body)
-  adminHelpers.registerSeller(req.body).then((seller)=>{
-    if(seller.role==='pending_seller'){
-      res.render('admin/pending-seller')
-    }else if(seller.role==='seller'){
-      res.render('admin/seller-dashboard',{adminExist:true,seller})
-    }
+  adminHelpers.registerSeller(req.body).then((response)=>{
+    req.session.admin=response
+    req.session.adminLoggedIn=true;
+    res.redirect('/admin')
+    console.log('hi')
+    console.log(response)
   })
 })
 router.get('/login', (req,res)=>{
   if(req.session.admin){
-    res.redirect('/')
+    res.redirect('/admin')
   }else{
     res.setHeader('Cache-Control', 'no-store, must-revalidate');
 
@@ -150,7 +156,7 @@ router.get('/orders',verifyLogin,async(req,res)=>{
 
 router.get('/users',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
-  productHelpers.getAllUsers().then((orders)=>{
+  adminHelpers.getAllUsers().then((orders)=>{
     res.render('admin/view-users',{adminExist:true, admin, orders})
   })
 })
@@ -158,7 +164,7 @@ router.get('/users',verifyLogin,async(req,res)=>{
 router.post('/updateProductStatus',async(req,res)=>{
   console.log("req testing")
   console.log(req.body)
-productHelpers.updateTrackStatus(req.body._id,req.body.option).then(()=>{
+adminHelpers.updateTrackStatus(req.body._id,req.body.option).then(()=>{
   res.json(true)
 })
 })
