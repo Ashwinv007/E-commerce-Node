@@ -39,9 +39,11 @@ doLogin:(adminData)=>{
 registerSeller:(sellerData)=>{
     return new Promise(async(resolve,reject)=>{
         sellerData.Password=await bcrypt.hash(sellerData.Password,10)
-        db.get().collection(collections.ADMIN_COLLECTION).insertOne(sellerData).then(data => resolve(data.insertedId))
-        
+        db.get().collection(collections.ADMIN_COLLECTION).insertOne(sellerData).then((data) => {
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         console.log(sellerData)
+            resolve(data.insertedId)})
+    
     })
 }
 
