@@ -46,6 +46,17 @@ registerSeller:(sellerData)=>{
     
     })
 },
+getAllSellers:()=>{
+    return new Promise(async(resolve,reject)=>{
+        let sellers=await db.get().collection(collections.ADMIN_COLLECTION).aggregate([
+            {
+                $match:{role:'seller'}
+            },
+        ]).toArray()
+        console.log(sellers)
+        resolve(sellers)
+    })
+},
 
  getAllUsers:()=>{
     return new Promise(async(resolve,reject)=>{
