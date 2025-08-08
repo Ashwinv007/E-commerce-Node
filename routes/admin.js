@@ -23,6 +23,7 @@ router.get('/', verifyLogin,function(req, res, next) {
   }else{
 
     adminHelpers.getAllSellers().then((sellers)=>{
+      console.log('<<<<<<<>>>>>>>>>>>>>>>>>>>>>')
       res.render('admin/view-sellers',{adminExist:true, admin, sellers})
     })
   //      productHelpers.getAllProducts().then((product)=>{

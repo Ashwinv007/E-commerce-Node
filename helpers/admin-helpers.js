@@ -48,11 +48,18 @@ registerSeller:(sellerData)=>{
 },
 getAllSellers:()=>{
     return new Promise(async(resolve,reject)=>{
-        let sellers=await db.get().collection(collections.ADMIN_COLLECTION).aggregate([
+        let sellers=await db.get().collection(collections.ADMIN_COLLECTION).find(
+            // {
+            //     $match:{role:'seller'}
+            // },
             {
-                $match:{role:'seller'}
+                $or:[
+                    {role:'pending_Seller'},
+                    {role:'seller'}
+                ]
             },
-        ]).toArray()
+        ).toArray()
+        console.log('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
         console.log(sellers)
         resolve(sellers)
     })
@@ -64,6 +71,7 @@ getAllSellers:()=>{
         {
           $match:{status:'placed'}
         },
+      
         {
           $lookup:{
             from:collections.USER_COLLECTION,
