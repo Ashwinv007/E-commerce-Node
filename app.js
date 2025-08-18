@@ -18,6 +18,10 @@ Handlebars.registerHelper('getStringDate',function(value){
   return value.toDateString()
 })
 
+// Handlebars.registerHelper('seperate',function(value){
+  
+// })
+
 Handlebars.registerHelper('getEmail',function(value){
   console.log('helllllllllllllllllllllllllllllllllo')
   console.log(value[0])

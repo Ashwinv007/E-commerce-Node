@@ -21,11 +21,8 @@ router.get('/', verifyLogin,function(req, res, next) {
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller')
   }else{
+res.render('admin/view-products',{adminExist:true,admin})
 
-    adminHelpers.getAllSellers().then((sellers)=>{
-      console.log('<<<<<<<>>>>>>>>>>>>>>>>>>>>>')
-      res.render('admin/view-sellers',{adminExist:true, admin, sellers})
-    })
   //      productHelpers.getAllProducts().then((product)=>{
   //   res.render('admin/view-products', {adminExist:true ,admin, product})
 
@@ -34,6 +31,13 @@ router.get('/', verifyLogin,function(req, res, next) {
   }
 
 });
+router.get('/sellers',verifyLogin,function(req,res,next){
+  let admin=req.session.admin
+      adminHelpers.getAllSellers().then((sellers)=>{
+      console.log('<<<<<<<>>>>>>>>>>>>>>>>>>>>>')
+      res.render('admin/view-sellers',{adminExist:true, admin, sellers})
+    })
+})
 router.get('/seller-register',(req,res)=>{
   res.render('admin/seller-register',{adminExist:true})
 })
