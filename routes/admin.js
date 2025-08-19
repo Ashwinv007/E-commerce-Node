@@ -21,7 +21,7 @@ router.get('/', verifyLogin,function(req, res, next) {
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller')
   }else{
-res.render('admin/view-products',{adminExist:true,admin})
+res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true})
 
   //      productHelpers.getAllProducts().then((product)=>{
   //   res.render('admin/view-products', {adminExist:true ,admin, product})
@@ -33,10 +33,17 @@ res.render('admin/view-products',{adminExist:true,admin})
 });
 router.get('/sellers',verifyLogin,function(req,res,next){
   let admin=req.session.admin
-      adminHelpers.getAllSellers().then((sellers)=>{
+      adminHelpers.getAllSellers('seller').then((sellers)=>{
       console.log('<<<<<<<>>>>>>>>>>>>>>>>>>>>>')
-      res.render('admin/view-sellers',{adminExist:true, admin, sellers})
+      res.render('admin/view-sellers',{adminExist:true, admin, sellers,superAdmin:true})
     })
+})
+
+router.get('/pending-sellers',verifyLogin,function(req,res,next){
+  let admin=req.session.admin;
+  adminHelpers.getAllSellers('pending_Seller').then((sellers)=>{
+    res.render('admin/view-sellers',{adminExist:true,admin,sellers,superAdmin:true})
+  })
 })
 router.get('/seller-register',(req,res)=>{
   res.render('admin/seller-register',{adminExist:true})

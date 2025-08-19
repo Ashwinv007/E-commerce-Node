@@ -46,7 +46,7 @@ registerSeller:(sellerData)=>{
     
     })
 },
-getAllSellers:()=>{
+getAllSellers:(choice)=>{
     return new Promise(async(resolve,reject)=>{
         let sellers=await db.get().collection(collections.ADMIN_COLLECTION).find(
             // {
@@ -59,9 +59,24 @@ getAllSellers:()=>{
                 ]
             },
         ).toArray()
-        console.log('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
-        console.log(sellers)
-        resolve(sellers)
+        console.log('_________________________')
+        let i=0;
+        let sellerArray=[];
+        while(i<sellers.length){
+          if(choice==='seller'){
+            if(sellers[i].role==='seller'){
+              sellerArray.push(sellers[i]);
+            }
+          }else if(choice==='pending_Seller'){
+            if(sellers[i].role==='pending_Seller'){
+              sellerArray.push(sellers[i]);
+            }
+          }
+          i++;
+        }
+        console.log('---------------------------------------------')
+        console.log(sellerArray)
+        resolve(sellerArray)
     })
 },
 
