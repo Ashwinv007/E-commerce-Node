@@ -35,7 +35,7 @@ router.get('/sellers',verifyLogin,function(req,res,next){
   let admin=req.session.admin
       adminHelpers.getAllSellers('seller').then((sellers)=>{
       console.log('<<<<<<<>>>>>>>>>>>>>>>>>>>>>')
-      res.render('admin/view-sellers',{adminExist:true, admin, sellers,superAdmin:true})
+      res.render('admin/view-sellers',{adminExist:true, admin, sellers,superAdmin:true,sellerList:true})
     })
 })
 
