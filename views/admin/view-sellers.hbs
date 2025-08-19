@@ -25,10 +25,15 @@
       {{!-- <td>{{this.Category}}</td>
             <td>{{this.productPrice}}</td>
                   <td><img style="width: 50px; height 50px" src="/product-images/{{this._id}}.jpg" alt=""></td> --}}
+                  {{#if sellerList}}
 <td>
   <a href="/admin/suspend-seller/{{this._id}}" class ="btn btn-warning">Suspend</a>
-   <a href="/admin/remove-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to delete {{this.companyName}}?')">Remove</a> </td>
-
+   <a href="/admin/remove-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to remove {{this.companyName}}?')">Remove</a> </td>
+{{else}}
+<td>
+  <a href="/admin/suspend-seller/{{this._id}}" class ="btn btn-success">Accept</a>
+   <a href="/admin/remove-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to reject {{this.companyName}}?')">Reject</a> </td>
+   {{/if}}
     </tr>
     {{/each}}
   
