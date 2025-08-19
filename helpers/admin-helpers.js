@@ -109,6 +109,20 @@ getAllSellers:(choice)=>{
       resolve(orders)
     })
   },
+  approveSeller:(adminId)=>{
+return new Promise(async(resolve,reject)=>{
+  db.get().collection(collections.ADMIN_COLLECTION)
+  .updateOne({_id:objectId(adminId)},
+  {
+    $set:{role:'seller'}
+  }
+
+).then(()=>{
+  console.log("role changed to seller")
+  resolve()
+})
+})
+  },
 
    updateTrackStatus:(_id,option)=>{
     return new Promise(async(resolve,reject)=>{

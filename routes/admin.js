@@ -35,7 +35,7 @@ router.get('/sellers',verifyLogin,function(req,res,next){
   let admin=req.session.admin
       adminHelpers.getAllSellers('seller').then((sellers)=>{
       console.log('<<<<<<<>>>>>>>>>>>>>>>>>>>>>')
-      res.render('admin/view-sellers',{adminExist:true, admin, sellers,superAdmin:true,sellerList:true})
+      res.render('admin/view-sellers',{adminExist:true, admin, sellers,sellerList:true,superAdmin:true})
     })
 })
 
@@ -48,7 +48,19 @@ router.get('/pending-sellers',verifyLogin,function(req,res,next){
 router.get('/seller-register',(req,res)=>{
   res.render('admin/seller-register',{adminExist:true})
 })
+// router.get('/accept-seller',verifyLogin,function(req,res,next){
+//   let admin=req.session.admin;
+//   adminHelpers.changeSellerRole(req.body._id).then(()=>{console.log('seller role  changed')
+//     res.json({status:true})
+//   })
+// })
 
+router.post('/approve-seller',(req,res)=>{
+  adminHelpers.approveSeller(req.body.adminId).then(()=>{
+    console.log('Seller role changed')
+    res.json({status:true})
+  })
+})
 router.post('/seller-register',(req,res)=>{
   console.log(req.body)
   adminHelpers.registerSeller(req.body).then((response)=>{
