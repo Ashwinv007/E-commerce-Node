@@ -160,20 +160,26 @@ return new Promise(async(resolve,reject)=>{
     })
   },
   suspendSeller:(adminId)=>{
+    let suspendUntilDate=new Date()
+     suspendUntilDate.setDate(suspendUntilDate.getDate()+2);
     return new Promise(async(resolve,reject)=>{
       db.get().collection(collections.ADMIN_COLLECTION)
       .updateOne({_id:objectId(adminId)},
     {
-      $set:{suspend:true}
-    }).then(()=>{
-      const cron=require('node-cron');
-      const datetime=new Date();
-      const adjustedDatetime=datetime.setDate(datetime.setDate()+2);
-      const eventDatetimeObject=new Date(adjustedDatetime);
+      $set:{
+        suspend:true,
+        suspendUntil:suspendUntilDate,
 
-      cron.schedule(eventDatetimeObject,()=>{
-        revokeSeller(adminId);
-      })
+      }
+    }).then(()=>{
+      // const cron=require('node-cron');
+      // const datetime=new Date();
+      // const adjustedDatetime=datetime.setDate(datetime.setDate()+2);
+      // const eventDatetimeObject=new Date(adjustedDatetime);
+
+      // cron.schedule(eventDatetimeObject,()=>{
+      //   revokeSeller(adminId);
+      // })
       console.log("Seller suspended")
       resolve()
     })
