@@ -132,6 +132,35 @@ return new Promise(async(resolve,reject)=>{
       })
     })
   },
+  revokeSeller:(adminId)=>{
+    return new Promise(async(resolve,reject)=>{
+      db.get().collection(collections.ADMIN_COLLECTION)
+      .updateOne({_id:objectId(adminId)},
+    {
+      $set:{suspend:false}
+    })
+    })
+  },
+  suspendSeller:(adminId)=>{
+    return new Promise(async(resolve,reject)=>{
+      db.get().collection(collections.ADMIN_COLLECTION)
+      .updateOne({_id:objectId(adminId)},
+    {
+      $set:{suspend:true}
+    }).then(()=>{
+      const datetime=new Date();
+      const adjustedDatetime=datetime.setDate(datetime.setDate()+2);
+      const eventDatetimeObject=new Date(adjustedDatetime);
+
+      cron.shedule(eventDatetimeObject,()=>{
+        revokeSeller(adminId);
+      })
+      console.log("Seller suspended")
+      resolve()
+    })
+    })
+
+  },
 
    updateTrackStatus:(_id,option)=>{
     return new Promise(async(resolve,reject)=>{
