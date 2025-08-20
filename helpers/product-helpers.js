@@ -21,7 +21,15 @@ module.exports={
   getAllProducts:()=>{
     return new Promise(async(resolve,reject)=>{
       let product = await db.get().collection(collections.PRODUCT_COLLECTION).find().toArray()
-      resolve(product)
+      let i=0;
+      let products=[];
+      while(i<product.length){
+        if(!product[i].suspend){
+          products.push(product[i])
+        }
+        i++;
+      }
+      resolve(products)
 
 
 })
