@@ -1,3 +1,47 @@
 <section>
-    <h1>Seller dashboard in progress</h1>
+    <div class="container">
+        <div class="row mt-4">
+            <a href="admin/add-product" class = 'btn btn-success ml-auto'>Add Product</a>
+        </div>
+        <table class="table mt-5" id="productsTable">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+    <th scope="col">Category</th>
+      <th scope="col">Price</th>
+      <th scope="col">Image</th>
+      <th scope="col">Options</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {{#each product}}
+    <tr>
+      <th scope="row">{{inc @index}}</th>
+      <td>{{this.productName}}</td>
+      <td>{{this.productDescription}}</td>
+      <td>{{this.Category}}</td>
+            <td>{{this.productPrice}}</td>
+                  <td><img style="width: 50px; height 50px" src="/product-images/{{this._id}}.jpg" alt=""></td>
+<td>
+  <a href="/admin/edit-product/{{this._id}}" class ="btn btn-primary">Edit</a>
+   <a href="/admin/delete-product/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to delete {{this.productName}}?')">Delete</a> </td>
+
+    </tr>
+    {{/each}}
+  
+
+  </tbody>
+</table>
+    </div>
 </section>
+
+<script>
+  $( function () {
+    $('#productsTable').DataTable();
+} );
+
+</script>
+

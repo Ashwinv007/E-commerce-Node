@@ -18,9 +18,11 @@ module.exports={
 
   
 
-  getAllProducts:()=>{
+  getAllProducts:(sellerId)=>{
+    console.log('get all pro',sellerId)
     return new Promise(async(resolve,reject)=>{
-      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find().toArray()
+      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find({sellerId:sellerId}).toArray()
+      console.log("hellllo product",product)
       let i=0;
       let products=[];
       while(i<product.length){
