@@ -27,8 +27,10 @@
                   <td><img style="width: 50px; height 50px" src="/product-images/{{this._id}}.jpg" alt=""></td> --}}
                   {{#if ../sellerList}}
 <td>
-  <a href="/admin/suspend-seller/{{this._id}}" class ="btn btn-warning">Suspend</a>
-   <a href="/admin/remove-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to remove {{this.companyName}}?')">Remove</a> </td>
+  <button class="btn btn-warning" onclick="suspendSeller('{{this._id}}')">Suspend</button>
+  <button class="btn btn-danger" onclick="removeSeller('{{this._id}}')">Remove</button>
+  {{!-- <a href="/admin/suspend-seller/{{this._id}}" class ="btn btn-warning">Suspend</a>
+   <a href="/admin/remove-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to remove {{this.companyName}}?')">Remove</a> </td> --}}
 {{else}}
 <td>
     <button class="btn btn-success" onclick="approveSeller('{{this._id}}')">Approve</button>
@@ -75,6 +77,36 @@ function rejectSeller(adminId){
     success:(response)=>{
       if(response.status){
         alert("Seller rejected")
+        $("#productsTable").load(" #productsTable");
+      }
+    }
+  })
+}
+function suspendSeller(adminId){
+  $.ajax({
+    url:'/admin/suspend-seller',
+    data:{
+      adminId:adminId
+    },        
+    method:'post',
+    success:(response)=>{
+      if(response.status){
+        alert("Seller suspended")
+        $("#productsTable").load(" #productsTable");
+      }
+    }  
+  })
+}
+function removeSeller(adminId){
+  $.ajax({
+    url:'/admin/remove-seller',
+    data:{
+      adminId:adminId
+    },
+    method:'post',
+    success:(response)=>{
+      if(response.status){
+        alert("Seller Removed")
         $("#productsTable").load(" #productsTable");
       }
     }

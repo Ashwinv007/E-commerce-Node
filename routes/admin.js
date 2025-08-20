@@ -131,6 +131,11 @@ router.post('/add-product', verifyLogin,(req,res)=>{
     })
   } )
 })
+router.post('/suspend-seller',verifyLogin,(req,res)=>{
+  adminHelpers.suspendSeller(req.body.adminId).then(()=>{
+    res.json({status:true})
+  })
+})
 
 router.get('/delete-product/:id',verifyLogin, function(req,res){
   let proId = req.params.id
