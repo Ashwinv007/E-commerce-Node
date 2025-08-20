@@ -2,11 +2,14 @@ var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers.js');
 const adminHelpers=require('../helpers/admin-helpers.js')
+
 const verifyLogin=(req,res,next)=>{
   if(req.session.adminLoggedIn){
     if(req.session.admin.suspend){
       if(req.session.admin.suspendUntilDate >Date.now()){
-        next()
+        adminHelpers.revokeSeller(req.session.admin._id).then(()=>{
+          next()
+        })
       }else{
         res.render('admin/suspend')
       }

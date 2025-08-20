@@ -138,6 +138,9 @@ return new Promise(async(resolve,reject)=>{
       .updateOne({_id:objectId(adminId)},
     {
       $set:{suspend:false}
+    }).then(()=>{
+      console.log("Seller revoked from database");
+      resolve();
     })
     })
   },
