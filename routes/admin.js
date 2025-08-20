@@ -136,6 +136,19 @@ router.post('/suspend-seller',verifyLogin,(req,res)=>{
     res.json({status:true})
   })
 })
+router.post('/revoke-seller',verifyLogin,(req,res)=>{
+  adminHelpers.revokeSeller(req.body.adminId).then(()=>{
+    res.json({status:true})
+  })
+})
+router.post('/remove-seller',verifyLogin,(req,res)=>{
+  adminHelpers.removeSeller(req.body.adminId).then(()=>{
+    adminHelpers.removeSellerProducts(req.body.adminId).then(()=>{
+    res.json({status:true})
+
+    })
+  })
+})
 
 router.get('/delete-product/:id',verifyLogin, function(req,res){
   let proId = req.params.id

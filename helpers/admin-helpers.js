@@ -141,6 +141,24 @@ return new Promise(async(resolve,reject)=>{
     })
     })
   },
+  removeSeller:(adminId)=>{
+    return new Promise(async(resolve,reject)=>{
+      db.get().collection(collections.ADMIN_COLLECTION)
+      .deleteOne({_id:objectId(adminId)}).then(()=>{
+        console.log("Seller Delted from admin collecitons")
+        resolve();
+      })
+    })
+  },
+  removeSellerProducts:(adminId)=>{
+    return new Promise(async(resolve,reject)=>{
+      db.get().collection(collections.PRODUCT_COLLECTION)
+      .deleteMany({_id:objectId(adminId)}).then(()=>{
+        console.log("deleted seller products")
+        resolve()
+      })
+    })
+  },
   suspendSeller:(adminId)=>{
     return new Promise(async(resolve,reject)=>{
       db.get().collection(collections.ADMIN_COLLECTION)
@@ -148,11 +166,12 @@ return new Promise(async(resolve,reject)=>{
     {
       $set:{suspend:true}
     }).then(()=>{
+      const cron=require('node-cron');
       const datetime=new Date();
       const adjustedDatetime=datetime.setDate(datetime.setDate()+2);
       const eventDatetimeObject=new Date(adjustedDatetime);
 
-      cron.shedule(eventDatetimeObject,()=>{
+      cron.schedule(eventDatetimeObject,()=>{
         revokeSeller(adminId);
       })
       console.log("Seller suspended")
