@@ -27,7 +27,7 @@
                   <td><img style="width: 50px; height 50px" src="/product-images/{{this._id}}.jpg" alt=""></td> --}}
                   {{#if ../sellerList}}
 <td>
-  {{#if ../suspended}}
+  {{#if this.suspend}}
   <button class="btn btn-success" onclick="revokeSeller('{{this._id}}')">Revoke</button>
   {{else}}
   <button class="btn btn-warning" onclick="suspendSeller('{{this._id}}')">Suspend</button>
