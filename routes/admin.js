@@ -61,6 +61,12 @@ router.post('/approve-seller',(req,res)=>{
     res.json({status:true})
   })
 })
+router.post('/reject-seller',(req,res)=>{
+  adminHelpers.rejectSeller(req.body.adminId).then(()=>{
+    console.log("Rejecting Seller")
+    res.json({status:true})
+  })
+})
 router.post('/seller-register',(req,res)=>{
   console.log(req.body)
   adminHelpers.registerSeller(req.body).then((response)=>{
