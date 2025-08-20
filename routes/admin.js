@@ -4,7 +4,15 @@ const productHelpers = require('../helpers/product-helpers.js');
 const adminHelpers=require('../helpers/admin-helpers.js')
 const verifyLogin=(req,res,next)=>{
   if(req.session.adminLoggedIn){
-    next()
+    if(req.session.admin.suspend){
+      if(req.session.admin.suspendUntilDate >Date.now()){
+        next()
+      }else{
+        res.render('admin/suspend')
+      }
+    }else{
+      next()
+    }
   }else{
     res.redirect('/admin/login')
   }
