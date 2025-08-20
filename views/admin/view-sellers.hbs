@@ -32,9 +32,9 @@
 {{else}}
 <td>
     <button class="btn btn-success" onclick="approveSeller('{{this._id}}')">Approve</button>
-
+    <button class="btn btn-danger" onclick="rejectSeller('{{this._id}}')">Reject</button>
   {{!-- <a href="/admin/accept-seller/{{this._id}}" class ="btn btn-success">Accept</a> --}}
-   <a href="/admin/reject-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to reject {{this.companyName}}?')">Reject</a> </td>
+   {{!-- <a href="/admin/reject-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to reject {{this.companyName}}?')">Reject</a> </td> --}}
    {{/if}}
     </tr>
     {{/each}}
@@ -58,9 +58,24 @@ function approveSeller(adminId){
     method:'post',
     success:(response)=>{
       if(response.status){
-        alert("Seller Accepted")
+        alert("Seller Approved")
         $("#productsTable").load(" #productsTable");
 
+      }
+    }
+  })
+}
+function rejectSeller(adminId){
+  $.ajax({
+    url:'/admin/reject-seller',
+    data:{
+      adminId:adminId
+    },
+    method:'post',
+    success:(response)=>{
+      if(response.status){
+        alert("Seller rejected")
+        $("#productsTable").load(" #productsTable");
       }
     }
   })

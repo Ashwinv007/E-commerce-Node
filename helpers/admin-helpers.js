@@ -123,6 +123,15 @@ return new Promise(async(resolve,reject)=>{
 })
 })
   },
+  rejectSeller:(adminId)=>{
+    return new Promise(async(resolve,reject)=>{
+      db.get().collection(collections.ADMIN_COLLECTION)
+      .deleteOne({_id:objectId(adminId)}).then(()=>{
+        console.log("Deleted seller from admin collections")
+        resolve();
+      })
+    })
+  },
 
    updateTrackStatus:(_id,option)=>{
     return new Promise(async(resolve,reject)=>{
