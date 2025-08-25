@@ -72,12 +72,15 @@ module.exports={
     
   },
 
-  getAllOrders:()=>{
+  getAllOrders:(sellerId)=>{
     return new Promise(async(resolve,reject)=>{
       let orders = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
         {
           $match:{status:'placed'}
         },
+        // {
+        //   $match:{'product.item.sellerId':sellerId}
+        // },
         {
           $lookup:{
             from:collections.USER_COLLECTION,
@@ -85,6 +88,17 @@ module.exports={
             foreignField:'_id',
             as:'user'
           }
+        },
+        {
+          $lookup:{
+            from:collections.PRODUCT_COLLECTION,
+            localField:'products.item',
+            foreignField:'_id',
+            as:'product'
+          }
+        },
+        {
+          $match:{'product.sellerId':sellerId}
         }
       ]).toArray()
       console.log("hi orders.................."+orders[0].deliveryDetails.trackOrder)
