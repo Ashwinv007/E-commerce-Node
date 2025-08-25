@@ -80,9 +80,12 @@ getAllSellers:(choice)=>{
     })
 },
 
- getAllUsers:()=>{
+ getAllUsers:(sellerId)=>{
     return new Promise(async(resolve,reject)=>{
       let orders =await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+        // {
+        //   $match:{sellerId:sellerId}
+        // },
         {
           $match:{status:'placed'}
         },
@@ -102,6 +105,17 @@ getAllSellers:(choice)=>{
             foreignField:'_id',
             as:'product'
           }
+        },
+        {
+          $lookup:{
+            from:collections.PRODUCT_COLLECTION,
+            localField:'products.item',
+            foreignField:'_id',
+            as:'product'
+          }
+        },
+        {
+          $match:{'product.sellerId':sellerId}
         }
 
       ]).toArray()

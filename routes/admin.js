@@ -213,7 +213,7 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
 })
 router.get('/orders',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
-  productHelpers.getAllOrders().then((orders)=>{
+  productHelpers.getAllOrders(admin._id).then((orders)=>{
     console.log('date here:::::'+orders[0].date)
     res.render('admin/view-orders',{adminExist:true, admin,orders})
   })
@@ -222,7 +222,7 @@ router.get('/orders',verifyLogin,async(req,res)=>{
 
 router.get('/users',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
-  adminHelpers.getAllUsers().then((orders)=>{
+  adminHelpers.getAllUsers(admin._id).then((orders)=>{
     res.render('admin/view-users',{adminExist:true, admin, orders})
   })
 })
