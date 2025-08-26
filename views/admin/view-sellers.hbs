@@ -32,7 +32,7 @@
   {{else}}
   <button class="btn btn-warning" onclick="suspendSeller('{{this._id}}')">Suspend</button>
   {{/if}}
-  <button class="btn btn-danger" onclick="removeSeller('{{this._id}}')">Remove</button>
+  <button class="btn btn-danger" onclick="removeSeller('{{this._id}}','{{this.companyName}}')">Remove</button>
   {{!-- <a href="/admin/suspend-seller/{{this._id}}" class ="btn btn-warning">Suspend</a>
    <a href="/admin/remove-seller/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to remove {{this.companyName}}?')">Remove</a> </td> --}}
 {{else}}
@@ -71,8 +71,9 @@ function approveSeller(adminId){
     }
   })
 }
-function rejectSeller(adminId){
-  $.ajax({
+function rejectSeller(adminId,sellerName){
+  if(confirm('Are you sure you want to reject '+sellerName+'?')==true){
+    $.ajax({
     url:'/admin/reject-seller',
     data:{
       adminId:adminId
@@ -85,6 +86,8 @@ function rejectSeller(adminId){
       }
     }
   })
+  }
+  
 }
 function suspendSeller(adminId){
   $.ajax({
@@ -101,20 +104,23 @@ function suspendSeller(adminId){
     }  
   })
 }
-function removeSeller(adminId){
-  $.ajax({
-    url:'/admin/remove-seller',
-    data:{
-      adminId:adminId
-    },
-    method:'post',
-    success:(response)=>{
-      if(response.status){
-        alert("Seller Removed")
-        $("#productsTable").load(" #productsTable");
-      }
-    }
-  })
+function removeSeller(adminId,sellerName){
+  if(confirm('Are you sure you want to remove '+sellerName+'?')==true){
+    $.ajax({
+        url:'/admin/remove-seller',
+        data:{
+          adminId:adminId
+        },
+        method:'post',
+        success:(response)=>{
+          if(response.status){
+            alert("Seller Removed")
+            $("#productsTable").load(" #productsTable");
+          }
+        }
+      })
+  }
+  
 }
 function revokeSeller(adminId){
   $.ajax({
