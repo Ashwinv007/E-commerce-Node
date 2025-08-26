@@ -6,6 +6,7 @@ var logger = require('morgan');
 var hbs=require('express-handlebars');
 var session = require('express-session');
 var Handlebars=require('handlebars');
+const passport=require('./config/passport');
 Handlebars.registerHelper("inc", function(value, options){
   return parseInt(value) + 1;
 })
@@ -67,6 +68,9 @@ db.connect((err)=>{
   else console.log('Connected to database')
 
 })
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);
 

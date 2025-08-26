@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers.js');
 const userHelpers = require('../helpers/user-helpers.js')
+const passport = require("passport");
 const verifyLogin=(req,res,next)=>{
   if(req.session.userLoggedIn){
     next()
@@ -10,6 +11,11 @@ const verifyLogin=(req,res,next)=>{
     res.redirect('/login')
   }
 }
+
+router.get('/auth/google',passport.authenticate('google',{scope:['profile','email']}));
+router.get('/auth/google/callback',passport.authenticate('google',{failureRedirect:'/signup'}),(req,res)=>{
+  res.redirect('/')
+})
 /* GET home page. */
 router.get('/',verifyLogin, async function(req, res, next) {
   let cartCount=null
