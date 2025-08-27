@@ -1,6 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const db = require("../config/connection"); 
+const collections=require("../config/collections")
 require("dotenv").config();
 
 passport.use(
@@ -13,7 +14,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const database = db.get(); // get the connected db instance
-        const usersCollection = database.collection("users");
+        const usersCollection = database.collection(collections.USER_COLLECTION);
 
         // check if user exists
         let user = await usersCollection.findOne({ googleId: profile.id });
@@ -23,7 +24,7 @@ passport.use(
         } else {
           // insert new user
           let newUser = {
-            name: profile.displayName,
+            username: profile.displayName,
             email: profile.emails[0].value,
             googleId: profile.id,
           };
@@ -45,7 +46,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     const database = db.get();
-    const usersCollection = database.collection("users");
+    const usersCollection = database.collection(collections.USER_COLLECTION);
 
     const user = await usersCollection.findOne({ _id: id });
     done(null, user);
