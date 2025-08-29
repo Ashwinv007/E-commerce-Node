@@ -11,7 +11,7 @@
                 {{#each matchingProducts}}
                     <div class="col-md-3 p-3" >
                         <div class="card" style="width: 15rem; height: 24rem;">
-                            <img class="card-img-top" src="/product-images/{{this._id}}.jpg" alt="Card image cap" style="height: 12rem;">
+                            <img class="card-img-top" src="/product-images/{{this._id}}.{{this.imgExt}}" alt="Card image cap" style="height: 12rem;">
                             <div class="card-body">
                                 <h5 class="card-title">{{this.productName}}</h5>
                                 <p class="card-text">{{this.productDescription}}</p>

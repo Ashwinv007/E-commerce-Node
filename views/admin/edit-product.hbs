@@ -26,6 +26,8 @@
     <label for="productImage">Image</label>
 <img src="/product-images/{{product._id}}.jpg" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3">
 <input type="file" class="form-control-file" name="productImage" onchange="viewImage(event)" accept="imaage/*">
+    <input type="text" id="imgExt" style="display:none" name="imgExt" value="">
+
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
@@ -36,6 +38,10 @@
 </section>
 <script>
     function viewImage(event){
-        document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
+        document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0]);
+          let file=event.target.files[0];
+    let ext=file.name.split('.')[1];
+
+    document.getElementById('imgExt').value=ext;
     }
 </script>

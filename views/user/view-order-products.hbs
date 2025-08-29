@@ -4,7 +4,7 @@
       {{#each products}}
         <div class="col-md-3 p-3">
             <div class="card" style="width: 15rem; height:24rem;">
-  <img class="card-img-top" src="/product-images//{{this.product._id}}.jpg" alt="Card image cap" style="height:12rem;">
+  <img class="card-img-top" src="/product-images//{{this.product._id}}.{{this.imgExt}}" alt="Card image cap" style="height:12rem;">
   <div class="card-body">
     <h5 class="card-title">{{this.product.productName}}</h5>
     <p class="card-text">Rs:{{this.product.productPrice}}/-</p>
