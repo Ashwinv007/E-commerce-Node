@@ -28,10 +28,10 @@
     <label for="productImage">Image</label>
 <img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3">
 
-    <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" required>
+    <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple required>
     <input type="text" id="imgExt" style="display:none" name="imgExt" value="">
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary" disabled id="subBtn">Submit</button>
 </form>
 
         </div>
@@ -44,8 +44,16 @@
     document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
     let file=event.target.files[0];
     let ext=file.name.split('.')[1];
+    if(parseInt(event.target.files.length)>3){
+    
+              alert("Your can only upload a maximum of 3 files");
 
+    }else{
+      document.getElementById("subBtn").disabled=false;
+    }
     document.getElementById('imgExt').value=ext;
 
     }
+
+   
 </script>
