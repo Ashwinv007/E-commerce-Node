@@ -192,8 +192,9 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
 
   try{
   let image = req.files.productImage
-  
-  image.mv('./public/product-images/'+id+'.jpg', (err,done)=>{
+      let ext =path.extname(image.name)
+
+  image.mv('./public/product-images/'+id+ext, (err,done)=>{
     if(!err){
           res.render('admin/add-product')
 
