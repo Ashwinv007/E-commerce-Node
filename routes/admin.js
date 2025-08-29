@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers.js');
-const adminHelpers=require('../helpers/admin-helpers.js')
+const adminHelpers=require('../helpers/admin-helpers.js');
+const path=require('path');
 
 const verifyLogin=(req,res,next)=>{
   if(req.session.adminLoggedIn){
@@ -133,7 +134,8 @@ router.post('/add-product', verifyLogin,(req,res)=>{
   
   productHelpers.addProduct(req.body, (id)=>{
     let image = req.files.productImage
-    image.mv('./public/product-images/'+id+'.jpg', (err,done)=>{
+    let ext =path.extname(image.name)
+    image.mv('./public/product-images/'+id+ext, (err,done)=>{
       if(!err){
             res.redirect('/admin')
 
