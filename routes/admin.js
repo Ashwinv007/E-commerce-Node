@@ -130,21 +130,38 @@ router.get('/add-product', verifyLogin,function(req,res){
 
 router.post('/add-product', verifyLogin,(req,res)=>{
   console.log(req.body)
-  console.log(req.files.productImage)
+  // console.log(req.files.productImage)
   
   productHelpers.addProduct(req.body, (id)=>{
-    let image = req.files.productImage
-    let ext =path.extname(image.name)
-    image.mv('./public/product-images/'+id+ext, (err,done)=>{
-      if(!err){
-            res.redirect('/admin')
+    let images=[];
+    let exts=[]
+    let err=false
+          console.log("kellllo"+req.files.productImage)
+
+    for(let i=0;i<req.files.productImage.length;i++){
+      images[i]=req.files.productImage[i]
+      console.log(images[i].name)
+      exts[i]=path.extname(images[i].name)
+      images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
+      if(err){
+        err=true
+      
+            // res.redirect('/admin')
 
 
-      }else{
-        console.log('Error occured while Image storing '+ err)
       }
 
     })
+    }
+    if(err){
+      console.log("Error occured while storing images: "+err);
+    }else{
+      res.redirect('/admin');
+    }
+
+    // let image = req.files.productImage
+    // let ext =path.extname(image.name)
+  
   } )
 })
 router.post('/suspend-seller',verifyLogin,(req,res)=>{

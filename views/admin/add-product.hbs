@@ -24,7 +24,7 @@
     <input id="sellerId" style="display:none" type="text" name="sellerId" value='{{admin._id}}'>
 
   </div>
-  <div class="form-group">
+  <div class="form-group" id="productImages">
     <label for="productImage">Image</label>
 <img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3">
 
@@ -41,9 +41,31 @@
 
 <script>
    function viewImage(event){
+    let imgs=[];
+let files=event.target.files;
+console.log(files)
+    for(let i=0;i<files.length;i++){
+      imgs[i]=document.createElement('img');
+      imgs[i].src=URL.createObjectURL(event.target.files[i])
+      document.getElementById('productImages').appendChild(imgs[i]);
+      imgs[i].classList.add("prodImages")
+    }
     document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
-    let file=event.target.files[0];
-    let ext=file.name.split('.')[1];
+    let  exts=[];
+    let extsRender=[]
+    console.log(files)
+    for(let i=0;i<files.length;i++){
+       exts[i]=files[i].name.split('.')[1];
+       extsRender[i]=document.createElement("input");
+       extsRender[i].type="text";
+       extsRender[i].className="ext_Stored"
+       extsRender[i].value=exts[i];
+       extsRender[i].name="extsRender"
+       document.getElementById('productImages').appendChild(extsRender[i]);
+
+
+
+    }
     if(parseInt(event.target.files.length)>3){
     
               alert("Your can only upload a maximum of 3 files");
@@ -51,7 +73,6 @@
     }else{
       document.getElementById("subBtn").disabled=false;
     }
-    document.getElementById('imgExt').value=ext;
 
     }
 

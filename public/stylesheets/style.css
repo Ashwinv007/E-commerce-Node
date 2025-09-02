@@ -1,7 +1,13 @@
 .cd__main{
     background: linear-gradient(to right, #8e9eab, #eef2f3) !important;
 }
-
+.prodImages{
+    width:100px;
+    height:auto;
+}
+.ext_Stored{
+  display: none;
+}
 .hh-grayBox {
 	background-color: #F8F8F8;
 	margin-bottom: 20px;
