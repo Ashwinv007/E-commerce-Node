@@ -19,6 +19,7 @@ Handlebars.registerHelper('getStringDate',function(value){
   return value.toDateString()
 })
 
+
 // Handlebars.registerHelper('seperate',function(value){
   
 // })
@@ -29,6 +30,13 @@ Handlebars.registerHelper('getEmail',function(value){
   return value[0].email
 })
 
+Handlebars.registerHelper('getIndex',function(value){
+  return value[1]
+})
+
+Handlebars.registerHelper('fileIndex',function(){
+  return 0;
+})
 Handlebars.registerHelper('getOrder',function(value){
   console.log('testiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii;ng')
   console.log(value)
