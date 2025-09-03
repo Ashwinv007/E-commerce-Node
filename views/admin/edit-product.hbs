@@ -32,7 +32,7 @@
     <img src="/product-images/{{../product._id}}{{@index}}.{{this}}" alt="" class="prodImages">
 {{!-- <img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3"> --}}
 {{/each}}
-    <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple required>
+    <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple >
     {{!-- <input type="text" id="imgExt" style="display:none" name="imgExt" value=""> --}}
   </div>
   {{!-- <div class="form-group">
@@ -55,7 +55,7 @@
 let files=event.target.files;
 console.log(files)
     for(let i=0;i<files.length;i++){
-      imgs[i]=document.createElement('img');
+      imgs[i]=document.getElementsByClassName("prodImages")[i];
       imgs[i].src=URL.createObjectURL(event.target.files[i])
       document.getElementById('productImages').appendChild(imgs[i]);
       imgs[i].classList.add("prodImages")

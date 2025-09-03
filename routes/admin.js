@@ -204,26 +204,35 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
   let id = req.params.id
 
   productHelpers.updateProduct(id,req.body).then(()=>{
-  res.redirect('/admin')
+  // res.redirect('/admin')
 
 
-  try{
-  let image = req.files.productImage
-      let ext =path.extname(image.name)
+   let images=[];
+    let exts=[]
+    let err=false
+          console.log("kellllo"+req.files.productImage)
 
-  image.mv('./public/product-images/'+id+ext, (err,done)=>{
-    if(!err){
-          res.render('admin/add-product')
+    for(let i=0;i<req.files.productImage.length;i++){
+      images[i]=req.files.productImage[i]
+      console.log(images[i].name)
+      exts[i]=path.extname(images[i].name)
+      images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
+      if(err){
+        err=true
+      
+            // res.redirect('/admin')
 
 
+      }
+
+    })
+    }
+    if(err){
+      console.log("Error occured while storing images: "+err);
     }else{
-      console.log('Error occured while Image storing '+ err)
+      res.redirect('/admin');
     }
 
-  })
-  }catch{
-
-  }
 
   // if(req.files.productImage){
   //   let image = req.files.productImage

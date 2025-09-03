@@ -63,7 +63,7 @@ module.exports={
           productDescription: proDetails.productDescription,
           productPrice: proDetails.productPrice,
           Category: proDetails.Category,
-          imgExt:proDetails.imgExt
+          extsRender:proDetails.extsRender
         
         }
       }).then((response)=>{
