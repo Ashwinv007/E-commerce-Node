@@ -24,12 +24,15 @@
     <input id="sellerId" style="display:none" type="text" name="sellerId" value='{{admin._id}}'>
 
   </div>
-  <div class="form-group" id="productImages">
+  <div class="form-group">
+    <div id="productImages">
+
+    </div>
     <label for="productImage">Image</label>
-<img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3">
+{{!-- <img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3"> --}}
 
     <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple required>
-    <input type="text" id="imgExt" style="display:none" name="imgExt" value="">
+    {{!-- <input type="text" id="imgExt" style="display:none" name="imgExt" value=""> --}}
   </div>
   <button type="submit" class="btn btn-primary" disabled id="subBtn">Submit</button>
 </form>
@@ -50,7 +53,6 @@ console.log(files)
       document.getElementById('productImages').appendChild(imgs[i]);
       imgs[i].classList.add("prodImages")
     }
-    document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
     let  exts=[];
     let extsRender=[]
     console.log(files)
