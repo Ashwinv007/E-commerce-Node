@@ -3,6 +3,8 @@ var router = express.Router();
 const productHelpers = require('../helpers/product-helpers.js');
 const adminHelpers=require('../helpers/admin-helpers.js');
 const path=require('path');
+const sharp = require('sharp');
+
 
 const verifyLogin=(req,res,next)=>{
   if(req.session.adminLoggedIn){
@@ -132,28 +134,48 @@ router.post('/add-product', verifyLogin,(req,res)=>{
   console.log(req.body)
   // console.log(req.files.productImage)
   
-  productHelpers.addProduct(req.body, (id)=>{
+  productHelpers.addProduct(req.body,(id)=>{
     let images=[];
     let exts=[]
-    let err=false
+    let error_Status=false
           console.log("kellllo"+req.files.productImage)
 
     for(let i=0;i<req.files.productImage.length;i++){
       images[i]=req.files.productImage[i]
+      if(images[i]){
+        console.log('helloimage: '+images[i]);
+      }else{
+        images[i]=req.files.productImage[i]
+        console.log('single file here: '+images[i])
+      }
       console.log(images[i].name)
       exts[i]=path.extname(images[i].name)
+      if(exts[i]){
+        console.log('hellloext: '+exts[i])
+      }
       images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
       if(err){
-        err=true
-      
+        error_Status=true
+      console.log('errrrrror here: '+err)
             // res.redirect('/admin')
 
+
+      }else{
+        // productHelpers.createThumbnail(id,exts[0])
+        sharp('./public/product-images/'+id+0+exts[0]).resize(50,50).toFile('./public/product-images/'+'thumb'+id+0+exts[0],(err,resizeImage)=>{
+          if(err){
+            console.log(err);
+          }else{
+            console.log(resizeImage)
+          }
+        })
+        
 
       }
 
     })
     }
-    if(err){
+    if(error_Status){
       console.log("Error occured while storing images: "+err);
     }else{
       res.redirect('/admin');
