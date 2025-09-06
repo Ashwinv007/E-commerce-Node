@@ -139,19 +139,21 @@ router.post('/add-product', verifyLogin,(req,res)=>{
     let exts=[]
     let error_Status=false
           console.log("kellllo"+req.files.productImage)
-
-    for(let i=0;i<req.files.productImage.length;i++){
+if(req.files.productImage.length>1){
+ for(let i=0;i<req.files.productImage.length;i++){
       images[i]=req.files.productImage[i]
       if(images[i]){
         console.log('helloimage: '+images[i]);
       }else{
-        images[i]=req.files.productImage[i]
+        images[i]=req.files.productImage
         console.log('single file here: '+images[i])
       }
       console.log(images[i].name)
       exts[i]=path.extname(images[i].name)
       if(exts[i]){
         console.log('hellloext: '+exts[i])
+      }else{
+        exts[i]=path.extname(images[i].name)
       }
       images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
       if(err){
@@ -175,6 +177,46 @@ router.post('/add-product', verifyLogin,(req,res)=>{
 
     })
     }
+}else{
+  //  for(let i=0;i<req.files.productImage.length;i++){
+      images=req.files.productImage
+      // if(images[i]){
+      //   console.log('helloimage: '+images[i]);
+      // }else{
+      //   images[i]=req.files.productImage
+      //   console.log('single file here: '+images[i])
+      // }
+      // console.log(images[i].name)
+      exts=path.extname(images.name)
+      // if(exts[i]){
+      //   console.log('hellloext: '+exts[i])
+      // }else{
+      //   exts[i]=path.extname(images[i].name)
+      // }
+      images.mv('./public/product-images/'+id+0+exts, (err,done)=>{
+      if(err){
+        error_Status=true
+      console.log('errrrrror here: '+err)
+            // res.redirect('/admin')
+
+
+      }else{
+        // productHelpers.createThumbnail(id,exts[0])
+        sharp('./public/product-images/'+id+0+exts).resize(50,50).toFile('./public/product-images/'+'thumb'+id+0+exts,(err,resizeImage)=>{
+          if(err){
+            console.log(err);
+          }else{
+            console.log(resizeImage)
+          }
+        })
+        
+
+      }
+
+    })
+    // }
+}
+   
     if(error_Status){
       console.log("Error occured while storing images: "+err);
     }else{
