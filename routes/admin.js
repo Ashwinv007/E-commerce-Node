@@ -131,6 +131,10 @@ router.get('/add-product', verifyLogin,function(req,res){
 })
 
 router.post('/add-product', verifyLogin,(req,res)=>{
+  if(typeof(req.body.extsRender)==='string'){
+  req.body.extsRender=[req.body.extsRender]
+
+  }
   console.log(req.body)
   // console.log(req.files.productImage)
   
