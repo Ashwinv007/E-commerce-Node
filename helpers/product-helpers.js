@@ -2,7 +2,8 @@ var db = require('../config/connection')
 const collections = require('../config/collections')
 var objectId = require('mongodb').ObjectId
 const bcrypt = require('bcrypt')
-
+const imageThumbnail=require('image-thumbnail');
+let options={width:50,responseType:'base64'}
 module.exports={
 
   addProduct:(product,callback)=>{
@@ -15,7 +16,17 @@ module.exports={
     })
 
   },
+//   createThumbnail:async(id,ext)=>{
+//     try{
+//           const imagePath = path.join(__dirname, "../public/product-images/", id + ext);
+//               const thumbnail = await imageThumbnail(imagePath, { width: 200, height: 200 });
 
+//         // const thumbnail= await imageThumbnail("../public/product-images/"+id+0+ext,options);
+//         console.log(thumbnail)
+//         }catch(err){
+// console.log("err in creating thumnail: "+err)
+//         }
+//   },
   
 
   getAllProducts:(sellerId)=>{

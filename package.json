@@ -18,12 +18,14 @@
     "fileupload": "^1.0.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
+    "image-thumbnail": "^1.0.17",
     "mongodb": "4.2",
     "mongoose": "^7.8.7",
     "morgan": "~1.9.1",
     "node-cron": "^4.2.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "razorpay": "^2.9.2"
+    "razorpay": "^2.9.2",
+    "sharp": "^0.34.3"
   }
 }
