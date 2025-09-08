@@ -3,6 +3,8 @@ const collections = require('../config/collections')
 const bcrypt = require('bcrypt')
 var objectId = require('mongodb').ObjectId
 const Razorpay = require('razorpay')
+const env=require("dotenv").config();
+const nodemailer=require("nodemailer");
 var instance = new Razorpay({ key_id: 'rzp_test_KuRfDd0Fixd4Cj', key_secret: 'pClROqLO4CwQ5N5IjCT7KjqB' })
 module.exports={
     doSignup:(userData)=>{
@@ -13,6 +15,41 @@ module.exports={
 
         })
 
+    },
+    generateOTP:()=>{
+        return new Promise(async(resolve,reject)=>{
+           resolve(Math.floor(100000+Math.random()*900000).toString())
+        })
+         
+    },
+    async sendVerificationEmail(email,otp){
+        return new Promise(async(resolve,reject)=>{
+  try{
+            const transporter=nodemailer.createTransport({
+                service:'gmail',
+                port:587,
+                secure:false,
+                requireTLS:true,
+                auth:{
+                    user:process.env.NODEMAILER_USER,
+                    pass:process.env.NODEMAILER_PASS    
+                }
+            })
+            const info=await transporter.sendMail({
+                from:process.env.NODEMAILER_USER,
+                to:email,
+                subject:"Verify your account",
+                text:`Your OTP is ${otp}`,
+                html:`<b>Your OTP: ${otp}<b>`,
+            })
+            resolve(info.accepted.length>0)
+        }catch(err){
+            console.log("Error sending email: ",err)
+            return false;
+
+        }
+        })
+      
     },
     doLogin:(userData)=>{
         return new Promise(async(resolve,reject)=>{

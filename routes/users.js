@@ -51,14 +51,21 @@ router.get('/',verifyLogin, async function(req, res, next) {
 
     // res.redirect('/')
    })
-
-   router.post('/signup', (req,res)=>{
-    userHelpers.doSignup(req.body).then((response)=>{
+   router.post('/otpVerify',(req,res)=>{
+     userHelpers.doSignup(req.body).then((response)=>{
       console.log(response)
       req.session.user=response
       req.session.userLoggedIn=true
       res.redirect('/')
     })
+   })
+   router.post('/signup', (req,res)=>{
+    userHelpers.generateOTP().then((otp)=>{
+      userHelpers.sendVerificationEmail(req.body.email,otp).then((response)=>{
+        res.render('user/verifyOTP',{data:req.body})
+      })
+    })
+   
   })
 
 
