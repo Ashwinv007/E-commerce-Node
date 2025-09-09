@@ -51,18 +51,42 @@ router.get('/',verifyLogin, async function(req, res, next) {
 
     // res.redirect('/')
    })
-   router.post('/otpVerify',(req,res)=>{
-     userHelpers.doSignup(req.body).then((response)=>{
-      console.log(response)
+   router.post('/verifyOtp',async(req,res)=>{
+    console.log('otp entered: ',req.body.otp)
+   await userHelpers.verifyOTP(req.body.otp,req.session.userOTP).then((response)=>{
+      if(response.success){
+  userHelpers.doSignup(req.session.userData).then((response)=>{
+      console.log('hi signup',response)
       req.session.user=response
       req.session.userLoggedIn=true
       res.redirect('/')
+    })
+      }else{
+        res.redirect('/signup')
+      }
+    })
+   
+   })
+
+   router.post('/resendOtp',async(req,res)=>{
+     userHelpers.generateOTP().then((otp)=>{
+      console.log('userEmail:  ',req.session.userData.email)
+      userHelpers.sendVerificationEmail(req.session.userData.email,otp).then((response)=>{
+         req.session.userOTP=otp;
+         res.json(response)
+        // req.session.userData={email:req.body.email,Password:req.body.Password}
+        //  res.render('user/verifyOTP')
+       
+      })
     })
    })
    router.post('/signup', (req,res)=>{
     userHelpers.generateOTP().then((otp)=>{
       userHelpers.sendVerificationEmail(req.body.email,otp).then((response)=>{
-        res.render('user/verifyOTP',{data:req.body})
+         req.session.userOTP=otp;
+        req.session.userData={email:req.body.email,Password:req.body.Password}
+        res.render('user/verifyOTP')
+       
       })
     })
    

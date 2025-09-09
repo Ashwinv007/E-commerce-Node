@@ -16,6 +16,23 @@ module.exports={
         })
 
     },
+    verifyOTP:(enteredOtp,generatedOtp)=>{
+        return new Promise(async(resolve,reject)=>{
+            console.log('endterd otp: ',enteredOtp);
+            console.log('genotp: ',generatedOtp)
+            let response={}
+             if(enteredOtp===generatedOtp){
+                response.success=true
+                resolve(response);
+        }else{
+            response.success=false
+            resolve(response);
+        }
+        })
+       
+
+
+    },
     generateOTP:()=>{
         return new Promise(async(resolve,reject)=>{
            resolve(Math.floor(100000+Math.random()*900000).toString())
