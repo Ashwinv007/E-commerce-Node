@@ -19,22 +19,28 @@
         <div class="card">
             <div class="header">
                 <h1 style="color:green">
-                    GeeksforGeeks
+                    Ecommerce Sample
                 </h1>
                 <h2 style="color:black">
                     OTP Verification
                 </h2>
             </div>
             <div class="content" id="content">
-                <button id="generateBtn" onclick="OTPFn()">
+                {{!-- <button id="generateBtn" onclick="OTPFn()">
                     Generate OTP
-                </button>
-                <div id="otpForm" class="otp-form">
-                    <input type="text" id="userOTP" placeholder="Enter OTP">
-                    <button onclick="OTPVerifyFn()">
+                </button> --}}
+                <form action="/verifyOtp" method="post">
+                <div id="otpForm" class="otp-form" style="display:flex">
+                    <input type="text" id="userOTP" name="otp" placeholder="Enter OTP">
+                    <button type="submit">
                         Verify
                     </button>
                 </div>
+                
+                </form>
+                                    <button class="" onclick="resendOtp()">Resend OTP</button>
+                                    
+
                 <div id="successMessage" class="success-message">
                     <i class="fas fa-check"></i>
                     <p>Congratulations Geek! OTP is Verified!</p>
@@ -46,6 +52,13 @@
     </div>
      </section>
     <script>
+
+        function resendOtp(){
+            $.ajax({
+                url:'/resendOtp',
+                method:'post',
+              
+        })}
         let otpGen;
 let timer;
 let secondsRemaining = 10;
@@ -78,29 +91,26 @@ function clearFn() {
 }
 
 function OTPVerifyFn() {
+let enterdOtp=document.getElementById('userOTP').value;
+console.log(enterdOtp)
+    $.ajax({
+        url:'/verifyOtp',
+        data:{
+        otp:enterdOtp,
+
+        },
+        method:'post',
+        success:(response)=>{
+            $("#otpSection").load(" #otpSection")
+        }
+       
+    })
     const userOtp = document.getElementById('userOTP').value;
     if (userOtp === "") {
         alert("Please enter OTP.");
         return;
     }
-    const enterOtp = parseInt(userOtp);
-    if (!isNaN(enterOtp)) {
-        if (secondsRemaining > 0) {
-            if (enterOtp === otpGen) {
-                showMsgFn();
-                document.getElementById('generateBtn').disabled = false;
-                resetTimer();
-                enableInputField();
-            } else {
-                document.getElementById('errorMessage').innerText = 'Invalid OTP. Please try again.';
-            }
-        } else {
-            document.getElementById('errorMessage').innerText = 'OTP Expired. Please generate a new OTP.';
-            resetTimer();
-        }
-    } else {
-        alert("Invalid OTP. Please try again.");
-    }
+   
 }
 
 function showMsgFn() {
