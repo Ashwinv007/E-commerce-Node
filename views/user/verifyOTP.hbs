@@ -57,6 +57,10 @@
             $.ajax({
                 url:'/resendOtp',
                 method:'post',
+                   success:()=>{
+            document.getElementById('userOTP').value=''
+
+        }
               
         })}
         let otpGen;
@@ -100,9 +104,7 @@ console.log(enterdOtp)
 
         },
         method:'post',
-        success:(response)=>{
-            $("#otpSection").load(" #otpSection")
-        }
+     
        
     })
     const userOtp = document.getElementById('userOTP').value;

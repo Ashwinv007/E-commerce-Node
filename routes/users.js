@@ -69,13 +69,14 @@ router.get('/',verifyLogin, async function(req, res, next) {
    })
 
    router.post('/resendOtp',async(req,res)=>{
-     userHelpers.generateOTP().then((otp)=>{
+     await userHelpers.generateOTP().then(async(otp)=>{
       console.log('userEmail:  ',req.session.userData.email)
-      userHelpers.sendVerificationEmail(req.session.userData.email,otp).then((response)=>{
+      await userHelpers.sendVerificationEmail(req.session.userData.email,otp).then((response)=>{
          req.session.userOTP=otp;
-         res.json(response)
+        //  let response={}
+        //  res.json(response)
         // req.session.userData={email:req.body.email,Password:req.body.Password}
-        //  res.render('user/verifyOTP')
+         res.render('user/verifyOTP')
        
       })
     })
