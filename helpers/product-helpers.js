@@ -32,7 +32,7 @@ module.exports={
   getAllProducts:(sellerId)=>{
     console.log('get all pro',sellerId)
     return new Promise(async(resolve,reject)=>{
-      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find({sellerId:sellerId}).toArray()
+      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find().toArray()
       console.log("hellllo product",product)
       let i=0;
       let products=[];
@@ -74,7 +74,8 @@ module.exports={
           productDescription: proDetails.productDescription,
           productPrice: proDetails.productPrice,
           Category: proDetails.Category,
-          extsRender:proDetails.extsRender
+          extsRender:proDetails.extsRender,
+          stockAmount:proDetails.stockAmount
         
         }
       }).then((response)=>{
@@ -82,6 +83,22 @@ module.exports={
       })
     })
     
+  },
+  decreaseStockQuantity:(product)=>{
+    return new Promise(async(resolve,reject)=>{
+      console.log('product here: ',product)
+      console.log('product id here',product._id)
+      let quantity=await db.get().collection(collections.PRODUCT_COLLECTION).findOne({_id:product.item})
+      let decreasedQuantity=quantity.stockAmount-product.quantity
+      console.log('quantity here: ',quantity.stockAmount)
+      db.get().collection(collections.PRODUCT_COLLECTION)
+      .updateOne({_id:product.item},{
+        $set:{
+          stockAmount:decreasedQuantity
+        }
+      })
+      resolve()
+    })
   },
 
   getAllOrders:(sellerId)=>{
