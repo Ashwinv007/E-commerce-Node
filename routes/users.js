@@ -225,6 +225,7 @@ router.post('/place-order',async(req,res)=>{
  
   userHelpers.placeOrder(req.body,products,totalPrice,reOrderStatus,req.body.reOrder).then((orderId)=>{
     console.log("order from user"+orderId)
+    console.log('productts of order here :', products)
     if(req.body['payment-method']==='COD'){
       res.json({codSuccess:true})
     }else{
@@ -233,6 +234,11 @@ router.post('/place-order',async(req,res)=>{
         res.json(response)
 
       })
+    }
+  }).then(async()=>{
+    for(let i=0;i<products.length;i++){
+      console.log('hello order pro: ',products[i].quantity)
+      await productHelpers.decreaseStockQuantity(products[i])
     }
   })
   console.log(req.body)
