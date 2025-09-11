@@ -55,19 +55,28 @@ router.get('/',verifyLogin, async function(req, res, next) {
     console.log('otp entered: ',req.body.otp)
    await userHelpers.verifyOTP(req.body.otp,req.session.userOTP).then((response)=>{
       if(response.success){
-  userHelpers.doSignup(req.session.userData).then((response)=>{
+        if(req.session.userData){
+userHelpers.doSignup(req.session.userData).then((response)=>{
       console.log('hi signup',response)
       req.session.user=response
       req.session.userLoggedIn=true
       res.redirect('/')
     })
+        }else{
+          res.render('user/change-password')
+        }
+  
       }else{
         res.redirect('/signup')
       }
     })
    
    })
-
+router.post('/change-password',async(req,res)=>{
+  await userHelpers.changePassword(req.session.userEmail,req.body.password).then(()=>{
+    res.redirect('/')
+  })
+})
    router.post('/resendOtp',async(req,res)=>{
      await userHelpers.generateOTP().then(async(otp)=>{
       console.log('userEmail:  ',req.session.userData.email)
@@ -81,11 +90,25 @@ router.get('/',verifyLogin, async function(req, res, next) {
       })
     })
    })
+   router.get('/forgot-password',(req,res)=>{
+    res.render('user/forgot-password')
+   })
+   router.post('/forgot-password',async(req,res)=>{
+     userHelpers.generateOTP().then((otp)=>{
+      userHelpers.sendVerificationEmail(req.body.email,otp).then((response)=>{
+         req.session.userOTP=otp;
+         req.session.userEmail=req.body.email
+        // req.session.userData={email:req.body.email,Password:req.body.Password}
+        res.render('user/verifyOTP')
+       
+      })
+    })
+   })
    router.post('/signup', (req,res)=>{
     userHelpers.generateOTP().then((otp)=>{
       userHelpers.sendVerificationEmail(req.body.email,otp).then((response)=>{
          req.session.userOTP=otp;
-        req.session.userData={email:req.body.email,Password:req.body.Password}
+        req.session.userData={username:req.body.username,email:req.body.email,Password:req.body.Password}
         res.render('user/verifyOTP')
        
       })

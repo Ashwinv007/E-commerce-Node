@@ -39,6 +39,20 @@ module.exports={
         })
          
     },
+    changePassword:(userEmail,password)=>{
+        return new Promise(async(resolve,reject)=>{
+                    password=await bcrypt.hash(password,10)
+
+            db.get().collection(collections.USER_COLLECTION)
+            .updateOne({email:userEmail},
+                {
+                    $set:{Password:password}
+                }
+            )
+            resolve()
+
+        })
+    },
     async sendVerificationEmail(email,otp){
         return new Promise(async(resolve,reject)=>{
   try{
