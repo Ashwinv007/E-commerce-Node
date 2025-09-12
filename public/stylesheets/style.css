@@ -258,6 +258,11 @@
 
 @keyframes blink { 50% { border-color:#fff ; }  } */
 
+#view-products a{
+  text-decoration: none;
+  color: #000;
+
+}
 
 #otpSection {
     font-family: 'Montserrat', sans-serif;
