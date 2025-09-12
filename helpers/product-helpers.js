@@ -28,6 +28,15 @@ module.exports={
 //         }
 //   },
   
+findProduct:(product_id)=>{
+  console.log('pro id here:  ',product_id)
+  return new Promise(async(resolve,reject)=>{
+    let product=await db.get().collection(collections.PRODUCT_COLLECTION).findOne({_id:objectId(product_id)})
+    console.log('some pro  ',product)
+    resolve(product)
+    
+  })
+},
 
   getAllProducts:(sellerId)=>{
     console.log('get all pro',sellerId)

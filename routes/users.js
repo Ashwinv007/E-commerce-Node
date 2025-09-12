@@ -137,6 +137,17 @@ router.post('/change-password',async(req,res)=>{
     req.session.userLoggedIn=false
       res.redirect('/')
    })
+   router.get('/view-product/:id',async(req,res)=>{
+       let cartCount=null
+  let user = req.session.user
+  if(req.session.user){
+    cartCount = await userHelpers.getCartCount(req.session.user._id)
+  }
+
+    await productHelpers.findProduct(req.params.id).then((product)=>{
+      res.render('user/view-product',{product,user,cartCount})
+    })
+   })
 
    router.get('/cart', verifyLogin,async (req,res)=>{
     let products = await userHelpers.getCartProducts(req.session.user._id)

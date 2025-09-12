@@ -1,0 +1,47 @@
+
+<section>
+    <div class="container mt-5">
+    <div class="row">
+      {{#if product}}
+        <div class="col-md-3 p-3" >
+            <div class="card" style="width: 15rem; height:24rem;">
+  {{!-- <img class="card-img-top" src="/product-images//{{this.product._id}}.{{this.imgExt}}" alt="Card image cap" style="height:12rem;"> --}}
+                                    <td><img style="width: 100%; height:auto" src="/product-images/{{product._id}}0.{{product.extsRender.[0]}}" alt=""  onload="checkStock()"></td>
+
+  <div class="card-body">
+    <h5 class="card-title">{{product.productName}}</h5>
+    <p class="card-text">Rs:{{product.productPrice}}/-</p>
+    {{!-- <p class="card-text">Quantity:{{product.quantity}}/-</p> --}}
+    {{!-- {{checkStock product.stockAmount}} --}}
+    <div id="stockAvailability" name="stockAvailability" >
+        <input type="number" id="stockAmount" name="stockAmount" style="display:none" value="{{product.stockAmount}}">
+        <h2 id="runningOutOfStock" style="display: none; color:red">Running out of Stock!</h2>
+        <h2 id="outOfStock" style="display:none; color:red">Out of Stock</h2>
+         </div>
+    <p class="card-text">{{product.productDescription}}/-</p>
+
+                                    <button id="cartButton" class="btn btn-primary" onclick="addToCart('{{product._id}}')">Add to Cart</button>
+
+  </div>
+</div>
+        </div>
+        {{/if}}
+
+    </div>
+    </div>
+</section>
+
+<script>
+    
+    function checkStock(){
+            let stockAmount=document.getElementById("stockAmount").value
+
+        console.log('hi qun:',stockAmount)
+        if(stockAmount<=10 && stockAmount!=0){
+            document.getElementById("runningOutOfStock").style.display="block"
+        }else if(stockAmount==0){
+            document.getElementById("outOfStock").style.display="block"
+            document.getElementById("cartButton").disabled=true
+        }
+    }
+</script>
