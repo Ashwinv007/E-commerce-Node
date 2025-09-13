@@ -242,6 +242,7 @@ router.post('/revoke-seller',verifyLogin,(req,res)=>{
     res.json({status:true})
   })
 })
+
 router.post('/remove-seller',verifyLogin,(req,res)=>{
   adminHelpers.removeSeller(req.body.adminId).then(()=>{
     adminHelpers.removeSellerProducts(req.body.adminId).then(()=>{
@@ -250,7 +251,39 @@ router.post('/remove-seller',verifyLogin,(req,res)=>{
     })
   })
 })
+router.get('/coupons',verifyLogin,function(req,res){
+      let admin=req.session.admin
 
+  res.render('admin/view-coupons',{adminExist:true,admin})
+  
+})
+
+router.get('/add-coupon',verifyLogin,(req,res)=>{
+      let admin=req.session.admin
+
+  res.render('admin/add-coupon',{adminExist:true,admin})
+})
+router.post('/add-coupon',verifyLogin,(req,res)=>{
+  adminHelpers.addCoupon(req.body).then(()=>{
+
+    res.redirect('/admin/coupons')
+  })
+})
+// router.post('/ad')
+router.get('/edit-coupon/:id',verifyLogin,async(req,res)=>{
+  let couponId=req.params.id
+  adminHelpers.getCouponDetails(couponId).then((coupon)=>{
+        let admin=req.session.admin
+
+    res.render('admin/edit-coupon',{adminExist:true,admin,coupon})
+  })
+})
+router.post('/edit-coupon/:id',verifyLogin,async(req,res)=>{
+  let couponId=req.params.id
+  adminHelpers.updateCoupon(couponId).then(()=>{
+    res.redirect('/admin/')
+  })
+})
 router.get('/delete-product/:id',verifyLogin, function(req,res){
   let proId = req.params.id
   console.log(proId)

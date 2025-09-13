@@ -2,7 +2,7 @@ var db = require('../config/connection')
 const collections = require('../config/collections')
 var objectId = require('mongodb').ObjectId
 const bcrypt = require('bcrypt')
-const imageThumbnail=require('image-thumbnail');
+// const imageThumbnail=require('image-thumbnail');
 let options={width:50,responseType:'base64'}
 module.exports={
 
