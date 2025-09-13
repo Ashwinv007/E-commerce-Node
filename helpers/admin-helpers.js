@@ -79,6 +79,40 @@ getAllSellers:(choice)=>{
         resolve(sellerArray)
     })
 },
+getCoupons:(sellerId)=>{
+  return new Promise(async(resolve,reject)=>{
+ if(sellerId){
+    let coupons=await db.get().collection(collections.COUPON_COLLECTION).find({sellerId:sellerId})
+    resolve(coupons)
+  }else{
+    let coupons=await db.get().collection(collections.COUPON_COLLECTION).find()
+    resolve(coupons)
+  }
+  })
+ 
+},
+addCoupon:(couponDetails)=>{
+  return new Promise(async(resolve,reject)=>{
+    db.get().collection(collections.COUPON_COLLECTION).insertOne(couponDetails).then(()=>{
+      resolve()
+    })
+  })
+},
+getCouponDetails:(couponId)=>{
+  return new Promise(async(resolve,reject)=>{
+    db.get().collection(collections.COUPON_COLLECTION).findOne({_id:objectId(couponId)}).then((response)=>{
+      resolve(response)
+    })
+  })
+},
+updateCoupon:(couponId)=>{
+  return new Promise(async(resolve,reject)=>{
+    db.get().collection(collections.COUPON_COLLECTION).updateOne({_id:objectId(couponId)}),
+   { $set:{
+
+    }}
+  })
+},
 
  getAllUsers:(sellerId)=>{
     return new Promise(async(resolve,reject)=>{
