@@ -41,8 +41,7 @@ findProduct:(product_id)=>{
   getAllProducts:(sellerId)=>{
     console.log('get all pro',sellerId)
     return new Promise(async(resolve,reject)=>{
-      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find().toArray()
-      console.log("hellllo product",product)
+      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find()
       let i=0;
       let products=[];
       while(i<product.length){

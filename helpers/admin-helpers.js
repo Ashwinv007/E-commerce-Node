@@ -79,13 +79,18 @@ getAllSellers:(choice)=>{
         resolve(sellerArray)
     })
 },
-getCoupons:(sellerId)=>{
+getCoupons:(adminId)=>{
   return new Promise(async(resolve,reject)=>{
- if(sellerId){
-    let coupons=await db.get().collection(collections.COUPON_COLLECTION).find({sellerId:sellerId})
+ if(adminId){
+    let coupons=await db.get().collection(collections.COUPON_COLLECTION).aggregate([
+      {
+        $match:{sellerId:adminId._id}
+      }
+    ]).toArray()
+    console.log('hello cop...',coupons)
     resolve(coupons)
   }else{
-    let coupons=await db.get().collection(collections.COUPON_COLLECTION).find()
+    let coupons=await db.get().collection(collections.COUPON_COLLECTION).find().toArray()
     resolve(coupons)
   }
   })
@@ -105,12 +110,22 @@ getCouponDetails:(couponId)=>{
     })
   })
 },
-updateCoupon:(couponId)=>{
+updateCoupon:(coupon)=>{
   return new Promise(async(resolve,reject)=>{
-    db.get().collection(collections.COUPON_COLLECTION).updateOne({_id:objectId(couponId)}),
-   { $set:{
+    console.log('updateCoupin here: ',coupon)
+    db.get().collection(collections.COUPON_COLLECTION).updateOne({_id:objectId(coupon.couponId)},
+   { 
+    $set:{
+    couponName:coupon.couponName,
+    startDate:coupon.startDate,
+    endDate:coupon.endDate,
+    offerPrice:coupon.offerPrice,
+    sellerId:coupon.sellerId
 
-    }}
+    }
+  }).then((response)=>{
+    resolve()
+  })
   })
 },
 
