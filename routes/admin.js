@@ -251,10 +251,14 @@ router.post('/remove-seller',verifyLogin,(req,res)=>{
     })
   })
 })
-router.get('/coupons',verifyLogin,function(req,res){
+router.get('/coupons',verifyLogin,async function(req,res){
       let admin=req.session.admin
+      console.log('seller admin hera: ',admin)
+  await adminHelpers.getCoupons(admin).then((coupons)=>{
+    console.log('coupons here: ',coupons)
+  res.render('admin/view-coupons',{adminExist:true,admin,coupons})
 
-  res.render('admin/view-coupons',{adminExist:true,admin})
+  })
   
 })
 
@@ -274,14 +278,16 @@ router.get('/edit-coupon/:id',verifyLogin,async(req,res)=>{
   let couponId=req.params.id
   adminHelpers.getCouponDetails(couponId).then((coupon)=>{
         let admin=req.session.admin
+        console.log('heelo coupon',coupon)
 
     res.render('admin/edit-coupon',{adminExist:true,admin,coupon})
   })
 })
-router.post('/edit-coupon/:id',verifyLogin,async(req,res)=>{
-  let couponId=req.params.id
-  adminHelpers.updateCoupon(couponId).then(()=>{
-    res.redirect('/admin/')
+router.post('/edit-coupon',verifyLogin,async(req,res)=>{
+  // let couponId=req.params.id
+  console.log('coupon Check',req.body)
+  adminHelpers.updateCoupon(req.body).then((response)=>{
+    res.redirect('/admin')
   })
 })
 router.get('/delete-product/:id',verifyLogin, function(req,res){

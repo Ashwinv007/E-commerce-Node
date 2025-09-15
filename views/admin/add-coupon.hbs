@@ -4,11 +4,11 @@
             <form  action="/admin/add-coupon" method="post" enctype="multipart/form-data">
   <div class="form-group">
     <label for="CouponName">Coupon Name</label>
-    <input type="text" class="form-control" id="couponName" name="couponName" placeholder="Enter product name" required>
+    <input type="text" class="form-control" id="couponName" name="couponName" placeholder="Enter Coupon name" required>
   </div>
   <div class="form-group">
     <label for="startDate">Start Date</label>
-        <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Start Date" required>
+        <input type="date" class="form-control" readonly  id="startDate" name="startDate" placeholder="Start Date" required>
 
   </div>
   <div class="form-group">
@@ -36,12 +36,10 @@
 
     </div>
     <label for="productImage">Image</label>
-{{!-- <img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3"> --}}
 
     <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple required>
-    {{!-- <input type="text" id="imgExt" style="display:none" name="imgExt" value=""> --}}
   </div> --}}
-  <button type="submit" class="btn btn-primary" disabled id="subBtn">Submit</button>
+  <button type="submit" class="btn btn-primary" id="subBtn">Submit</button>
 </form>
 
         </div>
@@ -51,6 +49,11 @@
 
 <script>
    
-
+  let startDate=document.getElementById("startDate");
+  let today=new Date();
+  let day=String(today.getDate()).padStart(2,'0');
+  let month=String(today.getMonth()+1).padStart(2,'0');
+  let year=today.getFullYear();
+  startDate.value=year+"-"+month+"-"+day;
    
 </script>
