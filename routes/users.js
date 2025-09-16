@@ -4,6 +4,8 @@ var router = express.Router();
 const productHelpers = require('../helpers/product-helpers.js');
 const userHelpers = require('../helpers/user-helpers.js')
 const passport = require("passport");
+const adminHelpers=require('../helpers/admin-helpers.js');
+
 const verifyLogin=(req,res,next)=>{
   if(req.session.userLoggedIn){
     next()
@@ -196,8 +198,29 @@ console.log('api call')
      
     })
    })
+   router.post('/verify-coupon',verifyLogin,async(req,res)=>{
+    let productList=await userHelpers.getCartProducts(req.session.user._id)
+    console.log('hi productList',productList)
+     console.log('data her: ',req.body.coupon)
+      await adminHelpers.verifyCoupon(req.body.coupon,productList).then((response)=>{
+    
+       res.json({response})
+     })
+     
    
+   })
+  //  router.post('/verify-coupon',verifyLogin,async(req,res)=>{
+  // await adminHelpers.verifyCoupon(req.body.coupon,req.body.productList).then((response)=>{
+    
+  // })
+  // let response={
+  //   sucess:true
+  // }
+  // res.json(response)
+
+
    router.get('/place-order',verifyLogin,async(req,res)=>{
+  
     let total = await userHelpers.getTotalAmount(req.session.user._id)
     res.render('user/place-order',{total,user:req.session.user})
    })
@@ -231,6 +254,9 @@ router.post('/place-order',async(req,res)=>{
 
 
 
+  }
+  if(req.body.discount){
+    totalPrice=totalPrice-discount
   }
 
  
@@ -329,6 +355,7 @@ router.get('/track-order-delivery/:id',async(req,res)=>{
   res.render('user/track-order',{user:req.session.user,trackOrder})
 })
 router.post('/verify-payment',(req,res)=>{
+ 
   console.log(req.body)
   userHelpers.verifyPayment(req.body).then(()=>{
   userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{

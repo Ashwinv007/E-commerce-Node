@@ -41,7 +41,7 @@ findProduct:(product_id)=>{
   getAllProducts:(sellerId)=>{
     console.log('get all pro',sellerId)
     return new Promise(async(resolve,reject)=>{
-      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find()
+      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find().toArray()
       let i=0;
       let products=[];
       while(i<product.length){
@@ -108,7 +108,13 @@ findProduct:(product_id)=>{
       resolve()
     })
   },
+  // getSellerIdofProducts:(cartId)=>{
+  //   return new Promise(async(resolve,reject)=>{
+  //     let products=await db.get().collection(collections.CART_COLLECTION)
+  //   })
 
+
+  // },
   getAllOrders:(sellerId)=>{
     return new Promise(async(resolve,reject)=>{
       let orders = await db.get().collection(collections.ORDER_COLLECTION).aggregate([

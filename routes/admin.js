@@ -290,6 +290,14 @@ router.post('/edit-coupon',verifyLogin,async(req,res)=>{
     res.redirect('/admin')
   })
 })
+router.post('/verify-coupon',verifyLogin,async(req,res)=>{
+  console.log('data her: ',req.body.coupon,req.body.productList)
+   await adminHelpers.verifyCoupon(req.body.coupon,req.body.productList).then((response)=>{
+    
+  })
+  
+
+})
 router.get('/delete-product/:id',verifyLogin, function(req,res){
   let proId = req.params.id
   console.log(proId)
