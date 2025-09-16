@@ -128,7 +128,42 @@ updateCoupon:(coupon)=>{
   })
   })
 },
+verifyCoupon:(verifyCoupon,productList)=>{
+  return new Promise(async(resolve,reject)=>{
+       let q=new Date();
+  let m=q.getMonth();
+  let d=q.getDay();
+  let y=q.getFullYear();
+    console.log('hellocoupon :  ',verifyCoupon)
+    let coupon=await db.get().collection(collections.COUPON_COLLECTION).findOne({couponName:verifyCoupon})
+    if(coupon){
+       let currentDate=new Date(y,m,d)
+       console.log('curretn date: ',currentDate)
+       console.log('exp date :',coupon.endDate)
+      if(currentDate<=new Date(coupon.endDate)){
+          for(let i=0;i<productList.length;i++){
+        if(coupon.sellerId===productList[i].product.sellerId){
+          let price=(Number((productList[i].product.productPrice)*productList[i].quantity)-coupon.offerPrice)
+          resolve(price)
 
+        }else{
+          resolve('This coupon is not valid')
+        }
+        // console.log('hello bro',JSON.stringify(productList,null,2))
+        // console.log(coupon,'hello \n',productList[i].product.sellerId)
+      }
+
+      }else{
+        resolve('This coupon is expired')
+      }
+    
+     
+
+    }else{
+      resolve('This coupon is not found')
+    }
+  })
+},
  getAllUsers:(sellerId)=>{
     return new Promise(async(resolve,reject)=>{
       let orders =await db.get().collection(collections.ORDER_COLLECTION).aggregate([

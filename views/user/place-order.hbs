@@ -18,6 +18,13 @@
                         <input type="text" class="form-control" name="mobile" id="mobile" value="{{mobile}}" placeholder="Enter your mobile number">
                     <input type="text" name="userId" id="" value="{{user._id}}" hidden>
                     </div>
+                    <div class="form-group" id="coupon-section">
+                        <label for="coupon">Coupon Code:</label>
+                        <input type="text" class="form-control" name="coupon" id="coupon" placeholder="Enter coupon">
+                        <button type="button" onclick="checkCoupon('{{user._id}}')">Redeem Coupon</button>
+
+                    {{!-- <input type="text" name="userId" id="" value="{{user._id}}" hidden> --}}
+                    </div>
             </div>
             <div class="col-md-6">
                 <h2>Order Summary</h2>
@@ -54,6 +61,7 @@
 </section>
 
 <script>
+  
     $('#checkout-form').submit((e)=>{
         e.preventDefault()
         $.ajax({
@@ -102,6 +110,31 @@ var rzp1 = new Razorpay(options);
 
     
 }
+
+  function checkCoupon(){
+        let couponCode=document.getElementById('coupon').value;
+        $.ajax({
+            url:'/verify-coupon',
+            method:'post',
+            data:{
+                coupon:couponCode,
+            },
+            success:(response)=>{
+                console.log(response)
+                console.log(typeof(response.response))
+             if(typeof(response.response)==='number'){
+                let discountElement=document.createElement("input");
+                discountElement.type="number"
+                discountElement.name="discount"
+                discountElement.value=response.response
+                document.getElementById('coupon-section').appendChild(discountElement)
+
+             }else{
+                alert('not correct')
+             }
+            }
+        })
+    }
        
 
     function verifyPayment(payment,order){
