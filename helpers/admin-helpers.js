@@ -110,6 +110,27 @@ getCouponDetails:(couponId)=>{
     })
   })
 },
+checkCoupon:(couponName)=>{
+  return new Promise(async(resolve,reject)=>{
+    let coupon=await db.get().collection(collections.COUPON_COLLECTION).findOne({couponName:couponName})
+
+    if(coupon){
+      console.log('cp here: ',coupon)
+      console.log('got cp here: ',couponName)
+      resolve({
+        response:{
+          success:true
+        }
+      })
+    }else{
+      resolve({
+        response:{
+          success:false
+        }
+      })
+    }
+  })
+},
 updateCoupon:(coupon)=>{
   return new Promise(async(resolve,reject)=>{
     console.log('updateCoupin here: ',coupon)
@@ -120,7 +141,8 @@ updateCoupon:(coupon)=>{
     startDate:coupon.startDate,
     endDate:coupon.endDate,
     offerPrice:coupon.offerPrice,
-    sellerId:coupon.sellerId
+    sellerId:coupon.sellerId,
+    minPrice:coupon.minPrice
 
     }
   }).then((response)=>{
@@ -128,7 +150,7 @@ updateCoupon:(coupon)=>{
   })
   })
 },
-verifyCoupon:(verifyCoupon,productList)=>{
+verifyCoupon:(verifyCoupon,total,productList)=>{
   return new Promise(async(resolve,reject)=>{
        let q=new Date();
   let m=q.getMonth();
@@ -143,8 +165,13 @@ verifyCoupon:(verifyCoupon,productList)=>{
       if(currentDate<=new Date(coupon.endDate)){
           for(let i=0;i<productList.length;i++){
         if(coupon.sellerId===productList[i].product.sellerId){
-          let price=(Number((productList[i].product.productPrice)*productList[i].quantity)-coupon.offerPrice)
+          if(total>=coupon.minPrice){
+             let price=(Number((productList[i].product.productPrice)*productList[i].quantity)-coupon.offerPrice)
           resolve(price)
+          }else{
+            resolve('Minimum Price is '+coupon.minPrice+'/-')
+          }
+         
 
         }else{
           resolve('This coupon is not valid')
@@ -160,7 +187,7 @@ verifyCoupon:(verifyCoupon,productList)=>{
      
 
     }else{
-      resolve('This coupon is not found')
+      resolve('Coupon not found')
     }
   })
 },
