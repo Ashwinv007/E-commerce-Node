@@ -362,7 +362,11 @@ router.get('/orders',verifyLogin,async(req,res)=>{
     res.render('admin/view-orders',{adminExist:true, admin,orders})
   })
 })
-
+router.post('/check-coupon',verifyLogin,async(req,res)=>{
+  adminHelpers.checkCoupon(req.body.couponName).then((response)=>{
+    res.json({response})
+  })
+})
 
 router.get('/users',verifyLogin,async(req,res)=>{
   let admin=req.session.admin

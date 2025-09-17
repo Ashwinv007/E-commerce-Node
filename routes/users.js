@@ -200,9 +200,11 @@ console.log('api call')
    })
    router.post('/verify-coupon',verifyLogin,async(req,res)=>{
     let productList=await userHelpers.getCartProducts(req.session.user._id)
+        let total = await userHelpers.getTotalAmount(req.session.user._id)
+
     console.log('hi productList',productList)
      console.log('data her: ',req.body.coupon)
-      await adminHelpers.verifyCoupon(req.body.coupon,productList).then((response)=>{
+      await adminHelpers.verifyCoupon(req.body.coupon,total,productList).then((response)=>{
     
        res.json({response})
      })

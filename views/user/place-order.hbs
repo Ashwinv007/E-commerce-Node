@@ -130,7 +130,14 @@ var rzp1 = new Razorpay(options);
                 document.getElementById('coupon-section').appendChild(discountElement)
 
              }else{
-                alert('not correct')
+                let invalidCoupon=document.createElement("input");
+                invalidCoupon.type="text"
+                invalidCoupon.style.width='auto'
+                invalidCoupon.name="invalidCoupon"
+                invalidCoupon.value=response.response
+                invalidCoupon.style.color="red"
+                document.getElementById('coupon-section').appendChild(invalidCoupon)
+
              }
             }
         })
