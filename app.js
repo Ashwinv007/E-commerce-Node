@@ -11,6 +11,16 @@ Handlebars.registerHelper("inc", function(value, options){
   return parseInt(value) + 1;
 })
 
+Handlebars.registerHelper("renderStars",function(ratingValue){
+  let rating=parseInt(ratingValue,10);
+  let stars='';
+
+  for(let i=1;i<=5;i++){
+    stars +=(i<=rating) ? '★' : '☆';
+  }
+  return stars
+})
+
 Handlebars.registerHelper('setIndex',function(value,options){
   return value[0].username
 })

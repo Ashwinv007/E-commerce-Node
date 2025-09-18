@@ -369,3 +369,56 @@ input:disabled {
     margin-top: 10px;
     font-size: 14px;
 }
+
+
+.rating {
+display: flex;
+padding: 0;
+margin: 0;
+}
+
+.rating li {
+list-style-type: none
+}
+
+.rating-item {
+border: 1px solid #fff;
+cursor: pointer;
+font-size:2em;
+color: yellow;
+}
+
+.stars span::before{
+  content:"\2606";
+  font-size:24px;
+  color:gray;
+}
+
+.stars[data-rating="1"] span:nth-child(-n+1)::before,
+.stars[data-rating="2"] span:nth-child(-n+2)::before,
+.stars[data-rating="3"] span:nth-child(-n+3)::before,
+.stars[data-rating="4"] span:nth-child(-n+4)::before,
+.stars[data-rating="5"] span:nth-child(-n+5)::before{
+  content:"\2605";
+  color:gold;
+}
+
+/* initial: make all stars full */
+.rating-item::before {
+content: "\2606";
+}
+
+/* make until the clicked star (the rest) empty */
+.rating-item.active ~ .rating-item::before {
+content: "\2606";
+}
+
+/* on hover make all full */
+.rating:hover .rating-item::before {
+content: "\2605";
+}
+
+/* make until the hovered (the rest) empty */
+.rating-item:hover ~ .rating-item::before {
+content: "\2606";
+}

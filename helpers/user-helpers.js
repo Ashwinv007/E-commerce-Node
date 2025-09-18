@@ -188,6 +188,30 @@ module.exports={
             resolve(cartItems)
         })
     },
+    getReviews:(proId)=>{
+        return new Promise(async(resolve,reject)=>{
+       let reviews=await db.get().collection(collections.REVIEW_COLLECTION).find({productId:proId}).toArray()
+    //    if(reviews){
+    //     let userReview=await db.get()
+    //    }
+            resolve(reviews)
+        })
+    },
+    checkReview:(userId,proId)=>{
+        return new Promise(async(resolve,reject)=>{
+                   let reviews=await db.get().collection(collections.REVIEW_COLLECTION).find({productId:proId}).toArray()
+                   let status=false
+                        if(reviews){
+                            for(let i=0;i<reviews.length;i++){
+                                if(reviews[i].userId===userId){
+                                    status=true
+                                    break;
+                                }
+                            }
+                            resolve(status)
+                        }
+        })
+    },
     getCartCount:(userId)=>{
         return new Promise(async(resolve,reject)=>{
             let count=0
@@ -229,6 +253,13 @@ module.exports={
 
             }
          
+        })
+    },
+    submitReview:(reviewData)=>{
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collections.REVIEW_COLLECTION).insertOne(reviewData).then(()=>{
+                resolve()
+            })
         })
     },
     getTotalAmount:(userId)=>{
