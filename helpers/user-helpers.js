@@ -197,6 +197,34 @@ module.exports={
             resolve(reviews)
         })
     },
+    getRatingSummary:(proId,reviews)=>{
+        return new Promise(async(resolve,reject)=>{
+            const totalReviews=reviews.length;
+            let starCounts={1:0,2:0,3:0,4:0,5:0};
+            reviews.forEach(r =>{
+                let rating=parseInt(r.ratingValue,10);
+                starCounts[rating]++;
+            })
+
+            const average=(
+                (1*starCounts[1]+2*starCounts[2]+3*starCounts[3]+4*starCounts[4]+5*starCounts[5])/totalReviews
+
+            ).toFixed(1);
+
+            let starPercentages={};
+            for(let i=1;i<=5;i++){
+                starPercentages[i]=(starCounts[i]/totalReviews)*100;
+            }
+            let starRows=[5,4,3,2,1].map(star =>({
+                star,
+                count:starCounts[star],
+                percentage:starPercentages[star]
+            }))
+            resolve({average,totalReviews,starCounts,starPercentages,starRows})
+
+            
+        })
+    },
     checkReview:(userId,proId)=>{
         return new Promise(async(resolve,reject)=>{
                    let reviews=await db.get().collection(collections.REVIEW_COLLECTION).find({productId:proId}).toArray()

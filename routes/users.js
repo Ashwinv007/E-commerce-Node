@@ -148,10 +148,12 @@ router.post('/change-password',async(req,res)=>{
 
     await productHelpers.findProduct(req.params.id).then(async(product)=>{
       await userHelpers.getReviews(req.params.id).then(async(reviews)=>{
-        await userHelpers.checkReview(req.session.user._id,req.params.id).then((userReviewed)=>{
-
-          console.log('rev here: ',userReviewed)
-              res.render('user/view-product',{product,user,cartCount,reviews,userReviewed})
+        await userHelpers.checkReview(req.session.user._id,req.params.id).then(async(userReviewed)=>{
+          await userHelpers.getRatingSummary(req.params.id,reviews).then((response)=>{
+              console.log('rev here: ',response)
+              res.render('user/view-product',{product,user,cartCount,reviews,userReviewed,response})
+          })
+        
         })
         
 

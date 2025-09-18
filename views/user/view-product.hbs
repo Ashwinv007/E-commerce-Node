@@ -25,11 +25,42 @@
   </div>
 </div>
         </div>
+
         {{/if}}
 
     </div>
     </div>
 
+        {{!-- <div class="displayRating">
+            
+ <div class="ratingContainer">
+        <div class=" five"></div>
+                <div class=" four"></div>
+
+        <div class=" three"></div>
+
+        <div class=" two"></div>
+
+        <div class=" one"></div>
+
+    </div>
+        </div> --}}
+  <div class="rating-summary">
+    <h2>{{response.average}}</h2>
+    <p>{{response.totalReviews}} ratings</p>
+
+    {{#each response.starRows}}
+    <div class="rating-row">
+        <span class="label">{{star}} star</span>
+        <div class="bar">
+            <div class="fill" style="width: {{percentage}}%;"></div>
+        </div>
+        <span class="count">{{count}}</span>
+    </div>
+    {{/each}}
+</div>
+
+      
 {{#if userReviewed}}
 
 {{else}}
