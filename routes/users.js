@@ -139,15 +139,23 @@ router.post('/change-password',async(req,res)=>{
     req.session.userLoggedIn=false
       res.redirect('/')
    })
-   router.get('/view-product/:id',async(req,res)=>{
+   router.get('/view-product/:id',verifyLogin,async(req,res)=>{
        let cartCount=null
   let user = req.session.user
   if(req.session.user){
     cartCount = await userHelpers.getCartCount(req.session.user._id)
   }
 
-    await productHelpers.findProduct(req.params.id).then((product)=>{
-      res.render('user/view-product',{product,user,cartCount})
+    await productHelpers.findProduct(req.params.id).then(async(product)=>{
+      await userHelpers.getReviews(req.params.id).then(async(reviews)=>{
+        await userHelpers.checkReview(req.session.user._id,req.params.id).then((userReviewed)=>{
+
+          console.log('rev here: ',userReviewed)
+              res.render('user/view-product',{product,user,cartCount,reviews,userReviewed})
+        })
+        
+
+      })
     })
    })
 
@@ -187,6 +195,12 @@ console.log('api call')
 
         })
         
+       })
+       router.post('/submit-review',(req,res)=>{
+        console.log('hello pro: ',req.body)
+        userHelpers.submitReview(req.body).then(()=>{
+          res.redirect(`/view-product/${req.body.productId}`)
+        })
        })
     
    router.post('/change-product-quantity',(req,res,next)=>{

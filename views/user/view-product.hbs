@@ -29,10 +29,82 @@
 
     </div>
     </div>
+
+{{#if userReviewed}}
+
+{{else}}
+<form action="/submit-review" method="post">
+    <div class="reviewBox">
+        <div class="ratingDiv">
+          
+<ul class="rating">
+<li class="rating-item" data-rate="1"></li>
+<li class="rating-item" data-rate="2"></li>
+<li class="rating-item" data-rate="3"></li>
+<li class="rating-item" data-rate="4"></li>
+<li class="rating-item" data-rate="5"></li>
+</ul>
+<input type="number" name="ratingValue" id="ratingValue">
+<input type="text" name="productId" value="{{product._id}}">
+<input type="text" name="userId" value="{{user._id}}">
+
+        </div>
+        <div class="review">
+            <input style="height:100px" type="textarea" id="userReview" name="userReview" placeholder="Enter Your Review">
+        </div>
+        <button type="submit" style="background-color: green;">Submit Review</button>
+    </div>
+    </form>
+    {{/if}}
+{{#each reviews}}
+    <div class="reviews">
+        <div class="ratings">
+{{!--           
+<ul class="rating">
+<li class="rating-item" data-rate="1"></li>
+<li class="rating-item" data-rate="2"></li>
+<li class="rating-item" data-rate="3"></li>
+<li class="rating-item" data-rate="4"></li>
+<li class="rating-item" data-rate="5"></li>
+</ul> --}}
+<div class="stars" data-rating="{{ratingValue}}">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+{{!-- <input type="number" name="ratingValue" id="ratingValue">
+<input type="text" name="productId" value="{{product._id}}">
+<input type="text" name="userId" value="{{user._id}}"> --}}
+
+        </div>
+        <div class="review">
+<p>
+{{this.userReview}}
+</p>        </div>
+        {{!-- <button type="submit" style="background-color: green;">Submit Review</button> --}}
+    </div>
+    {{/each}}
 </section>
 
 <script>
-    
+    const container = document.querySelector('.rating');
+const items = container.querySelectorAll('.rating-item')
+container.onclick = e => {
+const elClass = e.target.classList;
+// change the rating if the user clicks on a different star
+if (!elClass.contains('active')) {
+items.forEach( // reset the active class on the star
+item => item.classList.remove('active')
+);
+elClass.add('active'); // add active class to the clicked star
+}
+let ratingValue=document.getElementById("ratingValue")
+ratingValue.value=e.target.getAttribute("data-rate")
+console.log(e.target.getAttribute("data-rate"));
+
+};
     function checkStock(){
             let stockAmount=document.getElementById("stockAmount").value
 
