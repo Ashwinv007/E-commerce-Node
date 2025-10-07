@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'HankenGrotesk';
+  src: url('../fonts/HankenGrotesk-VariableFont_wght.ttf') format('truetype'),
+       url('../fonts/HankenGrotesk-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'HankenGrotesk', sans-serif;
+}
+
 .cd__main{
     background: linear-gradient(to right, #8e9eab, #eef2f3) !important;
 }
@@ -13,8 +28,141 @@
 	margin-bottom: 20px;
 	padding: 35px;
   margin-top: 20px;
+  
 }
-.pt45{padding-top:45px;}
+
+/* Vertical Order Tracking Container */
+.order-tracking-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Individual tracking step */
+.order-tracking {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    padding: 0 0 40px 0;
+    width: 100%;
+}
+
+/* Remove the horizontal connecting line */
+.order-tracking::before {
+    display: none;
+}
+
+/* Vertical connecting line between steps */
+.order-tracking::after {
+    content: '';
+    position: absolute;
+    left: 14px; /* Centers line with the circle (30px width / 2 - 1.5px line / 2) */
+    top: 30px; /* Starts below the circle */
+    width: 3px;
+    height: calc(100% - 30px);
+    background-color: #f7be16; /* Yellow for incomplete */
+    z-index: 0;
+}
+
+/* Hide line after the last step */
+.order-tracking:last-child::after {
+    display: none;
+}
+
+/* Green line for completed steps */
+.order-tracking.completed::after {
+    background-color: #27aa80;
+}
+
+/* The circle indicator */
+.order-tracking .is-complete {
+    display: block;
+    position: relative;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    min-width: 30px; /* Prevents shrinking */
+    border: 0px solid #AFAFAF;
+    background-color: #f7be16;
+    margin-right: 20px;
+    transition: background 0.25s linear;
+    z-index: 2;
+    flex-shrink: 0; /* Prevents the circle from shrinking */
+}
+
+/* Checkmark inside completed circles */
+.order-tracking .is-complete:after {
+    display: block;
+    position: absolute;
+    content: '';
+    height: 14px;
+    width: 7px;
+    top: 6px;
+    left: 11px;
+    border: 0px solid #AFAFAF;
+    border-width: 0px 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+/* Completed step styling */
+.order-tracking.completed .is-complete {
+    background-color: #27aa80;
+}
+
+.order-tracking.completed .is-complete:after {
+    border-color: #fff;
+    border-width: 0px 3px 3px 0;
+    opacity: 1;
+}
+
+/* Text content area */
+.order-tracking-content {
+    flex: 1;
+    padding-top: 2px; /* Aligns text with circle */
+}
+
+.order-tracking p {
+    color: #A4A4A4;
+    font-size: 16px;
+    margin: 0 0 4px 0;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.order-tracking.completed p {
+    color: #000;
+    font-weight: 600;
+}
+
+.order-tracking p span {
+    display: block;
+    font-size: 14px;
+    color: #888;
+    font-weight: normal;
+    margin-top: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .order-tracking-container {
+        padding: 15px;
+    }
+    
+    .order-tracking {
+        padding-bottom: 30px;
+    }
+    
+    .order-tracking p {
+        font-size: 15px;
+    }
+    
+    .order-tracking p span {
+        font-size: 13px;
+    }
+}
+/* .pt45{padding-top:45px;}
 .order-tracking{
 	text-align: center;
 	width: 25%;
@@ -83,7 +231,7 @@
 }
 .order-tracking:first-child:before{display: none;}
 .order-tracking.completed:before{background-color: #27aa80;}
-
+ */
 
 
 /* #tracking{
