@@ -217,14 +217,14 @@ verifyCoupon:(verifyCoupon,total,productList)=>{
             as:'product'
           }
         },
-        {
-          $lookup:{
-            from:collections.PRODUCT_COLLECTION,
-            localField:'products.item',
-            foreignField:'_id',
-            as:'product'
-          }
-        },
+        // {
+        //   $lookup:{
+        //     from:collections.PRODUCT_COLLECTION,
+        //     localField:'products.item',
+        //     foreignField:'_id',
+        //     as:'product'
+        //   }
+        // },
         {
           $match:{'product.sellerId':sellerId}
         }
