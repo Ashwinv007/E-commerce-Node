@@ -22,9 +22,17 @@ Handlebars.registerHelper("renderStars",function(ratingValue){
 })
 
 Handlebars.registerHelper('setIndex',function(value,options){
+  console.log('helllloo boy'+value)
   return value[0].username
 })
-
+Handlebars.registerHelper('setIndexProduct',function(value,options){
+  console.log('helllloo boy'+value)
+  return value[0]._id;
+})
+Handlebars.registerHelper('setIndexExt',function(value,options){
+  console.log('helllloo boy'+value)
+  return value[0].extsRender[0];
+})
 Handlebars.registerHelper('getStringDate',function(value){
   return value.toDateString()
 })
