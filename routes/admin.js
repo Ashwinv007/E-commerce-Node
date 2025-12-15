@@ -123,6 +123,12 @@ router.get('/login', (req,res)=>{
   
  })
 
+ router.get('/logout', (req,res)=>{
+    req.session.admin=null
+    req.session.adminLoggedIn=false
+      res.redirect('/admin/login')
+   })
+
 
 router.get('/add-product', verifyLogin,function(req,res){
     let admin=req.session.admin
