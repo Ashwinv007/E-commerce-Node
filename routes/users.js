@@ -305,6 +305,7 @@ router.get('/order-success',verifyLogin,(req,res)=>{
 
 router.get('/orders',verifyLogin,async(req,res)=>{
   let orders = await userHelpers.getUserOrders(req.session.user._id)
+  console.log('heollo user orders: '+JSON.stringify(orders[0],null,2))
   res.render('user/orders',{user:req.session.user,orders})
 })
 router.post('/cancel-ordered-products',async(req,res)=>{

@@ -409,8 +409,26 @@ module.exports={
     getUserOrders:(userId)=>{
         return new Promise(async(resolve,reject)=>{
             console.log(userId)
-            let orders=await db.get().collection(collections.ORDER_COLLECTION)
-            .find({userId:objectId(userId)}).toArray()
+            let orders=await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+                {
+                    $match:{userId:objectId(userId)}
+                },
+                {
+                    $unwind:'$products'
+                },
+                {
+                    $lookup:{
+                        from:collections.PRODUCT_COLLECTION,
+                        localField:'products.item',
+                        foreignField:'_id',
+                        as:'productDetails'
+                    }
+                },
+                {
+                    $unwind:'$productDetails'
+                }
+            ]).toArray()
+            // .find({userId:objectId(userId)}).toArray()
             console.log(orders)
             resolve(orders)
         })
