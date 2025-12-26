@@ -251,7 +251,7 @@ router.post('/place-order',async(req,res)=>{
   if (!req.body.reOrder){
     console.log('hi bro')
 
-    products = await userHelpers.getCartProductList(req.body.userId)
+    products = await userHelpers.getCartProducts(req.body.userId)
     totalPrice = await userHelpers.getTotalAmount(req.body.userId)
     console.log('totalpeice is: ', totalPrice)
     
@@ -376,19 +376,18 @@ router.get('/track-order-delivery/:id',async(req,res)=>{
 router.post('/verify-payment',(req,res)=>{
  
   console.log(req.body)
+  const paymentGroupId = req.body['order[receipt]']; // Renamed for clarity
   userHelpers.verifyPayment(req.body).then(()=>{
-  userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
-    console.log("Payment Successfull")
-    res.json({status:true})
-
-  })
-    
-
+    userHelpers.distributeAndRecordPayouts(paymentGroupId).then(()=>{
+      userHelpers.changePaymentStatus(paymentGroupId).then(()=>{
+        console.log("Payment Successfull")
+        res.json({status:true})
+      })
+    })
   }).catch((err)=>{
     console.log(err)
     res.json({status:false, errMssg:'ERRRROR'})
     console.log(res.json)
-
   })
 })
 module.exports = router;

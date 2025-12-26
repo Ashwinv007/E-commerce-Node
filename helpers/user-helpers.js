@@ -341,61 +341,72 @@ module.exports={
         
 
     },
-    placeOrder:(order,products,total,reOrderStatus,reOrderId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let status = order['payment-method']==='COD'?'placed':'pending'
-            let cancelOrder= false;
-            let productDelivered = false;
-            if(status === 'placed'){
-                 cancelOrder = true;
-            }else if(status === 'pending'){
-                cancelOrder = false;
-            }else{
-                 productDelivered = true;
-            }
-            let orderObj={
-                deliveryDetails:{
-                    mobile:order.mobile,
-                    address:order.address,
-                    pincode:order.pincode,
-                    trackOrder:{
-                        ordered:true,
-                        shipped:false,
-                        outForDelivery:false,
-                        delivered:false,
-                        stage_od:true,
-                        stage_ship:false,
-                        stage_oad:false,
-                        stage_del:false,
-                    },
-
-                },
-                userId:objectId(order.userId),
-                paymentMethod:order['payment-method'],
-                products:products,
-                totalAmount:total,
-                status:status,
-                userAction:cancelOrder,
-                productDelivered:productDelivered,
-                date:new Date()
-
-            }
-
-            db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
-                if(reOrderStatus){
-                    console.log('reOrder true', reOrderId)
-                     db.get().collection(collections.ORDER_COLLECTION).deleteOne(
-                        { _id: objectId(reOrderId) })
-                }else{
-                    console.log('false rorder')
-                    db.get().collection(collections.CART_COLLECTION).deleteOne({user:objectId(order.userId)})
-
+    placeOrder: (order, products, total, reOrderStatus, reOrderId) => {
+        return new Promise(async (resolve, reject) => {
+            let status = order['payment-method'] === 'COD' ? 'placed' : 'pending'
+            const productsBySeller = products.reduce((acc, cartItem) => {
+                const sellerId = cartItem.product.sellerId.toString();
+                if (!acc[sellerId]) {
+                    acc[sellerId] = []
                 }
-                // console.log("response: "+ response)
-                // console.log("instertedId: "+response.insertedId)
-                // console.log("id: "+response.insertedId._id)
-               resolve(response.insertedId)
-            })
+                acc[sellerId].push(cartItem);
+                return acc;
+            }, {});
+
+            const paymentGroupId = new objectId();
+            let cancelOrder = status === 'placed';
+            let productDelivered = false; // Assuming this is the default
+
+            const ordersToInsert = Object.keys(productsBySeller).map(sellerId => {
+                const sellerProducts = productsBySeller[sellerId];
+                const sellerTotal = sellerProducts.reduce((sum, item) => {
+                    const price = parseFloat(item.product.productPrice);
+                    return sum + (item.quantity * price);
+                }, 0);
+
+                return {
+                    paymentGroupId: paymentGroupId,
+                    sellerId: objectId(sellerId),
+                    userId: objectId(order.userId),
+                    deliveryDetails: {
+                        mobile: order.mobile,
+                        address: order.address,
+                        pincode: order.pincode,
+                        trackOrder: {
+                            ordered: true,
+                            shipped: false,
+                            outForDelivery: false,
+                            delivered: false,
+                            stage_od: true,
+                            stage_ship: false,
+                            stage_oad: false,
+                            stage_del: false,
+                        },
+                    },
+                    paymentMethod: order['payment-method'],
+                    products: sellerProducts.map(p => ({ item: objectId(p.item), quantity: p.quantity })),
+                    totalAmount: sellerTotal,
+                    status: status,
+                    userAction: cancelOrder,
+                    productDelivered: productDelivered,
+                    date: new Date()
+                };
+            });
+
+            try {
+                await db.get().collection(collections.ORDER_COLLECTION).insertMany(ordersToInsert);
+
+                if (reOrderStatus) {
+                    console.log('reOrder true', reOrderId);
+                    await db.get().collection(collections.ORDER_COLLECTION).deleteOne({ _id: objectId(reOrderId) });
+                } else {
+                    console.log('false rorder');
+                    await db.get().collection(collections.CART_COLLECTION).deleteOne({ user: objectId(order.userId) });
+                }
+                resolve(paymentGroupId);
+            } catch (err) {
+                reject(err);
+            }
         })
     },
     getCartProductList:(userId)=>{
@@ -546,23 +557,54 @@ module.exports={
             }
         })
     },
-    changePaymentStatus:(orderId)=>{
-        return new Promise((resolve,reject)=>{
-            console.log(orderId)
+    changePaymentStatus: (paymentGroupId) => {
+        return new Promise((resolve, reject) => {
+            console.log(paymentGroupId)
             console.log('reached changepayemntstatus')
             db.get().collection(collections.ORDER_COLLECTION)
-            .updateOne({_id:objectId(orderId)},
-            
-            {
-                $set:{userAction: true,
-                    status:'placed'
-            }            }
-            ).then(()=>{
-                console.log("done!")
-                resolve()
-            })
+                .updateMany({ paymentGroupId: objectId(paymentGroupId) },
+                    {
+                        $set: {
+                            userAction: true,
+                            status: 'placed'
+                        }
+                    }
+                ).then(() => {
+                    console.log("done!")
+                    resolve()
+                }).catch((err) => {
+                    reject(err)
+                })
 
         })
+    },
+    distributeAndRecordPayouts: (paymentGroupId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const orders = await db.get().collection(collections.ORDER_COLLECTION).find({ paymentGroupId: objectId(paymentGroupId) }).toArray();
+
+                for (const order of orders) {
+                    const totalAmount = order.totalAmount;
+                    const platformFee = totalAmount * 0.10; // 10% platform fee
+                    const sellerShare = totalAmount - platformFee;
+                    const payoutStatus = 'PENDING';
+
+                    await db.get().collection(collections.ORDER_COLLECTION).updateOne(
+                        { _id: order._id },
+                        {
+                            $set: {
+                                sellerShare: sellerShare,
+                                platformFee: platformFee,
+                                payoutStatus: payoutStatus
+                            }
+                        }
+                    );
+                }
+                resolve();
+            } catch (err) {
+                reject(err);
+            }
+        });
     },
     findProducts:(searchTerm)=>{
         return new Promise(async(resolve,reject)=>{
