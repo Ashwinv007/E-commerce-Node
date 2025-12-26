@@ -327,33 +327,38 @@ router.post('/edit-product/:id',verifyLogin,(req,res)=>{
   productHelpers.updateProduct(id,req.body).then(()=>{
   // res.redirect('/admin')
 
+    if(req.files && req.files.productImage){
 
-   let images=[];
-    let exts=[]
-    let err=false
-          console.log("kellllo"+req.files.productImage)
-
-    for(let i=0;i<req.files.productImage.length;i++){
-      images[i]=req.files.productImage[i]
-      console.log(images[i].name)
-      exts[i]=path.extname(images[i].name)
-      images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
-      if(err){
-        err=true
+      let images=[];
+      let exts=[]
+      let err=false
+      console.log("kellllo"+req.files.productImage)
       
+      for(let i=0;i<req.files.productImage.length;i++){
+        images[i]=req.files.productImage[i]
+        console.log(images[i].name)
+        exts[i]=path.extname(images[i].name)
+        images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
+          if(err){
+            err=true
+            
             // res.redirect('/admin')
-
-
+            
+            
+          }
+          
+        })
       }
-
-    })
-    }
-    if(err){
-      console.log("Error occured while storing images: "+err);
+      if(err){
+        console.log("Error occured while storing images: "+err);
+      }else{
+        res.redirect('/admin');
+      }
+      
     }else{
-      res.redirect('/admin');
-    }
+              res.redirect('/admin');
 
+    }
 
   // if(req.files.productImage){
   //   let image = req.files.productImage

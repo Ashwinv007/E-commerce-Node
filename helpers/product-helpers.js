@@ -76,16 +76,21 @@ findProduct:(product_id)=>{
 
   updateProduct:(proId, proDetails)=>{
     return new Promise(async(resolve,reject)=>{
+
+      let updateData = {
+        productName:proDetails.productName,
+        productDescription: proDetails.productDescription,
+        productPrice: proDetails.productPrice,
+        Category: proDetails.Category,
+        stockAmount:proDetails.stockAmount
+      };
+
+      if (proDetails.extsRender) {
+          updateData.extsRender = proDetails.extsRender;
+      }
+
       db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{
-        $set:{
-          productName:proDetails.productName,
-          productDescription: proDetails.productDescription,
-          productPrice: proDetails.productPrice,
-          Category: proDetails.Category,
-          extsRender:proDetails.extsRender,
-          stockAmount:proDetails.stockAmount
-        
-        }
+        $set: updateData
       }).then((response)=>{
         resolve()
       })
