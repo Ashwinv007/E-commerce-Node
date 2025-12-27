@@ -38,8 +38,25 @@ findProduct:(product_id)=>{
   })
 },
 
-  getAllProducts:(sellerId)=>{
+  getAllProductsBySeller:(sellerId)=>{
     console.log('get all pro',sellerId)
+    return new Promise(async(resolve,reject)=>{
+      let product = await db.get().collection(collections.PRODUCT_COLLECTION).find({sellerId:sellerId}).toArray()
+      let i=0;
+      let products=[];
+      while(i<product.length){
+        if(!product[i].suspend){
+          products.push(product[i])
+        }
+        i++;
+      }
+      resolve(products)
+
+
+})
+  },
+  getAllProducts:()=>{
+    console.log('get all pro',)
     return new Promise(async(resolve,reject)=>{
       let product = await db.get().collection(collections.PRODUCT_COLLECTION).find().toArray()
       let i=0;

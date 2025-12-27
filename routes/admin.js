@@ -31,7 +31,7 @@ router.get('/', verifyLogin,function(req, res, next) {
   console.log('<<<<<<<<<<<<<<<<<<<?????????')
   console.log(admin)
   if(admin.role=='seller'){
-    productHelpers.getAllProducts(req.session.admin._id).then((product)=>{
+    productHelpers.getAllProductsBySeller(req.session.admin._id).then((product)=>{
       res.render('admin/seller-dashboard',{adminExist:true,admin,product})    
 
     })
