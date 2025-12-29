@@ -20,11 +20,11 @@
                     <td>{{this.product.productName}}</td>
                                                            <td>{{this.product.productPrice}}</td>
 
-                    <td><button class="cart-item-count mr-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',-1)">-</button>
+                    <td><button class="cart-item-count mr-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
                     <span id="{{this.product._id}}">{{this.quantity}}</span>
-                    <button class="cart-item-count ml-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',1)">+</button></td>
+                    <button class="cart-item-count ml-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button></td>
 
-                    <td>                    <button class="btn btn-danger" onclick="removeProductFromCart('{{this._id}}','{{this.product._id}}','{{../user}}','{{this.product.productName}}',-1)">Remove</button></td>
+                    <td>                    <button class="btn btn-danger" onclick="removeProductFromCart('{{this._id}}','{{this.product._id}}','{{../user._id}}','{{this.product.productName}}',-1)">Remove</button></td>
 
 </td>
                 </tr>
@@ -63,7 +63,7 @@
 
 
                 }else{
-                    document.getElementById(proId).innerHTML=quantity+count
+                    document.getElementById(proId).innerHTML=response.quantity
                     document.getElementById('total').innerHTML=response.total
                 }
                
@@ -86,13 +86,11 @@
             },
             method:'post',
             success:(response)=>{
-                if(response.removeProduct){
+                if(response.error){ // Handle the error from the backend
+                    alert(response.error)
+                } else if(response.removeProduct){
                      alert("Product removed from cart")
                         $("#cartProductList").load(" #cartProductList");
-
-
-
-
                 }else{
                     document.getElementById(proId).innerHTML=quantity+count
                     document.getElementById('total').innerHTML=response.total

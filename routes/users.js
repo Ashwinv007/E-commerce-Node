@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers.js');
@@ -175,8 +174,8 @@ router.post('/change-password',async(req,res)=>{
 
    router.get('/add-to-cart/:id',async (req,res)=>{
 console.log('api call')
-    userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
-      res.json({status:true})
+    userHelpers.addToCart(req.params.id,req.session.user._id).then((response)=>{
+      res.json(response)
     })
     
    })
@@ -206,7 +205,7 @@ console.log('api call')
        })
     
    router.post('/change-product-quantity',(req,res,next)=>{
-    userHelpers.changeProductQuantity(req.body).then(async(response)=>{
+    userHelpers.changeProductQuantity(req.body,req.session.user._id).then(async(response)=>{
       console.log('totalhere'+ req.session.user)
       response.total = await userHelpers.getTotalAmount(req.session.user._id)
 

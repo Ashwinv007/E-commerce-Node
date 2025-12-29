@@ -5,6 +5,7 @@ var objectId = require('mongodb').ObjectId
 const Razorpay = require('razorpay')
 const env=require("dotenv").config();
 const nodemailer=require("nodemailer");
+const productHelpers = require('./product-helpers');
 var instance = new Razorpay({ key_id: 'rzp_test_KuRfDd0Fixd4Cj', key_secret: 'pClROqLO4CwQ5N5IjCT7KjqB' })
 module.exports={
     doSignup:(userData)=>{
@@ -117,6 +118,14 @@ module.exports={
             quantity:1
         }
         return new Promise(async(resolve,reject)=>{
+            let total = await module.exports.getTotalAmount(userId);
+            let product = await productHelpers.findProduct(proId);
+            let productPrice = parseFloat(product.productPrice);
+    
+            if (total + productPrice > 50000) {
+                return resolve({ error: 'Cart limit of 50,000 exceeded' });
+            }
+
             let userCart = await db.get().collection(collections.CART_COLLECTION).findOne({user:objectId(userId)})
             if(userCart){
                 let proExist = userCart.products.findIndex(product =>product.item==proId)
@@ -128,7 +137,7 @@ module.exports={
                         $inc:{'products.$.quantity':1}
                     }
                     ).then(()=>{
-                        resolve()
+                        resolve({status: true})
                     })
                     
                 }else{
@@ -138,7 +147,7 @@ module.exports={
                         $push:{products:proObj}
                     }
                     ).then((response)=>{
-                        resolve()
+                        resolve({status: true})
                     })
 
                 }
@@ -149,7 +158,7 @@ module.exports={
                     products:[proObj]
                 }
                 db.get().collection(collections.CART_COLLECTION).insertOne(cartObj).then((response)=>{
-                    resolve()
+                    resolve({status: true})
                 })
             }
         })
@@ -254,12 +263,31 @@ module.exports={
             resolve(count)
         })
     },
-    changeProductQuantity:(details)=>{
+    changeProductQuantity:(details, userId)=>{
         details.count=parseInt(details.count)
         details.quantity = parseInt(details.quantity)
 
         return new Promise(async(resolve,reject)=>{
-            if(details.count==-1 && details.quantity==1){
+            let cart = await db.get().collection(collections.CART_COLLECTION).findOne({user:objectId(userId)})
+            let productIndex = cart.products.findIndex(product => product.item.toString() === details.product)
+            let productInCart = cart.products[productIndex]
+            let currentQuantity = productInCart.quantity
+
+            // Get product price
+            const productDetails = await productHelpers.findProduct(details.product);
+            const productPrice = parseFloat(productDetails.productPrice);
+
+            // Calculate potential new total if incrementing
+            if (details.count === 1) { // Incrementing quantity
+                let currentCartTotal = await module.exports.getTotalAmount(userId);
+                let potentialNewTotal = currentCartTotal + productPrice;
+                if (potentialNewTotal > 50000) {
+                    return resolve({ error: 'Cart limit of 50,000 exceeded by adding this product' });
+                }
+            }
+            // No limit check needed for decrementing
+
+            if(details.count==-1 && currentQuantity==1){
                 db.get().collection(collections.CART_COLLECTION)
                 .updateOne({_id:objectId(details.cart)},
                 
