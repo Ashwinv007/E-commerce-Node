@@ -42,7 +42,7 @@ registerSeller:(sellerData)=>{
         db.get().collection(collections.ADMIN_COLLECTION).insertOne(sellerData).then((data) => {
                 console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         console.log(sellerData)
-            resolve(db.get().collection(collections.ADMIN_COLLECTION).findOne({_id:data.insertedId}))})
+            resolve(db.get().collection(collections.ADMIN_COLLECTION).findOne({_id:data.insertedId}))}) 
     
     })
 },
@@ -302,10 +302,10 @@ return new Promise(async(resolve,reject)=>{
     }).then(()=>{
       // const cron=require('node-cron');
       // const datetime=new Date();
-      // const adjustedDatetime=datetime.setDate(datetime.setDate()+2);
+      // const adjustedDatetime=datetime.setDate(datetime.getDate()+2);
       // const eventDatetimeObject=new Date(adjustedDatetime);
 
-      // cron.schedule(eventDatetimeObject,()=>{
+      // cron.schedule(eventDatetimeObject, ()=>{
       //   revokeSeller(adminId);
       // })
       console.log("Seller suspended")
@@ -339,14 +339,28 @@ db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
         }
       }
     )    }else{
-db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
-      {
-        $set:{
-              "deliveryDetails.trackOrder.delivered":{status:true, date:new Date()},
-              "deliveryDetails.trackOrder.stage_oad":false,
-        }
+      if(order.paymentMethod==='COD'){
+        db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
+          {
+            $set:{
+                  "deliveryDetails.trackOrder.delivered":{status:true, date:new Date()},
+                  "deliveryDetails.trackOrder.stage_oad":false,
+                  "platformFee":order.totalAmount*0.1,
+                  "sellerShare":order.totalAmount*0.9
+            }
+          }
+        )  
+      }else{
+        db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
+          {
+            $set:{
+                  "deliveryDetails.trackOrder.delivered":{status:true, date:new Date()},
+                  "deliveryDetails.trackOrder.stage_oad":false,
+            }
+          }
+        )     
       }
-    )     }
+    }
      
 
     }else{

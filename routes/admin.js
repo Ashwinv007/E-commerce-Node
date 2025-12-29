@@ -31,8 +31,25 @@ router.get('/', verifyLogin,function(req, res, next) {
   console.log('<<<<<<<<<<<<<<<<<<<?????????')
   console.log(admin)
   if(admin.role=='seller'){
-    productHelpers.getAllProductsBySeller(req.session.admin._id).then((product)=>{
-      res.render('admin/seller-dashboard',{adminExist:true,admin,product})    
+    productHelpers.getAllProductsBySeller(req.session.admin._id).then(async(product)=>{
+      let orders=await productHelpers.getAllOrders(req.session.admin._id)
+      let sellerRevenue = 0;
+      let pendingSellerRevenue = 0;
+      for(let order of orders){
+        if(order.status==='placed'){
+          if(order.paymentMethod!=='COD'){
+            sellerRevenue+=order.sellerShare || 0
+          }else{
+            if(order.deliveryDetails.trackOrder.delivered.status){
+              sellerRevenue+=order.sellerShare || (order.totalAmount * 0.9)
+            }else{
+              pendingSellerRevenue+=order.totalAmount*0.9
+            }
+          }
+        }
+      }
+
+      res.render('admin/seller-dashboard',{adminExist:true,admin,product,sellerRevenue,pendingSellerRevenue})    
 
     })
   }else if(admin.role=='pending_Seller'){
@@ -46,7 +63,7 @@ router.get('/', verifyLogin,function(req, res, next) {
             if(order.status==='placed'){
 
               if(order.paymentMethod!=='COD'){
-                platformRevenue+=order.platformFee
+                platformRevenue+=order.platformFee || 0
               }else{
                 if(order.deliveryDetails.trackOrder.delivered.status){
                   platformRevenue+=order.totalAmount*0.1
