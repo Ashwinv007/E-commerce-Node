@@ -38,7 +38,10 @@ router.get('/', verifyLogin,function(req, res, next) {
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller')
   }else{
-res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true})
+        productHelpers.getAllProducts().then((product)=>{
+
+res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,product})
+        })
 
   //      productHelpers.getAllProducts().then((product)=>{
   //   res.render('admin/view-products', {adminExist:true ,admin, product})
