@@ -38,9 +38,26 @@ router.get('/', verifyLogin,function(req, res, next) {
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller')
   }else{
-        productHelpers.getAllProducts().then((product)=>{
+        productHelpers.getAllProducts().then(async(product)=>{
+          let orders=await productHelpers.getAllOrdersForAdmin()
+          let platformRevenue = 0;
+          let pendingRevenue = 0;
+          for(let order of orders){
+            if(order.status==='placed'){
 
-res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,product})
+              if(order.paymentMethod!=='COD'){
+                platformRevenue+=order.platformFee
+              }else{
+                if(order.deliveryDetails.trackOrder.delivered.status){
+                  platformRevenue+=order.totalAmount*0.1
+                }else{
+                  pendingRevenue+=order.totalAmount*0.1
+                }
+              }
+            }
+          }
+
+res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,product,platformRevenue,pendingRevenue})
         })
 
   //      productHelpers.getAllProducts().then((product)=>{
