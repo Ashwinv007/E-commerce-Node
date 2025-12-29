@@ -1,80 +1,3 @@
-{{!-- {{#if trackOrder}}
-
-<div class="container">
-
-						<div class="col-12 col-md-10 hh-grayBox pt45 pb20">
-							<div class="row justify-content-between">
-                {{#if trackOrder.ordered}}
-                	<div class="order-tracking completed">
-									<span class="is-complete"></span>
-									<p>Ordered<br><span>Mon, June 24</span></p>
-								</div>
-                {{else}}
-                	<div class="order-tracking">
-									<span class="is-complete"></span>
-									<p>Ordered</p>
-								</div>
-                {{/if}}
-				
-                {{#if trackOrder.shipped}}
-								<div class="order-tracking completed">
-									<span class="is-complete"></span>
-									<p>Shipped<br><span>Tue, June 25</span></p>
-								</div>
-                {{else}}
-                <div class="order-tracking">
-									<span class="is-complete"></span>
-									<p>Shipped</p>
-								</div>
-                {{/if}}
-
-                {{#if trackOrder.outForDelivery}}
-								<div class="order-tracking completed">
-									<span class="is-complete"></span>
-									<p>Out for Delivery<br><span>Fri, June 28</span></p>
-								</div>
-                {{else}}
-                	<div class="order-tracking">
-									<span class="is-complete"></span>
-									<p>Out for Delivery</p>
-								</div>
-                {{/if}}
-
-
-                  {{#if trackOrder.delivered}}
-                	<div class="order-tracking completed">
-									<span class="is-complete"></span>
-									<p>Delivered<br><span>Fri, June 28</span></p>
-								</div>
-                {{else if trackOrder.outForDelivery}}
-                <div class="order-tracking">
-									<span class="is-complete"></span>
-									<p>Arriving Today by 6pm<br><span>Fri, June 28</span></p>
-								</div>
-                {{else}}
-                  	<div class="order-tracking">
-									<span class="is-complete"></span>
-									<p>Delivered</p>
-								</div>
-                {{/if}}
-
-							</div>
-						</div>
-					
-</div>
-
-
-
-
-
-
-
-
-
-{{/if}} --}}
-
-
-
 
 {{#if trackOrder}}
 
@@ -82,11 +5,11 @@
     <div class="order-tracking-container">
         
         <!-- Step 1: Ordered -->
-        {{#if trackOrder.ordered}}
+        {{#if trackOrder.ordered.status}}
             <div class="order-tracking completed">
                 <span class="is-complete"></span>
                 <div class="order-tracking-content">
-                    <p>Ordered<span>Mon, June 24</span></p>
+                    <p>Ordered<span>{{trackOrder.ordered.date}}</span></p>
                 </div>
             </div>
         {{else}}
@@ -99,11 +22,11 @@
         {{/if}}
         
         <!-- Step 2: Shipped -->
-        {{#if trackOrder.shipped}}
+        {{#if trackOrder.shipped.status}}
             <div class="order-tracking completed">
                 <span class="is-complete"></span>
                 <div class="order-tracking-content">
-                    <p>Shipped<span>Tue, June 25</span></p>
+                    <p>Shipped<span>{{trackOrder.shipped.date}}</span></p>
                 </div>
             </div>
         {{else}}
@@ -116,11 +39,11 @@
         {{/if}}
         
         <!-- Step 3: Out for Delivery -->
-        {{#if trackOrder.outForDelivery}}
+        {{#if trackOrder.outForDelivery.status}}
             <div class="order-tracking completed">
                 <span class="is-complete"></span>
                 <div class="order-tracking-content">
-                    <p>Out for Delivery<span>Fri, June 28</span></p>
+                    <p>Out for Delivery<span>{{trackOrder.outForDelivery.date}}</span></p>
                 </div>
             </div>
         {{else}}
@@ -133,18 +56,18 @@
         {{/if}}
         
         <!-- Step 4: Delivered -->
-        {{#if trackOrder.delivered}}
+        {{#if trackOrder.delivered.status}}
             <div class="order-tracking completed">
                 <span class="is-complete"></span>
                 <div class="order-tracking-content">
-                    <p>Delivered<span>Fri, June 28</span></p>
+                    <p>Delivered<span>{{trackOrder.delivered.date}}</span></p>
                 </div>
             </div>
-        {{else if trackOrder.outForDelivery}}
+        {{else if trackOrder.outForDelivery.status}}
             <div class="order-tracking">
                 <span class="is-complete"></span>
                 <div class="order-tracking-content">
-                    <p>Arriving Today by 6pm<span>Fri, June 28</span></p>
+                    <p>Arriving Today by 6pm<span></span></p>
                 </div>
             </div>
         {{else}}

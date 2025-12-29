@@ -324,7 +324,7 @@ return new Promise(async(resolve,reject)=>{
  db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
       {
         $set:{
-              "deliveryDetails.trackOrder.shipped":true,
+              "deliveryDetails.trackOrder.shipped":{status:true, date:new Date()},
               "deliveryDetails.trackOrder.stage_od":false,
               "deliveryDetails.trackOrder.stage_ship":true
         }
@@ -333,7 +333,7 @@ return new Promise(async(resolve,reject)=>{
 db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
       {
         $set:{
-              "deliveryDetails.trackOrder.outForDelivery":true,
+              "deliveryDetails.trackOrder.outForDelivery":{status:true, date:new Date()},
               "deliveryDetails.trackOrder.stage_ship":false,
               "deliveryDetails.trackOrder.stage_oad":true,
         }
@@ -342,7 +342,7 @@ db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
 db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(_id)},
       {
         $set:{
-              "deliveryDetails.trackOrder.delivered":true,
+              "deliveryDetails.trackOrder.delivered":{status:true, date:new Date()},
               "deliveryDetails.trackOrder.stage_oad":false,
         }
       }
