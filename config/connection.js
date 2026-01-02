@@ -4,12 +4,12 @@ const state ={
 }
 
 module.exports.connect = function(done){
-    const url='mongodb://localhost:27017'
-    const dbname="Ecommerce"
+    const url=process.env.MONGO_URI
+    const dbname=process.env.DB_NAME
 
-    mongoClient.connect(url,(err,data)=>{
+    mongoClient.connect(url,(err,client)=>{
         if(err) return done(err)
-        state.db=data.db(dbname)
+        state.db=client.db(dbname)
         done()
     })
     

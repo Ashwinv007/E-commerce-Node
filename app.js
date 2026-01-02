@@ -7,6 +7,8 @@ var hbs=require('express-handlebars');
 var session = require('express-session');
 var Handlebars=require('handlebars');
 const passport=require('./config/passport');
+require('dotenv').config()
+
 Handlebars.registerHelper("inc", function(value, options){
   return parseInt(value) + 1;
 })
@@ -89,10 +91,23 @@ app.use(session({
   secret: 'Key',
   cookie: {maxAge: 600000}
 }))
-db.connect((err)=>{
-  if (err)console.log('Error connecting to database' + err)
-  else console.log('Connected to database')
+// db.connect((err)=>{
+//   if (err)console.log('Error connecting to database' + err)
+//   else console.log('Connected to database')
 
+// })
+db.connect((err) => {
+  if (err) {
+    console.log('Error connecting to database', err)
+  } else {
+    console.log('Connected to database')
+
+    const PORT = process.env.PORT || 3000
+
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`)
+    })
+  }
 })
 
 app.use(passport.initialize());
