@@ -28,12 +28,16 @@ Handlebars.registerHelper('setIndex',function(value,options){
   return value[0].username
 })
 Handlebars.registerHelper('setIndexProduct',function(value,options){
-  console.log('helllloo boy'+value)
-  return value[0]._id;
+  if (value && value.length > 0) {
+    return value[0]._id;
+  }
+  return '';
 })
 Handlebars.registerHelper('setIndexExt',function(value,options){
-  console.log('helllloo boy'+value)
-  return value[0].extsRender[0];
+  if (value && value.length > 0 && value[0].extsRender && value[0].extsRender.length > 0) {
+    return value[0].extsRender[0];
+  }
+  return '';
 })
 Handlebars.registerHelper('getStringDate',function(value){
   return value.toDateString()
