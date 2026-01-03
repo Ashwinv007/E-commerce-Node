@@ -4,8 +4,8 @@
       {{#each products}}
         <div class="col-md-3 p-3">
             <div class="card" style="width: 15rem; height:24rem;">
-  {{!-- <img class="card-img-top" src="/product-images//{{this.product._id}}.{{this.imgExt}}" alt="Card image cap" style="height:12rem;"> --}}
-                                    <td><img style="width: 50px; height: 50px" src="{{this.product.thumbnailUrl}}" alt=""></td>
+  <img class="card-img-top" src="{{this.product.imageUrls.[0]}}" alt="Card image cap" style="height:12rem;">
+                                    {{!-- <td><img style="width: 50px; height: 50px" src="{{this.product.thumbnailUrl}}" alt=""></td> --}}
 
   <div class="card-body">
     <h5 class="card-title">{{this.product.productName}}</h5>
