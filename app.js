@@ -89,7 +89,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
 app.use(session({
   secret: 'Key',
-  cookie: {maxAge: 600000}
+  cookie: {
+    maxAge: 600000,
+    secure: true,      
+    httpOnly: true,
+    sameSite: "lax"
+  }
 }))
 // db.connect((err)=>{
 //   if (err)console.log('Error connecting to database' + err)
@@ -110,6 +115,7 @@ db.connect((err) => {
   }
 })
 
+app.set("trust proxy", 1);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', usersRouter);

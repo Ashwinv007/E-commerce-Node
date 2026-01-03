@@ -1,5 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const { ObjectId } = require("mongodb");
 const db = require("../config/connection"); 
 const collections=require("../config/collections")
 require("dotenv").config();
@@ -48,7 +49,10 @@ passport.deserializeUser(async (id, done) => {
     const database = db.get();
     const usersCollection = database.collection(collections.USER_COLLECTION);
 
-    const user = await usersCollection.findOne({ _id: id });
+    // const user = await usersCollection.findOne({ _id: id });
+       const user = await usersCollection.findOne({
+      _id: new ObjectId(id),
+    });
     done(null, user);
   } catch (err) {
     done(err, null);
