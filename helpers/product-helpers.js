@@ -179,10 +179,14 @@ findProduct:(product_id)=>{
     })
   },
 
- 
-
- 
-
-
+  updateProductMedia: (productId, imageUrls, thumbnailUrl) => {
+    return db.get().collection(collections.PRODUCT_COLLECTION).updateOne({ _id: objectId(productId) }, {
+      $set: { 
+        imageUrls: imageUrls, 
+        thumbnailUrl: thumbnailUrl,
+        extsRender: null // Clean up the old field
+      }
+    });
+  },
 
 }

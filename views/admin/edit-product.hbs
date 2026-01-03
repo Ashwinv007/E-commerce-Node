@@ -30,10 +30,9 @@
     </div>
     <label for="productImage">Image</label>
 
-    {{#each product.extsRender}}
-    <img src="/product-images/{{../product._id}}{{@index}}.{{this}}" alt="" class="prodImages">
-{{!-- <img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3"> --}}
-{{/each}}
+    {{#each product.imageUrls}}
+    <img src="{{this}}" alt="Product image {{inc @index}}" class="prodImages" style="width: 100px; height: auto; margin: 0 5px 5px 0;">
+    {{/each}}
     <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple >
     {{!-- <input type="text" id="imgExt" style="display:none" name="imgExt" value=""> --}}
   </div>

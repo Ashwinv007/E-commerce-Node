@@ -174,108 +174,45 @@ router.get('/add-product', verifyLogin,function(req,res){
     res.render('admin/add-product', {adminExist:true,admin})
 })
 
-router.post('/add-product', verifyLogin,(req,res)=>{
-  if(typeof(req.body.extsRender)==='string'){
-  req.body.extsRender=[req.body.extsRender]
-
-  }
-  console.log(req.body)
-  // console.log(req.files.productImage)
-  
-  productHelpers.addProduct(req.body,(id)=>{
-    let images=[];
-    let exts=[]
-    let error_Status=false
-          console.log("kellllo"+req.files.productImage)
-if(req.files.productImage.length>1){
- for(let i=0;i<req.files.productImage.length;i++){
-      images[i]=req.files.productImage[i]
-      if(images[i]){
-        console.log('helloimage: '+images[i]);
-      }else{
-        images[i]=req.files.productImage
-        console.log('single file here: '+images[i])
+router.post('/add-product', verifyLogin, (req, res) => {
+  productHelpers.addProduct(req.body, async (id) => {
+    try {
+      if (!req.files || !req.files.productImage) {
+        return res.redirect('/admin');
       }
-      console.log(images[i].name)
-      exts[i]=path.extname(images[i].name)
-      if(exts[i]){
-        console.log('hellloext: '+exts[i])
-      }else{
-        exts[i]=path.extname(images[i].name)
-      }
-      images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
-      if(err){
-        error_Status=true
-      console.log('errrrrror here: '+err)
-            // res.redirect('/admin')
 
-
-      }else{
-        // productHelpers.createThumbnail(id,exts[0])
-        sharp('./public/product-images/'+id+0+exts[0]).resize(50,50).toFile('./public/product-images/'+'thumb'+id+0+exts[0],(err,resizeImage)=>{
-          if(err){
-            console.log(err);
-          }else{
-            console.log(resizeImage)
-          }
-        })
+      const files = Array.isArray(req.files.productImage) ? req.files.productImage : [req.files.productImage];
+      const imageUrls = new Array(files.length);
+      let thumbnailUrl = '';
+      
+      const uploadPromises = files.map(async (file, i) => {
+        const ext = path.extname(file.name);
+        const s3Key = `product-images/${id}${i}${ext}`;
         
+        const result = await s3Helper.uploadFile(file, s3Key);
+        imageUrls[i] = result.Location;
 
-      }
+        if (i === 0) {
+          const thumbBuffer = await sharp(file.data).resize(50, 50).toBuffer();
+          const thumbKey = `product-images/thumb${id}0${ext}`;
+          const thumbFile = { data: thumbBuffer, name: `thumb-${file.name}` };
+          const thumbResult = await s3Helper.uploadFile(thumbFile, thumbKey);
+          thumbnailUrl = thumbResult.Location;
+        }
+      });
+      
+      await Promise.all(uploadPromises);
 
-    })
-    }
-}else{
-  //  for(let i=0;i<req.files.productImage.length;i++){
-      images=req.files.productImage
-      // if(images[i]){
-      //   console.log('helloimage: '+images[i]);
-      // }else{
-      //   images[i]=req.files.productImage
-      //   console.log('single file here: '+images[i])
-      // }
-      // console.log(images[i].name)
-      exts=path.extname(images.name)
-      // if(exts[i]){
-      //   console.log('hellloext: '+exts[i])
-      // }else{
-      //   exts[i]=path.extname(images[i].name)
-      // }
-      images.mv('./public/product-images/'+id+0+exts, (err,done)=>{
-      if(err){
-        error_Status=true
-      console.log('errrrrror here: '+err)
-            // res.redirect('/admin')
-
-
-      }else{
-        // productHelpers.createThumbnail(id,exts[0])
-        sharp('./public/product-images/'+id+0+exts).resize(50,50).toFile('./public/product-images/'+'thumb'+id+0+exts,(err,resizeImage)=>{
-          if(err){
-            console.log(err);
-          }else{
-            console.log(resizeImage)
-          }
-        })
-        
-
-      }
-
-    })
-    // }
-}
-   
-    if(error_Status){
-      console.log("Error occured while storing images: "+err);
-    }else{
+      await productHelpers.updateProductMedia(id, imageUrls, thumbnailUrl);
+      
       res.redirect('/admin');
-    }
 
-    // let image = req.files.productImage
-    // let ext =path.extname(image.name)
-  
-  } )
-})
+    } catch (err) {
+      console.error("Error during S3 upload or DB update: ", err);
+      res.redirect('/admin/add-product?error=uploadFailed');
+    }
+  });
+});
 router.post('/suspend-seller',verifyLogin,(req,res)=>{
   adminHelpers.suspendSeller(req.body.adminId).then(()=>{
     res.json({status:true})
@@ -359,51 +296,50 @@ router.get('/edit-product/:id', verifyLogin,async (req,res)=>{
 
 })
 
-router.post('/edit-product/:id',verifyLogin,(req,res)=>{
-  let id = req.params.id
+router.post('/edit-product/:id', verifyLogin, async (req, res) => {
+  const id = req.params.id;
+  try {
+    // First, update the non-image product details
+    await productHelpers.updateProduct(id, req.body);
 
-  productHelpers.updateProduct(id,req.body).then(()=>{
-  // res.redirect('/admin')
+    // Check if new images were uploaded
+    if (req.files && req.files.productImage) {
+      const files = Array.isArray(req.files.productImage) ? req.files.productImage : [req.files.productImage];
+      const newImageUrls = new Array(files.length);
+      let newThumbnailUrl = '';
 
-    if(req.files && req.files.productImage){
+      // Process all new image uploads in parallel
+      const uploadPromises = files.map(async (file, i) => {
+        const ext = path.extname(file.name);
+        const s3Key = `product-images/${id}${i}${ext}`;
+        
+        // Upload the new main image
+        const result = await s3Helper.uploadFile(file, s3Key);
+        newImageUrls[i] = result.Location;
 
-      let images=[];
-      let exts=[]
-      let err=false
-      console.log("kellllo"+req.files.productImage)
-      
-      for(let i=0;i<req.files.productImage.length;i++){
-        images[i]=req.files.productImage[i]
-        console.log(images[i].name)
-        exts[i]=path.extname(images[i].name)
-        images[i].mv('./public/product-images/'+id+i+exts[i], (err,done)=>{
-          if(err){
-            err=true
-            
-            // res.redirect('/admin')
-            
-            
-          }
-          
-        })
-      }
-      if(err){
-        console.log("Error occured while storing images: "+err);
-      }else{
-        res.redirect('/admin');
-      }
-      
-    }else{
-              res.redirect('/admin');
+        // If it's the first image, create and upload a new thumbnail
+        if (i === 0) {
+          const thumbBuffer = await sharp(file.data).resize(50, 50).toBuffer();
+          const thumbKey = `product-images/thumb${id}0${ext}`;
+          const thumbFile = { data: thumbBuffer, name: `thumb-${file.name}` };
+          const thumbResult = await s3Helper.uploadFile(thumbFile, thumbKey);
+          newThumbnailUrl = thumbResult.Location;
+        }
+      });
 
+      // Wait for all uploads to complete
+      await Promise.all(uploadPromises);
+
+      // Update the database with the new S3 URLs, replacing the old ones
+      await productHelpers.updateProductMedia(id, newImageUrls, newThumbnailUrl);
     }
 
-  // if(req.files.productImage){
-  //   let image = req.files.productImage
-  //   image.mv('./public/product-images/'+id+'.jpg')
-  // }
-})
-})
+    res.redirect('/admin');
+  } catch (err) {
+    console.error("Error during product edit or S3 upload: ", err);
+    res.redirect(`/admin/edit-product/${id}?error=uploadFailed`);
+  }
+});
 router.get('/orders',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
   productHelpers.getAllOrders(admin._id).then((orders)=>{

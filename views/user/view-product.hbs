@@ -6,7 +6,7 @@
         <div class="col-md-3 p-3" >
             <div class="card" style="width: 15rem; height:24rem;">
   {{!-- <img class="card-img-top" src="/product-images//{{this.product._id}}.{{this.imgExt}}" alt="Card image cap" style="height:12rem;"> --}}
-                                    <td><img style="width: 100%; height:auto" src="/product-images/{{product._id}}0.{{product.extsRender.[0]}}" alt=""  onload="checkStock()"></td>
+                                    <td><img style="width: 100%; height:auto" src="{{product.imageUrls.[0]}}" alt="{{product.productName}}"  onload="checkStock()"></td>
 
   <div class="card-body">
     <h5 class="card-title">{{product.productName}}</h5>
