@@ -91,7 +91,7 @@ app.use(session({
   secret: 'Key',
   cookie: {
     maxAge: 600000,
-    secure: false,      
+    secure: true,      
     httpOnly: true,
     sameSite: "lax"
   }
