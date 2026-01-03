@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,7 +8,6 @@ var hbs=require('express-handlebars');
 var session = require('express-session');
 var Handlebars=require('handlebars');
 const passport=require('./config/passport');
-require('dotenv').config()
 
 Handlebars.registerHelper("inc", function(value, options){
   return parseInt(value) + 1;
