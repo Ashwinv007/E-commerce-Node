@@ -4,6 +4,7 @@ const productHelpers = require('../helpers/product-helpers.js');
 const adminHelpers=require('../helpers/admin-helpers.js');
 const path=require('path');
 const sharp = require('sharp');
+const s3Helper = require('../helpers/s3-helper');
 
 
 const verifyLogin=(req,res,next)=>{
