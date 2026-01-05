@@ -108,8 +108,20 @@ router.get('/pending-sellers',verifyLogin,function(req,res,next){
     res.render('admin/view-sellers',{adminExist:true,admin,sellers,superAdmin:true})
   })
 })
-router.get('/seller-register',(req,res)=>{
-  res.render('admin/seller-register',{adminExist:true})
+const verifyUserLogin = (req, res, next) => {
+    if (req.session.userLoggedIn) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+router.get('/seller-register',verifyUserLogin,async (req,res)=>{
+  let seller=await adminHelpers.getSellerByUserId(req.session.user._id)
+  if(seller){
+    res.redirect('/')
+  }else{
+    res.render('admin/seller-register',{adminExist:true})
+  }
 })
 // router.get('/accept-seller',verifyLogin,function(req,res,next){
 //   let admin=req.session.admin;
@@ -130,15 +142,19 @@ router.post('/reject-seller',(req,res)=>{
     res.json({status:true})
   })
 })
-router.post('/seller-register',(req,res)=>{
-  console.log(req.body)
-  adminHelpers.registerSeller(req.body).then((response)=>{
-    req.session.admin=response
-    req.session.adminLoggedIn=true;
-    res.redirect('/admin')
-    console.log('hi')
-    console.log(response)
-  })
+router.post('/seller-register',verifyUserLogin,async (req,res)=>{
+  let seller=await adminHelpers.getSellerByUserId(req.session.user._id)
+  if(seller){
+    res.redirect('/')
+  }
+  else{
+    req.body.userId=req.session.user._id
+    adminHelpers.registerSeller(req.body).then((response)=>{
+      req.session.admin=response
+      req.session.adminLoggedIn=true;
+      res.redirect('/admin')
+    })
+  }
 })
 router.get('/login', (req,res)=>{
   if(req.session.admin){

@@ -41,9 +41,16 @@ getAdminDetails: (adminId) => {
         resolve(admin);
     });
 },
+getSellerByUserId: (userId) => {
+    return new Promise(async (resolve, reject) => {
+        let seller = await db.get().collection(collections.ADMIN_COLLECTION).findOne({ userId: objectId(userId) });
+        resolve(seller);
+    });
+},
 registerSeller:(sellerData)=>{
     return new Promise(async(resolve,reject)=>{
         sellerData.password=await bcrypt.hash(sellerData.password,10)
+        sellerData.userId=objectId(sellerData.userId)
         db.get().collection(collections.ADMIN_COLLECTION).insertOne(sellerData).then((data) => {
                 console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         console.log(sellerData)

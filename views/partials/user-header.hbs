@@ -38,12 +38,14 @@
   </button>
   <div class="dropdown-menu">
     {{#if user}}
-  <a href="/admin/seller-register" class="dropdown-item">Become a Seller</a>
-    <a class="dropdown-item" href="/logout">Logout</a>
+      {{#if sellerAccount}}
+        <a href="/admin" class="dropdown-item">Admin dashboard</a>
+      {{else}}
+        <a href="/admin/seller-register" class="dropdown-item">Become a Seller</a>
+      {{/if}}
+      <a class="dropdown-item" href="/logout">Logout</a>
     {{else}}
         <a class="dropdown-item" href="/login">Login</a>
-
-
   {{/if}}
     <div class="dropdown-divider"></div>
   </div>

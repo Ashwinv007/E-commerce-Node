@@ -5,6 +5,13 @@ const userHelpers = require('../helpers/user-helpers.js')
 const passport = require("passport");
 const adminHelpers=require('../helpers/admin-helpers.js');
 
+router.use(async (req, res, next) => {
+    if (req.session.user) {
+        res.locals.sellerAccount = await adminHelpers.getSellerByUserId(req.session.user._id);
+    }
+    next();
+});
+
 const verifyLogin=(req,res,next)=>{
   if(req.session.userLoggedIn){
     next()
