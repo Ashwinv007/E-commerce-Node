@@ -152,19 +152,27 @@ router.post('/change-password',async(req,res)=>{
     cartCount = await userHelpers.getCartCount(req.session.user._id)
   }
 
-    await productHelpers.findProduct(req.params.id).then(async(product)=>{
-      await userHelpers.getReviews(req.params.id).then(async(reviews)=>{
-        await userHelpers.checkReview(req.session.user._id,req.params.id).then(async(userReviewed)=>{
-          await userHelpers.getRatingSummary(req.params.id,reviews).then((response)=>{
-              console.log('rev here: ',response)
-              res.render('user/view-product',{product,user,cartCount,reviews,userReviewed,response})
-          })
-        
-        })
-        
+  let product = await productHelpers.findProduct(req.params.id);
+  let reviews = await userHelpers.getReviews(req.params.id);
+  let userReview = null; // Initialize userReview as null
 
-      })
-    })
+  if (req.session.user) { // Only check for user's review if user is logged in
+    userReview = await userHelpers.checkReview(req.session.user._id, req.params.id); // This now returns the review object or null
+    if (userReview) {
+      // Filter out the user's review from the main reviews array to avoid duplication
+      reviews = reviews.filter(review => review._id.toString() !== userReview._id.toString());
+    }
+  }
+  
+  let response = await userHelpers.getRatingSummary(req.params.id,reviews); // Pass the potentially filtered reviews
+  let hasOrdered = false; // Initialize hasOrdered
+
+  if (req.session.user) { // Only check if user is logged in
+    hasOrdered = await userHelpers.hasUserOrderedProduct(req.session.user._id, req.params.id);
+  }
+  
+  console.log('rev here: ',response)
+  res.render('user/view-product',{product,user,cartCount,reviews,userReview,response,hasOrdered}) // Pass userReview, not userReviewed
    })
 
    router.get('/cart', verifyLogin,async (req,res)=>{

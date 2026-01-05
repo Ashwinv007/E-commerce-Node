@@ -249,18 +249,24 @@ module.exports={
     },
     checkReview:(userId,proId)=>{
         return new Promise(async(resolve,reject)=>{
-                   let reviews=await db.get().collection(collections.REVIEW_COLLECTION).find({productId:proId}).toArray()
-                   let status=false
-                        if(reviews){
-                            for(let i=0;i<reviews.length;i++){
-                                if(reviews[i].userId===userId){
-                                    status=true
-                                    break;
-                                }
-                            }
-                            resolve(status)
-                        }
+                   let review=await db.get().collection(collections.REVIEW_COLLECTION).findOne({productId:proId, userId:userId})
+                   resolve(review)
         })
+    },
+    hasUserOrderedProduct: (userId, productId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const order = await db.get().collection(collections.ORDER_COLLECTION).findOne({
+                    userId: objectId(userId),
+                    status: 'placed',
+                    'products.item': objectId(productId)
+                });
+                resolve(!!order); // Resolve with true if order is found, false otherwise
+            } catch (err) {
+                console.error("Error checking if user ordered product:", err);
+                resolve(false); // Resolve with false in case of an error
+            }
+        });
     },
     getCartCount:(userId)=>{
         return new Promise(async(resolve,reject)=>{
@@ -565,7 +571,7 @@ module.exports={
             instance.orders.create({
                 amount: total*100,
                 currency: "INR",
-                receipt: orderId,
+                receipt: ""+orderId,
               
               }, function(err,order){
                 if(err){

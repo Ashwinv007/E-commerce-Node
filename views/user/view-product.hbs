@@ -61,32 +61,49 @@
 </div>
 
       
-{{#if userReviewed}}
-
-{{else}}
-<form action="/submit-review" method="post">
-    <div class="reviewBox">
-        <div class="ratingDiv">
-          
-<ul class="rating">
-<li class="rating-item" data-rate="1"></li>
-<li class="rating-item" data-rate="2"></li>
-<li class="rating-item" data-rate="3"></li>
-<li class="rating-item" data-rate="4"></li>
-<li class="rating-item" data-rate="5"></li>
-</ul>
-<input type="number" name="ratingValue" id="ratingValue">
-<input type="text" name="productId" value="{{product._id}}">
-<input type="text" name="userId" value="{{user._id}}">
-
+{{#if hasOrdered}}
+    {{#if userReview}}
+        <div class="reviews">
+            <h3>Your Review</h3>
+            <div class="ratings">
+                <div class="stars" data-rating="{{userReview.ratingValue}}">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <div class="review">
+                <p>{{userReview.userReview}}</p>
+            </div>
         </div>
-        <div class="review">
-            <input style="height:100px" type="textarea" id="userReview" name="userReview" placeholder="Enter Your Review">
-        </div>
-        <button type="submit" style="background-color: green;">Submit Review</button>
-    </div>
-    </form>
+    {{else}}
+        <form action="/submit-review" method="post">
+            <div class="reviewBox">
+                <div class="ratingDiv">
+                  
+        <ul class="rating">
+        <li class="rating-item" data-rate="1"></li>
+        <li class="rating-item" data-rate="2"></li>
+        <li class="rating-item" data-rate="3"></li>
+        <li class="rating-item" data-rate="4"></li>
+        <li class="rating-item" data-rate="5"></li>
+        </ul>
+        <input type="number" name="ratingValue" id="ratingValue">
+        <input type="text" name="productId" value="{{product._id}}">
+        <input type="text" name="userId" value="{{user._id}}">
+
+                </div>
+                <div class="review">
+                    <input style="height:100px" type="textarea" id="userReview" name="userReview" placeholder="Enter Your Review">
+                </div>
+                <button type="submit" style="background-color: green;">Submit Review</button>
+            </div>
+        </form>
     {{/if}}
+{{/if}}
+
 {{#each reviews}}
     <div class="reviews">
         <div class="ratings">
