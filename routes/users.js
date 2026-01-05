@@ -369,12 +369,12 @@ router.get('/reorder-products/:reOrderId', (req, res) => {
     });
 });
 
-router.get('/view-order-products/:id',async(req,res)=>{
+router.get('/view-order-products/:id',verifyLogin,async(req,res)=>{
   let products = await userHelpers.getOrderProducts(req.params.id)
   res.render('user/view-order-products',{user:req.session.user,products})
 })
 
-router.get('/track-order-delivery/:id',async(req,res)=>{
+router.get('/track-order-delivery/:id',verifyLogin,async(req,res)=>{
   let trackOrder = await userHelpers.trackOrderDetails(req.params.id)
   console.log('locate hi', trackOrder)
   res.render('user/track-order',{user:req.session.user,trackOrder})
