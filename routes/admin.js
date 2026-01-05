@@ -7,15 +7,23 @@ const sharp = require('sharp');
 const s3Helper = require('../helpers/s3-helper');
 
 
-const verifyLogin=(req,res,next)=>{
+const verifyLogin=async (req,res,next)=>{
   if(req.session.adminLoggedIn){
+    let admin=await adminHelpers.getAdminDetails(req.session.admin._id)
+    if(!admin){
+      req.session.admin=null
+      req.session.adminLoggedIn=false
+      return res.redirect('/admin/login')
+    }
+    req.session.admin=admin
     if(req.session.admin.suspend){
-      if(req.session.admin.suspendUntilDate >Date.now()){
-        adminHelpers.revokeSeller(req.session.admin._id).then(()=>{
-          next()
-        })
+      if(req.session.admin.suspendUntilDate < Date.now()){
+        await adminHelpers.revokeSeller(req.session.admin._id)
+        req.session.admin.suspend=false
+        next()
+        
       }else{
-        res.render('admin/suspend')
+        res.render('admin/suspend',{admin,adminExist:true})
       }
     }else{
       next()
@@ -54,7 +62,7 @@ router.get('/', verifyLogin,function(req, res, next) {
 
     })
   }else if(admin.role=='pending_Seller'){
-    res.render('admin/pending-seller')
+    res.render('admin/pending-seller',{adminExist:true,admin})
   }else{
         productHelpers.getAllProducts().then(async(product)=>{
           let orders=await productHelpers.getAllOrdersForAdmin()

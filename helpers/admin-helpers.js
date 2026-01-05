@@ -33,9 +33,14 @@ doLogin:(adminData)=>{
         resolve({adminStatus:false})
     }
 
-})
+}) 
 },
-
+getAdminDetails: (adminId) => {
+    return new Promise(async (resolve, reject) => {
+        let admin = await db.get().collection(collections.ADMIN_COLLECTION).findOne({ _id: objectId(adminId) });
+        resolve(admin);
+    });
+},
 registerSeller:(sellerData)=>{
     return new Promise(async(resolve,reject)=>{
         sellerData.password=await bcrypt.hash(sellerData.password,10)
