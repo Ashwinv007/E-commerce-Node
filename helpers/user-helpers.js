@@ -209,6 +209,19 @@ module.exports={
     getRatingSummary:(proId,reviews)=>{
         return new Promise(async(resolve,reject)=>{
             const totalReviews=reviews.length;
+            if (totalReviews === 0) {
+                return resolve({
+                    average: 0,
+                    totalReviews: 0,
+                    starCounts: {1:0, 2:0, 3:0, 4:0, 5:0},
+                    starPercentages: {1:0, 2:0, 3:0, 4:0, 5:0},
+                    starRows: [5,4,3,2,1].map(star => ({
+                        star,
+                        count: 0,
+                        percentage: 0
+                    }))
+                });
+            }
             let starCounts={1:0,2:0,3:0,4:0,5:0};
             reviews.forEach(r =>{
                 let rating=parseInt(r.ratingValue,10);
