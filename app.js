@@ -91,6 +91,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
+app.set("trust proxy", 1);
+
 app.use(session({
   secret: 'Key',
   cookie: {
@@ -119,7 +121,6 @@ db.connect((err) => {
   }
 })
 
-app.set("trust proxy", 1);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', usersRouter);

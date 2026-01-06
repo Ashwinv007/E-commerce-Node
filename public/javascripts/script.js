@@ -1,53 +1,33 @@
-function addToCart(proId){
-            $.ajax({
-                url:'/add-to-cart/'+proId,
-                method:'get',
-                success:(response)=>{
-                    if(response.error){
-                        alert(response.error)
-                    } else if(response.status){
-                        let count=$('#cart-count').html()
-                        count=parseInt(count)+1
-                        $("#cart-count").html(count)
-                    }
-                    
-                }
-            })
-        }
+let slideIndex = 1;
+showSlides(slideIndex);
 
-        function search(input){
-            if(input.value.trim()===''){
-                $.ajax({
-                    url:'/',
-                    method:'get',
-                    
-                    success:function(res){
-                        var viewProductsHtml=$(res).find('#view-products').html();
-                        $('#view-products').html(viewProductsHtml)
-                    }
-                })
-            }else{
-                $.ajax({
-                    url:'/find-product/'+input.value,
-                    method:'get',
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
 
-                    success: function(res){
-                        var viewProductsHtml=$(res).find('#view-products').html()
-                        $('#view-products').html(viewProductsHtml)
-                    }
-                })
-            }
-        }
-//          function updateTrackStatus(orderId,choice){
-//     $.ajax({
-//       url:'/admin/updateProductStatus',
-//       data:{
-//         _id:orderId,
-//         option:choice
-//       },
-//       method:'post',
-//     //   success()=>{
-//     //     $("ordersList").("ordersList");
-//     //   }
-//     })
-//   }
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+
+
+function addToCart(event, productId) {
+  event.stopPropagation();
+  event.preventDefault();
+  alert("Item added to cart!");
+}
