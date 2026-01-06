@@ -54,7 +54,7 @@ router.get('/',verifyLogin, async function(req, res, next) {
    })
 
    router.get('/signup', (req,res)=>{
-    res.render('user/signup')
+    res.redirect('/login#signup')
    
 
     // res.redirect('/')

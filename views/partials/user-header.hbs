@@ -31,7 +31,7 @@
 
     <div class="header-right">
         <div class="dropdown">
-            <div class="account-action" id="accountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-right: none; padding-right: 0;">
+            <div class="account-action" style="border-right: none; padding-right: 0;">
                 <a href="{{#if user}}/orders{{else}}/login{{/if}}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -44,15 +44,15 @@
                 </a>
             </div>
              {{#if user}}
-            <div class="dropdown-menu" aria-labelledby="accountDropdown">
-                <a class="dropdown-item" href="/orders">Orders</a>
+            <div class="dropdown-content">
+                <a href="/orders">Orders</a>
                 {{#if sellerAccount}}
-                    <a href="/admin" class="dropdown-item">Admin dashboard</a>
+                    <a href="/admin">Admin dashboard</a>
                 {{else}}
-                    <a href="/admin/seller-register" class="dropdown-item">Become a Seller</a>
+                    <a href="/admin/seller-register">Become a Seller</a>
                 {{/if}}
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/logout">Logout</a>
+                <hr>
+                <a href="/logout">Logout</a>
             </div>
              {{/if}}
         </div>
