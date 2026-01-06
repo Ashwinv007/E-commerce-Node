@@ -1,165 +1,113 @@
-{{!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GFG OTP Verification</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
-    <link rel="stylesheet" href="styles.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <title>Dkart - OTP Verification</title>
 </head>
-
-<body> --}}
-    <section id="otpSection">
-
-   
-    <div class="container">
-        <div class="card">
-            <div class="header">
-                <h1 style="color:green">
-                    Ecommerce Sample
-                </h1>
-                <h2 style="color:black">
-                    OTP Verification
-                </h2>
+<body>
+    <div class="homepage">
+        <div class="otp-verification-container">
+            <div class="otp-icon-wrapper">
+                <i class="fas fa-envelope"></i>
             </div>
-            <div class="content" id="content">
-                {{!-- <button id="generateBtn" onclick="OTPFn()">
-                    Generate OTP
-                </button> --}}
-                <form action="/verifyOtp" method="post">
-                <div id="otpForm" class="otp-form" style="display:flex">
-                    <input type="text" id="userOTP" name="otp" placeholder="Enter OTP">
-                    <button type="submit">
-                        Verify
-                    </button>
-                </div>
-                
-                </form>
-                                    <button class="" onclick="resendOtp()">Resend OTP</button>
-                                    
-
-                <div id="successMessage" class="success-message">
-                    <i class="fas fa-check"></i>
-                    <p>Congratulations Geek! OTP is Verified!</p>
-                </div>
-                <div id="errorMessage" class="error-message"></div>
-                <div id="timer" class="timer"></div>
+            
+            <div class="otp-verification-header">
+                <h1>Check your email</h1>
+                <p>We sent a verification code to<br><span class="user-email">{{#if userData}}{{userData.email}}{{else}}your email{{/if}}</span></p>
             </div>
+
+            <form id="otpVerificationForm" action="/verifyOtp" method="post">
+                <div class="otp-code-inputs">
+                    <input type="number" class="otp-code-input" maxlength="1" id="otpDigit1" name="otp1" required>
+                    <input type="number" class="otp-code-input" maxlength="1" id="otpDigit2" name="otp2" required>
+                    <input type="number" class="otp-code-input" maxlength="1" id="otpDigit3" name="otp3" required>
+                    <input type="number" class="otp-code-input" maxlength="1" id="otpDigit4" name="otp4" required>
+                    <input type="number" class="otp-code-input" maxlength="1" id="otpDigit5" name="otp5" required>
+                    <input type="number" class="otp-code-input" maxlength="1" id="otpDigit6" name="otp6" required>
+                    <input type="hidden" name="otp" id="otp">
+                </div>
+
+                <button type="submit" class="otp-verify-btn">Verify email</button>
+            </form>
+
+            <div class="otp-resend-section">
+                Didn't receive the email? <a href="#" onclick="resendOtp(); return false;">Click to resend</a>
+            </div>
+
+            <a href="/login" class="otp-back-to-login">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to log in</span>
+            </a>
         </div>
     </div>
-     </section>
     <script>
+        const otpCodeInputs = document.querySelectorAll('.otp-code-input');
+        const otpInput = document.getElementById('otp');
 
-        function resendOtp(){
-            $.ajax({
-                url:'/resendOtp',
-                method:'post',
-                   success:()=>{
-            document.getElementById('userOTP').value=''
+        otpCodeInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                if (this.value.length > 1) {
+                    this.value = this.value.slice(0, 1);
+                }
+                
+                if (this.value.length === 1 && index < otpCodeInputs.length - 1) {
+                    otpCodeInputs[index + 1].focus();
+                }
+                updateOtpValue();
+            });
 
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                    otpCodeInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData('text').slice(0, 6);
+                const digits = pasteData.split('');
+                
+                digits.forEach((digit, i) => {
+                    if (i < otpCodeInputs.length && /[0-9]/.test(digit)) {
+                        otpCodeInputs[i].value = digit;
+                    }
+                });
+                
+                if (digits.length < otpCodeInputs.length) {
+                    otpCodeInputs[digits.length].focus();
+                } else {
+                    otpCodeInputs[otpCodeInputs.length - 1].focus();
+                }
+                updateOtpValue();
+            });
+        });
+        
+        function updateOtpValue(){
+            let otpValue = '';
+            otpCodeInputs.forEach(input => {
+                otpValue += input.value;
+            });
+            otpInput.value = otpValue;
         }
-              
-        })}
-        let otpGen;
-let timer;
-let secondsRemaining = 10;
 
-function OTPFn() {
-    const btn = document.getElementById('generateBtn');
-    btn.disabled = true;
-    clearFn();
-    otpGen = Math.floor(1000 + Math.random() * 9000);
-    const temp = document.getElementById('content');
-    const showOtp = document.createElement('div');
-    showOtp.classList.add('otp-display');
-    showOtp.innerHTML = `
-        <p class="otp-text">Generated OTP: 
-            <span>${otpGen}</span>
-        </p>`;
-    temp.appendChild(showOtp);
-    document.getElementById('otpForm').style.display = 'flex';
-    startTimer();
-}
+        document.getElementById('otpVerificationForm').addEventListener('submit', function(e) {
+            updateOtpValue();
+        });
 
-function clearFn() {
-    const prevOtp = document.querySelector('.otp-display');
-    if (prevOtp) {
-        prevOtp.remove();
-    }
-    resetTimer();
-    document.getElementById('errorMessage').innerText = '';
-    enableInputField();
-}
-
-function OTPVerifyFn() {
-let enterdOtp=document.getElementById('userOTP').value;
-console.log(enterdOtp)
-    $.ajax({
-        url:'/verifyOtp',
-        data:{
-        otp:enterdOtp,
-
-        },
-        method:'post',
-     
-       
-    })
-    const userOtp = document.getElementById('userOTP').value;
-    if (userOtp === "") {
-        alert("Please enter OTP.");
-        return;
-    }
-   
-}
-
-function showMsgFn() {
-    const successMessage = document.getElementById('successMessage');
-    successMessage.style.animation = 'fadeIn 1s forwards';
-    successMessage.style.display = 'flex';
-    setTimeout(() => {
-        successMessage.style.display = 'none';
-    }, 3000);
-}
-
-function startTimer() {
-    timer = setInterval(function () {
-        if (secondsRemaining <= 0) {
-            clearInterval(timer);
-            document.getElementById('generateBtn').disabled = false;
-            document.getElementById('errorMessage').innerText = 'OTP Expired. Please generate a new OTP.';
-            resetTimer();
-            disableInputField();
-        } else {
-            document.getElementById('timer').innerText = `Time Remaining: ${secondsRemaining} seconds`;
-            secondsRemaining--;
+        function resendOtp() {
+            fetch('/resendOtp', {method: 'POST'})
+                .then(response => response.json())
+                .then(data => {
+                    alert('A new OTP has been sent to your email.');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Could not resend OTP. Please try again later.');
+                });
         }
-    }, 1000);
-}
-
-function resetTimer() {
-    clearInterval(timer);
-    document.getElementById('timer').innerText = '';
-    secondsRemaining = 10;
-}
-
-function disableInputField() {
-    document.getElementById('userOTP').disabled = true;
-}
-
-function enableInputField() {
-    document.getElementById('userOTP').disabled = false;
-}
-
-function clearFields() {
-    document.getElementById('userOTP').value = '';
-    clearFn();
-}
     </script>
-
-{{!--     
 </body>
-
-</html> --}}
+</html>
