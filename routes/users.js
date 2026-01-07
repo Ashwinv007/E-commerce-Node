@@ -183,19 +183,13 @@ router.post('/change-password',async(req,res)=>{
   res.render('user/view-product',{product,user,cartCount,reviews,userReview,response,hasOrdered}) // Pass userReview, not userReviewed
    })
 
-   router.get('/cart', verifyLogin,async (req,res)=>{
-    let products = await userHelpers.getCartProducts(req.session.user._id)
-    let totalValue=0
-    if(products.length>0){
-      totalValue = await userHelpers.getTotalAmount(req.session.user._id)
+router.get('/cart', verifyLogin,async (req,res)=>{
+  let products = await userHelpers.getCartProducts(req.session.user._id)
+  let totalValue = await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('user/cart', {products, user:req.session.user,totalValue})
+})
 
-
-    }
-    console.log(products)
-    res.render('user/cart', {products, user:req.session.user,totalValue})
-   })
-
-   router.get('/add-to-cart/:id',async (req,res)=>{
+   router.post('/add-to-cart/:id',async (req,res)=>{
 console.log('api call')
     userHelpers.addToCart(req.params.id,req.session.user._id).then((response)=>{
       res.json(response)

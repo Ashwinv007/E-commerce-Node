@@ -1,41 +1,108 @@
 <section id="cartProductList">
-    <div class="container">
-        <table class="table mt-5">
-            <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-
-                </tr>
-            </thead>
-            <tbody >
-                {{#each products}}
-                <tr>
-                    {{!-- <td><img style="width:70px;height:70px" src="/product-images/{{this.product._id}}.{{this.imgExt}}" alt=""></td> --}}
-                                    {{!-- <td><img style="width: 50px; height 50px" src="/product-images/thumb{{this._id}}0.{{this.extsRender}}" alt=""></td> --}}
-                                                        <td><img style="width: 50px; height: 50px;" src="{{this.product.thumbnailUrl}}" alt="{{this.product.productName}}"></td>
-
-                    <td>{{this.product.productName}}</td>
-                                                           <td>{{this.product.productPrice}}</td>
-
-                    <td><button class="cart-item-count mr-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
-                    <span id="{{this.product._id}}">{{this.quantity}}</span>
-                    <button class="cart-item-count ml-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button></td>
-
-                    <td>                    <button class="btn btn-danger" onclick="removeProductFromCart('{{this._id}}','{{this.product._id}}','{{../user._id}}','{{this.product.productName}}',-1)">Remove</button></td>
-
-</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-        <hr>
-        <div class="float-right pr-5">
-            <h4 class="float-left mr-5">TOTAL RS: <span id="total">{{totalValue}}</span>/-</h4><br>
-            <a href="/place-order" class="btn btn-success mt-3" style="width:100%;"> <b>Place Order</b></a>
+    <div class="order-summary-card">
+        <!-- Header with item count -->
+        <div class="summary-header">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Order Summary</h2>
+            <span class="item-badge">{{products.length}} items</span>
         </div>
+
+        <!-- Price Breakdown -->
+        <div class="price-breakdown">
+            <!-- Subtotal -->
+            <div class="price-row">
+                <span class="price-label">Subtotal</span>
+                <span class="price-value">RS {{totalValue}}</span>
+            </div>
+
+            <!-- Shipping with Free badge -->
+            <div class="price-row">
+                <span class="price-label">Shipping</span>
+                <div>
+                    <span class="free-badge">Free!</span>
+                    <span class="original-price">RS 0.00</span>
+                </div>
+            </div>
+
+            <!-- Tax -->
+            <div class="price-row">
+                <span class="price-label">Tax (18%)</span>
+                <span class="price-value">RS {{calculateTax totalValue}}</span>
+            </div>
+
+            <!-- Discount -->
+            <div class="price-row">
+                <span class="price-label">Discount</span>
+                <span class="price-value discount-value">-RS 0.00</span>
+            </div>
+        </div>
+
+        <!-- Total Section -->
+        <div class="total-section">
+            <div class="total-row">
+                <span class="total-label">Total</span>
+                <span class="total-value" id="total">RS {{calculateTotal totalValue (calculateTax totalValue)}}</span>
+            </div>
+        </div>
+
+        <!-- Checkout Button -->
+        <a href="/place-order" class="checkout-btn">
+            <i class="fas fa-credit-card"></i>
+            Proceed to Checkout
+        </a>
+
+        <!-- Security Badge -->
+        <div class="security-badge">
+            <i class="fas fa-lock"></i>
+            <span>Secure checkout with SSL encryption</span>
+        </div>
+    </div>
+
+    <div class="cart-container">
+        {{#each products}}
+        <!-- Cart Item -->
+        <div class="cart-item">
+            <!-- Remove Button - Top Right -->
+            <button class="remove-btn" onclick="removeProductFromCart('{{this._id}}','{{this.product._id}}','{{../user._id}}','{{this.product.productName}}',-1)" title="Remove item">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="product-image-container">
+                <span class="category-badge">{{this.product.category}}</span>
+                <img src="{{this.product.thumbnailUrl}}" alt="{{this.product.productName}}">
+            </div>
+
+            <div class="product-details">
+                <h3 class="product-name">{{this.product.productName}}</h3>
+                <div class="stock-status">
+                    <i class="fas fa-check-circle"></i>
+                    <span>In Stock</span>
+                </div>
+                <div class="price-container">
+                    <span class="current-price">RS {{this.product.productPrice}}</span>
+                </div>
+            </div>
+
+            <div class="cart-controls">
+                <div class="quantity-controls">
+                    <span class="quantity-label">Qty:</span>
+                    <div class="quantity-wrapper">
+                        <button class="quantity-btn" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="quantity-display" id="{{this.product._id}}">{{this.quantity}}</div>
+                        <button class="quantity-btn" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="subtotal">
+                    <div class="subtotal-label">Subtotal:</div>
+                    <div class="subtotal-price">RS {{multiply this.product.productPrice this.quantity}}</div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
     </div>
 </section>
 
@@ -57,14 +124,10 @@
             success:(response)=>{
                 if(response.removeProduct){
                      alert("Product removed from cart")
-                        $("#cartProductList").load(" #cartProductList");
-
-
-
+                        $("#cartProductList").load(location.href + " #cartProductList>*","");
 
                 }else{
-                    document.getElementById(proId).innerHTML=response.quantity
-                    document.getElementById('total').innerHTML=response.total
+                     $("#cartProductList").load(location.href + " #cartProductList>*","");
                 }
                
             }
@@ -90,10 +153,9 @@
                     alert(response.error)
                 } else if(response.removeProduct){
                      alert("Product removed from cart")
-                        $("#cartProductList").load(" #cartProductList");
+                        $("#cartProductList").load(location.href + " #cartProductList>*","");
                 }else{
-                    document.getElementById(proId).innerHTML=quantity+count
-                    document.getElementById('total').innerHTML=response.total
+                     $("#cartProductList").load(location.href + " #cartProductList>*","");
                 }
                
             }

@@ -26,8 +26,41 @@ function showSlides(n) {
 }
 
 
-function addToCart(event, productId) {
-  event.stopPropagation();
-  event.preventDefault();
-  alert("Item added to cart!");
+function addToCart(event, proId) {
+  if (typeof event === 'object') {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  let productId = proId || event;
+
+  if (!productId) {
+    console.error("Product ID is missing in addToCart call");
+    return;
+  }
+
+  $.ajax({
+      url:'/add-to-cart/'+productId,
+      method:'post',
+      success:(response)=>{
+          if(response.status){
+              let countElement = $('.cart-badge');
+              let count = parseInt(countElement.html() || 0);
+              countElement.html(count + 1);
+              if(countElement.length === 0){
+                $('.cart-action').append('<span class="cart-badge" style="background: var(--primary); color: white; border-radius: 50%; padding: 0.1em 0.4em; font-size: 0.8rem; margin-left: 5px;">1</span>');
+              }
+              alert("Item added to cart!");
+          } else if (response.error) {
+              alert(response.error);
+          }
+      },
+      error: (jqXHR, textStatus, errorThrown) => {
+        if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+            alert('Error: ' + jqXHR.responseJSON.error);
+        } else {
+            alert('An error occurred while adding the item to the cart.');
+        }
+      }
+  })
 }

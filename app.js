@@ -73,7 +73,17 @@ Handlebars.registerHelper('getOrder',function(value){
   return value.product[0].productName
 })
 
+Handlebars.registerHelper('calculateTax', function(total) {
+  return (total * 0.18).toFixed(2);
+});
 
+Handlebars.registerHelper('calculateTotal', function(total, tax) {
+  return (parseFloat(total) + parseFloat(tax)).toFixed(2);
+});
+
+Handlebars.registerHelper('multiply', function(a, b) {
+  return (a * b).toFixed(2);
+});
 
 
 var usersRouter = require('./routes/users');
