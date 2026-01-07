@@ -31,34 +31,3 @@ function addToCart(event, productId) {
   event.preventDefault();
   alert("Item added to cart!");
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileToggle = document.getElementById('menuToggle');
-    const mobileOverlay = document.querySelector('.moble-overlay');
-
-    if (mobileToggle && mobileOverlay) {
-        mobileToggle.addEventListener('click', () => {
-            if (mobileOverlay.style.display === 'block') {
-                mobileOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    mobileOverlay.style.display = 'none';
-                }, 300); // Match CSS transition duration
-            } else {
-                mobileOverlay.style.display = 'block';
-                setTimeout(() => {
-                    mobileOverlay.style.opacity = '1';
-                }, 10);
-            }
-        });
-
-        // Close overlay when clicking on it
-        mobileOverlay.addEventListener('click', () => {
-            if (mobileOverlay.style.display === 'block') {
-                mobileOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    mobileOverlay.style.display = 'none';
-                }, 300); // Match CSS transition duration
-            }
-        });
-    }
-});

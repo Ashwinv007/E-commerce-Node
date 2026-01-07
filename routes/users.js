@@ -34,11 +34,8 @@ router.get('/',verifyLogin, async function(req, res, next) {
     cartCount = await userHelpers.getCartCount(req.session.user._id)
   }
   console.log(user);
-  productHelpers.getAllProducts().then((product)=>{
-    res.render('user/view-products', {admin:false , product,user,cartCount})
-
-
-   })});
+  res.render('index', {admin:false , user,cartCount, isHomepage: true})
+});
    router.get('/login', (req,res)=>{
     if(req.session.user){
       res.redirect('/')
