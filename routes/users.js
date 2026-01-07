@@ -36,6 +36,17 @@ router.get('/',verifyLogin, async function(req, res, next) {
   console.log(user);
   res.render('index', {admin:false , user,cartCount, isHomepage: true})
 });
+
+router.get('/products', verifyLogin, async function(req, res, next) {
+    let cartCount = null;
+    let user = req.session.user;
+    if (req.session.user) {
+        cartCount = await userHelpers.getCartCount(req.session.user._id);
+    }
+    productHelpers.getAllProducts().then((product) => {
+        res.render('user/view-products', { admin: false, product, user, cartCount, isHomepage: true, activeCategory: req.query.category  });
+    });
+});
    router.get('/login', (req,res)=>{
     if(req.session.user){
       res.redirect('/')
@@ -202,7 +213,7 @@ console.log('api call')
 
 
           }else{
-            res.render('user/view-products', {matchingProducts})
+            res.render('user/view-products', {matchingProducts, isHomepage: true})
 
           }
 

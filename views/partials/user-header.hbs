@@ -75,37 +75,37 @@
 </header>
 {{#if isHomepage}}
 <section class="categories">
-    <button class="category-active">
+    <a href="/products?category=Groceries" class="{{#if (eq activeCategory 'Groceries')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Groceries</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
-    <button class="category">
+    </a>
+    <a href="/products?category=Premium%20Fruits" class="{{#if (eq activeCategory 'Premium Fruits')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Premium Fruits</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
-    <button class="category">
+    </a>
+    <a href="/products?category=Home%20%26%20Kitchen" class="{{#if (eq activeCategory 'Home & Kitchen')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Home & Kitchen</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
-    <button class="category">
+    </a>
+    <a href="/products?category=Fashion" class="{{#if (eq activeCategory 'Fashion')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Fashion</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
-    <button class="category">
+    </a>
+    <a href="/products?category=Electronics" class="{{#if (eq activeCategory 'Electronics')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Electronics</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
-    <button class="category">
+    </a>
+    <a href="/products?category=Beauty" class="{{#if (eq activeCategory 'Beauty')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Beauty</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
-    <button class="category">
+    </a>
+    <a href="/products?category=Home%20Improvement" class="{{#if (eq activeCategory 'Home Improvement')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Home Improvement</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
-    <button class="category">
+    </a>
+    <a href="/products?category=Sports%2C%20Toys%20%26%20Luggage" class="{{#if (eq activeCategory 'Sports, Toys & Luggage')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
         <span class="category-text">Sports, Toys & Luggage</span>
         <i class="fas fa-chevron-down"></i>
-    </button>
+    </a>
 </section>
 {{/if}}

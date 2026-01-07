@@ -13,6 +13,10 @@ Handlebars.registerHelper("inc", function(value, options){
   return parseInt(value) + 1;
 })
 
+Handlebars.registerHelper("eq", function(a, b){
+  return a === b;
+})
+
 Handlebars.registerHelper("renderStars",function(ratingValue){
   let rating=parseInt(ratingValue,10);
   let stars='';
