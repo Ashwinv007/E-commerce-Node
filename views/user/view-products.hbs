@@ -1,107 +1,95 @@
-
-{{#if matchingProducts}}
-
-<section>
-  <div id="view-products">
-
-    <div class="container mt-5">
-        <div class="row">
-
-        
-
-                {{#each matchingProducts}}
-                <a href="/view-product/:{{this._id}}">
-
-                    <div class="col-md-3 p-3" >
-                        <div class="card" style="width: 15rem; height: 24rem;">
-                            <img class="card-img-top" src="{{this.imageUrls.[0]}}" alt="{{this.productName}}" style="height: 12rem;">
-                                                        {{!-- <img class="card-img-top" src="/product-images/{{this._id}}0.{{this.extsRender[0]}}" alt="Card image cap" style="height: 12rem;"> --}}
-
-                            <div class="card-body">
-                                <h5 class="card-title">{{this.productName}}</h5>
-                                <p class="card-text">{{this.productDescription}}</p>
-                                <h5 class="card-title">{{this.productPrice}}</h5>
-                                <!-- Add other product details here -->
-                                <button class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add to Cart</button>
+<section class="smartphones" style="padding: 2rem;">
+    <div class="title">
+        <h2>{{#if matchingProducts}}Search Results{{else}}All Products{{/if}}</h2>
+    </div>
+    <div class="smartphones-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
+        {{#if matchingProducts}}
+            {{#each matchingProducts}}
+                <div class="card" style="width: 18rem;">
+                    <a href="/view-product/{{this._id}}" style="text-decoration: none; color: inherit;">
+                        <div class="mobileImage">
+                            <img src="{{this.imageUrls.[0]}}" alt="{{this.productName}}">
+                        </div>
+                        <div class="smartphone-details">
+                            <h3>{{this.productName}}</h3>
+                            <p class="price">₹ {{this.productPrice}}</p>
+                            <div id="stockAvailability_{{this._id}}">
+                                <input type="hidden" id="stockAmount_{{this._id}}" value="{{this.stockAmount}}">
+                                <p class="stock-message running-out" style="display: none; color:red">Running out of Stock!</p>
+                                <p class="stock-message out-of-stock" style="display: none; color:red">Out of Stock</p>
                             </div>
                         </div>
-                    </div>
-                                </a>
-
-                {{/each}}
-
-
-
-
-            
-                              
-            
-        </div>
-    </div>
-      </div>
-
-</section>
-
-{{else}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-<section>
-    <div id="view-products">
-
-    <div class="container mt-5">
-    <div class="row">
-      {{#each product}}
-      <a href="/view-product/{{this._id}}" >
-
-        <div class="col-md-3 p-3">
-            <div class="card" style="width: 15rem; height:24rem;">
-  <img class="card-img-top" src="{{this.imageUrls.[0]}}" style="height:12rem;" onload="checkStock({{this._id}})" alt="{{this.productName}}">
-  <div class="card-body">
-    <h5 class="card-title">{{this.productName}}</h5>
-    <p class="card-text">{{this.productDescription}}</p>
-        <h5 class="card-title">{{this.productPrice}}</h5>
- <div id="stockAvailability" name="stockAvailability" >
-        <input type="number" id="stockAmount" name="stockAmount" style="display:block" value="{{this.stockAmount}}">
-        <h2 id="runningOutOfStock" style="display: none; color:red">Running out of Stock!</h2>
-        <h2 id="outOfStock" style="display:none; color:red">Out of Stock</h2>
-         </div>
-    <button id="{{this._id}}+cartButton" class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add to Cart</button>
-  </div>
-</div>
-        </div>
                     </a>
-
-        {{/each}}
-
+                    <button id="{{this._id}}_cartButton" class="add-to-cart" onclick="addToCart('{{this._id}}')">Add to Cart</button>
+                </div>
+            {{/each}}
+        {{else}}
+            {{#each product}}
+                <div class="card" style="width: 18rem;">
+                    <a href="/view-product/{{this._id}}" style="text-decoration: none; color: inherit;">
+                        <div class="mobileImage">
+                            <img src="{{this.imageUrls.[0]}}" alt="{{this.productName}}">
+                        </div>
+                        <div class="smartphone-details">
+                            <h3>{{this.productName}}</h3>
+                            <p class="price">₹ {{this.productPrice}}</p>
+                            <div id="stockAvailability_{{this._id}}">
+                                <input type="hidden" id="stockAmount_{{this._id}}" value="{{this.stockAmount}}">
+                                <p class="stock-message running-out" style="display: none; color:red">Running out of Stock!</p>
+                                <p class="stock-message out-of-stock" style="display: none; color:red">Out of Stock</p>
+                            </div>
+                        </div>
+                    </a>
+                    <button id="{{this._id}}_cartButton" class="add-to-cart" onclick="addToCart('{{this._id}}')">Add to Cart</button>
+                </div>
+            {{/each}}
+        {{/if}}
     </div>
-    </div>
-    </div>
-
 </section>
 
-            {{/if}}
 <script>
-    
-    function checkStock(productId){
-            let stockAmount=document.getElementById("stockAmount").value
+    document.addEventListener("DOMContentLoaded", function() {
+        {{#if matchingProducts}}
+            {{#each matchingProducts}}
+                checkStock('{{this._id}}');
+            {{/each}}
+        {{else}}
+            {{#each product}}
+                checkStock('{{this._id}}');
+            {{/each}}
+        {{/if}}
+    });
 
-        console.log('hi qun:',stockAmount)
-        if(stockAmount<=10 && stockAmount!=0){
-            document.getElementById("runningOutOfStock").style.display="block"
-        }else if(stockAmount==0){
-            document.getElementById("outOfStock").style.display="block"
-            document.getElementById(productId+"cartButton").disabled=true
+    function checkStock(productId) {
+        let stockAmountInput = document.getElementById("stockAmount_" + productId);
+        if (!stockAmountInput) return;
+        let stockAmount = stockAmountInput.value;
+        let runningOutMsg = document.querySelector("#stockAvailability_" + productId + " .running-out");
+        let outOfStockMsg = document.querySelector("#stockAvailability_" + productId + " .out-of-stock");
+        let cartButton = document.getElementById(productId + "_cartButton");
+
+        if (stockAmount > 0 && stockAmount <= 10) {
+            if(runningOutMsg) runningOutMsg.style.display = "block";
+        } else if (stockAmount == 0) {
+            if(outOfStockMsg) outOfStockMsg.style.display = "block";
+            if(cartButton) cartButton.disabled = true;
         }
+    }
+
+    function addToCart(productId) {
+        $.ajax({
+            url: '/add-to-cart/' + productId,
+            method: 'get',
+            success: (response) => {
+                if (response.status) {
+                    let count_span = $('.cart-badge');
+                    let count = parseInt(count_span.html()) || 0;
+                    count = count + 1;
+                    count_span.html(count).show();
+                } else {
+                    alert('Could not add to cart');
+                }
+            }
+        });
     }
 </script>
