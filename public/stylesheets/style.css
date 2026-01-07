@@ -1998,3 +1998,56 @@
         .otp-back-to-login:hover i {
             transform: translateX(-3px);
         }
+
+/* Dropdown styles for header */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none; /* Hidden by default */
+  position: absolute;
+  background-color: var(--white);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1; /* Ensures it appears above other content */
+  border-radius: 8px;
+  padding: 10px 0;
+  right: 0; /* Align to the right of the parent dropdown */
+  margin-top: 10px; /* Space between the trigger and dropdown content */
+}
+
+.dropdown-content a {
+  color: var(--heading);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--background1);
+  color: var(--primary);
+}
+
+.dropdown:hover .dropdown-content {
+  display: block; /* Show the dropdown menu on hover */
+}
+
+/* Ensure the user name and icon within account-action trigger the dropdown */
+.dropdown .account-action {
+  cursor: pointer;
+  /* Additional styling to make it look like a button or clickable area */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.dropdown .account-action:hover {
+  color: var(--primary); /* Highlight on hover */
+}

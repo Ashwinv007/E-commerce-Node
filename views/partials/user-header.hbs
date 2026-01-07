@@ -30,32 +30,36 @@
     </div>
 
     <div class="header-right">
-        <div class="dropdown">
-            <div class="account-action" style="border-right: none; padding-right: 0;">
-                <a href="{{#if user}}/orders{{else}}/login{{/if}}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+    <div class="header-right">
+        {{#if user}}
+            <div class="dropdown">
+                <div class="account-action" style="border-right: none; padding-right: 0;">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
-                    {{#if user}}
-                        <span class="account-text">{{user.username}}</span>
+                    <span class="account-text">{{user.username}}</span>
+                </div>
+                <div class="dropdown-content">
+                    <a href="/orders">Orders</a>
+                    {{#if sellerAccount}}
+                        <a href="/admin">Admin dashboard</a>
                     {{else}}
-                        <span class="account-text">Sign In</span>
+                        <a href="/admin/seller-register">Become a Seller</a>
                     {{/if}}
+                    <hr>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        {{else}}
+            <div class="account-action" style="border-right: none; padding-right: 0;">
+                <a href="/login" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <span class="account-text">Sign In</span>
                 </a>
             </div>
-             {{#if user}}
-            <div class="dropdown-content">
-                <a href="/orders">Orders</a>
-                {{#if sellerAccount}}
-                    <a href="/admin">Admin dashboard</a>
-                {{else}}
-                    <a href="/admin/seller-register">Become a Seller</a>
-                {{/if}}
-                <hr>
-                <a href="/logout">Logout</a>
-            </div>
-             {{/if}}
-        </div>
+        {{/if}}
 
         <a href="/cart" class="cart-action" style="text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
@@ -66,5 +70,6 @@
                 <span class="cart-badge" style="background: var(--primary); color: white; border-radius: 50%; padding: 0.1em 0.4em; font-size: 0.8rem; margin-left: 5px;">{{cartCount}}</span>
             {{/if}}
         </a>
+    </div>
     </div>
 </header>
