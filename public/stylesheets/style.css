@@ -2647,3 +2647,102 @@
 .action-btn.reorder:hover {
     background: #c8e6c9;
 }
+/* Track Order Page */
+.track-order-page {
+    padding: 2rem 0;
+}
+
+.tracking-container-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tracking-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-step {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    padding-bottom: 2.5rem;
+}
+
+.timeline-step:last-child {
+    padding-bottom: 0;
+}
+
+/* Vertical line */
+.timeline-step::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 30px;
+    width: 2px;
+    height: calc(100% - 30px);
+    background-color: var(--border);
+    z-index: 1;
+}
+
+.timeline-step:last-child::before {
+    display: none;
+}
+
+.timeline-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--border);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    margin-right: 1.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.timeline-content .timeline-title {
+    font-weight: 600;
+    color: var(--heading);
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-content .timeline-date {
+    color: var(--light);
+    font-size: 0.9rem;
+}
+
+/* Completed state */
+.timeline-step.completed .timeline-icon {
+    background: var(--green);
+}
+
+.timeline-step.completed .timeline-icon::after {
+    content: '✓';
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.timeline-step.completed::before {
+    background-color: var(--green);
+}
+
+.timeline-step.completed .timeline-title,
+.timeline-step.completed .timeline-date {
+    color: var(--heading);
+}
+
+.timeline-step:not(.completed) .timeline-title {
+    color: var(--light);
+}

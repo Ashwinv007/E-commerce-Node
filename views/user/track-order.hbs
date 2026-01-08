@@ -1,85 +1,65 @@
 
-{{#if trackOrder}}
+<section class="track-order-page">
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Track Your Order</h1>
+            {{#if trackOrder.orderId}}
+                <p>Order #{{trackOrder.orderId}}</p>
+            {{/if}}
+        </div>
 
-<div class="container">
-    <div class="order-tracking-container">
-        
-        <!-- Step 1: Ordered -->
-        {{#if trackOrder.ordered.status}}
-            <div class="order-tracking completed">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Ordered<span>{{trackOrder.ordered.date}}</span></p>
+        <div class="tracking-container-card">
+            <div class="tracking-timeline">
+
+                <!-- Ordered Step -->
+                <div class="timeline-step {{#if trackOrder.ordered.status}}completed{{/if}}">
+                    <div class="timeline-icon"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">Ordered</p>
+                        {{#if trackOrder.ordered.status}}
+                            <p class="timeline-date">{{trackOrder.ordered.date}}</p>
+                        {{else}}
+                            <p class="timeline-date">Waiting for confirmation</p>
+                        {{/if}}
+                    </div>
                 </div>
-            </div>
-        {{else}}
-            <div class="order-tracking">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Ordered</p>
+
+                <!-- Shipped Step -->
+                <div class="timeline-step {{#if trackOrder.shipped.status}}completed{{/if}}">
+                    <div class="timeline-icon"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">Shipped</p>
+                        {{#if trackOrder.shipped.status}}
+                            <p class="timeline-date">{{trackOrder.shipped.date}}</p>
+                        {{/if}}
+                    </div>
                 </div>
-            </div>
-        {{/if}}
-        
-        <!-- Step 2: Shipped -->
-        {{#if trackOrder.shipped.status}}
-            <div class="order-tracking completed">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Shipped<span>{{trackOrder.shipped.date}}</span></p>
+
+                <!-- Out for Delivery Step -->
+                <div class="timeline-step {{#if trackOrder.outForDelivery.status}}completed{{/if}}">
+                    <div class="timeline-icon"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">Out for Delivery</p>
+                        {{#if trackOrder.outForDelivery.status}}
+                            <p class="timeline-date">{{trackOrder.outForDelivery.date}}</p>
+                        {{/if}}
+                    </div>
                 </div>
-            </div>
-        {{else}}
-            <div class="order-tracking">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Shipped</p>
+
+                <!-- Delivered Step -->
+                <div class="timeline-step {{#if trackOrder.delivered.status}}completed{{/if}}">
+                    <div class="timeline-icon"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">Delivered</p>
+                        {{#if trackOrder.delivered.status}}
+                            <p class="timeline-date">{{trackOrder.delivered.date}}</p>
+                        {{else if trackOrder.outForDelivery.status}}
+                             <p class="timeline-date">Arriving Today</p>
+                        {{/if}}
+                    </div>
                 </div>
+
             </div>
-        {{/if}}
-        
-        <!-- Step 3: Out for Delivery -->
-        {{#if trackOrder.outForDelivery.status}}
-            <div class="order-tracking completed">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Out for Delivery<span>{{trackOrder.outForDelivery.date}}</span></p>
-                </div>
-            </div>
-        {{else}}
-            <div class="order-tracking">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Out for Delivery</p>
-                </div>
-            </div>
-        {{/if}}
-        
-        <!-- Step 4: Delivered -->
-        {{#if trackOrder.delivered.status}}
-            <div class="order-tracking completed">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Delivered<span>{{trackOrder.delivered.date}}</span></p>
-                </div>
-            </div>
-        {{else if trackOrder.outForDelivery.status}}
-            <div class="order-tracking">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Arriving Today by 6pm<span></span></p>
-                </div>
-            </div>
-        {{else}}
-            <div class="order-tracking">
-                <span class="is-complete"></span>
-                <div class="order-tracking-content">
-                    <p>Delivered</p>
-                </div>
-            </div>
-        {{/if}}
-        
+        </div>
     </div>
-</div>
-
-{{/if}}
+</section>
