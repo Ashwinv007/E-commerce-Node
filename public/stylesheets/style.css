@@ -1999,7 +1999,7 @@
         .otp-back-to-login:hover i {
             transform: translateX(-3px);
         }
-
+        
         @media (max-width: 480px) {
             .otp-verification-container {
                 padding: 2rem 1.5rem;
@@ -2511,4 +2511,139 @@
     margin: 0.5rem 0;
     overflow: hidden;
     background-color: var(--border); /* Using a border color variable */
+}
+
+/* Orders Page Styling */
+.orders-section {
+    padding: 2rem 0;
+}
+
+.orders-container {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.orders-table th {
+    background: var(--background2);
+    font-weight: 600;
+    color: var(--heading);
+    white-space: nowrap;
+}
+
+.orders-table tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-table tr:hover {
+    background-color: var(--blue-bg);
+}
+
+.order-product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.status-Placed {
+    background-color: #e3f2fd;
+    color: #1e88e5;
+}
+.status-Pending {
+    background-color: #fff8e1;
+    color: #fbc02d;
+}
+.status-Shipped {
+    background-color: #e0f2f1;
+    color: #00897b;
+}
+
+.status-Delivered {
+    background-color: #e8f5e9;
+    color: var(--green);
+}
+
+.status-Cancelled {
+    background-color: #ffebee;
+    color: var(--red);
+}
+
+/* Action Buttons */
+.action-btn {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    border: none;
+    font-family: 'HankenGrotesk', sans-serif;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.action-btn.view {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.action-btn.view:hover {
+    background: #006a99;
+}
+
+.action-btn.track {
+    background: #e3f2fd;
+    color: #1e88e5;
+}
+
+.action-btn.track:hover {
+    background: #bbdefb;
+}
+
+.action-btn.cancel {
+    background: #ffebee;
+    color: var(--red);
+}
+
+.action-btn.cancel:hover {
+    background: #ffcdd2;
+}
+
+.action-btn.reorder {
+    background: #e8f5e9;
+    color: var(--green);
+}
+
+.action-btn.reorder:hover {
+    background: #c8e6c9;
 }
