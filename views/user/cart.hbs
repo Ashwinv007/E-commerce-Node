@@ -24,12 +24,6 @@
                 </div>
             </div>
 
-            <!-- Tax -->
-            <div class="price-row">
-                <span class="price-label">Tax (18%)</span>
-                <span class="price-value">RS {{calculateTax totalValue}}</span>
-            </div>
-
             <!-- Discount -->
             <div class="price-row">
                 <span class="price-label">Discount</span>
@@ -41,7 +35,7 @@
         <div class="total-section">
             <div class="total-row">
                 <span class="total-label">Total</span>
-                <span class="total-value" id="total">RS {{calculateTotal totalValue (calculateTax totalValue)}}</span>
+                <span class="total-value" id="total">RS {{totalValue}}</span>
             </div>
         </div>
 
