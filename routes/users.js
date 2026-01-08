@@ -290,7 +290,7 @@ router.post('/place-order',async(req,res)=>{
 
   }
   if(req.body.discount){
-    totalPrice=totalPrice-discount
+    totalPrice=totalPrice-req.body.discount
   }
 
  
