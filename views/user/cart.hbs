@@ -1,4 +1,5 @@
 <section id="cartProductList">
+    {{#if products.length}}
     <div class="order-summary-card">
         <!-- Header with item count -->
         <div class="summary-header">
@@ -51,6 +52,7 @@
             <span>Secure checkout with SSL encryption</span>
         </div>
     </div>
+    {{/if}}
 
     <div class="cart-container">
         {{#each products}}
