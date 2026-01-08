@@ -1,67 +1,82 @@
-<section>
-    <div class="container mt-5">
-        <div class="row">
-                            <form action="" id="checkout-form">
+<div class="place-order-page">
+    <form id="checkout-form">
+        <div class="order-page-container">
+            <!-- Left Section - Shipping Details -->
+            <div class="shipping-details-section">
+                <h2 class="section-heading">Shipping Details</h2>
+                
+                <div class="shipping-form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" placeholder="Enter your address" value="{{address}}" required>
+                </div>
 
-            <div class="col-md-6">
-                <h2>Shipping Details</h2>
-                    <div class="form-group">
-                        <label for="address">Address:</label>
-                        <input type="text" class="form-control" name="address" id="address" value="{{address}}" placeholder="Enter your address">
-                    </div>
-                    <div class="form-group">
-                        <label for="pincode">Pincode:</label>
-                        <input type="text" class="form-control" name="pincode" id="pincode" value="{{pincode}}" placeholder="Enter your pincode">
-                    </div>
-                    <div class="form-group">
-                        <label for="mobile">Mobile:</label>
-                        <input type="text" class="form-control" name="mobile" id="mobile" value="{{mobile}}" placeholder="Enter your mobile number">
+                <div class="shipping-form-group">
+                    <label for="pincode">Pincode:</label>
+                    <input type="text" id="pincode" name="pincode" placeholder="Enter your pincode" value="{{pincode}}" required>
+                </div>
+
+                <div class="shipping-form-group">
+                    <label for="mobile">Mobile:</label>
+                    <input type="tel" id="mobile" name="mobile" placeholder="Enter your mobile number" value="{{mobile}}" required>
                     <input type="text" name="userId" id="" value="{{user._id}}" hidden>
-                    </div>
-                    <div class="form-group" id="coupon-section">
-                        <label for="coupon">Coupon Code:</label>
-                        <input type="text" class="form-control" name="coupon" id="coupon" placeholder="Enter coupon">
-                        <button type="button" onclick="checkCoupon('{{user._id}}')">Redeem Coupon</button>
+                </div>
 
-                    {{!-- <input type="text" name="userId" id="" value="{{user._id}}" hidden> --}}
+                <div class="coupon-section" id="coupon-section">
+                    <div class="shipping-form-group">
+                        <label for="couponCode">Coupon Code:</label>
+                        <div class="coupon-input-wrapper">
+                            <input type="text" id="coupon" name="coupon" placeholder="Enter coupon code">
+                            <button type="button" class="redeem-coupon-btn" onclick="checkCoupon('{{user._id}}')">
+                                Redeem Coupon
+                            </button>
+                        </div>
                     </div>
+                    <div id="coupon-message-area"></div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h2>Order Summary</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Amount</h5>
-                        {{#if totalAmount}}
-                        <p class="card-text">Rs:{{totalAmount}}/-</p>
-                        {{else}}
-                        <p class="card-text">Rs:{{total}}/-</p>
 
+            <!-- Right Section - Order Summary & Payment -->
+            <div class="order-summary-sidebar">
+                <!-- Order Summary -->
+                <div class="summary-card">
+                    <h3 class="summary-heading">Order Summary</h3>
+                    <div class="summary-amount-row">
+                        <span class="summary-label">Total Amount</span>
+                        {{#if totalAmount}}
+                        <span class="summary-value">Rs:{{totalAmount}}/-</span>
+                        {{else}}
+                        <span class="summary-value">Rs:{{total}}/-</span>
                         {{/if}}
                     </div>
                      <input id="reOrder" style="display:none" name="reOrder" value='{{reOrder}}'>
+                </div>
 
-                </div>
-                <div class="mt-3">
-                    <h2>Payment Method</h2>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="payment-method" id="cod" value="COD">
-                        <label class="form-check-label" for="cod">Cash on Delivery (COD)</label>
+                <!-- Payment Method -->
+                <div class="payment-method-card">
+                    <h3 class="summary-heading">Payment Method</h3>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" id="cod" name="payment-method" value="COD" checked>
+                            <label for="cod">Cash on Delivery (COD)</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="onlinePayment" name="payment-method" value="OnlinePayment">
+                            <label for="online">Online Payment</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="payment-method" id="onlinePayment" value="OnlinePayment">
-                        <label class="form-check-label" for="onlinePayment">Online Payment</label>
-                    </div>
+
+                    <button type="submit" class="checkout-action-btn">
+                        Checkout
+                    </button>
                 </div>
-                <button  class="btn btn-primary mt-3" type="submit">Checkout</button>
             </div>
-                            </form>
-
         </div>
-    </div>
-</section>
+    </form>
+</div>
 
 <script>
-  
+    let initialTotal = parseFloat($('.summary-value').text().replace('Rs:', '').replace('/-', ''));
+
     $('#checkout-form').submit((e)=>{
         e.preventDefault()
         $.ajax({
@@ -111,36 +126,81 @@ var rzp1 = new Razorpay(options);
     
 }
 
-  function checkCoupon(){
-        let couponCode=document.getElementById('coupon').value;
+  function checkCoupon(userId){
+        let couponCode = document.getElementById('coupon').value;
+        let couponMessageArea = document.getElementById('coupon-message-area');
+        couponMessageArea.innerHTML = ''; // Clear previous messages
+
+        // Disable coupon input and redeem button to prevent multiple submissions
+        document.getElementById('coupon').disabled = true;
+        document.querySelector('.redeem-coupon-btn').disabled = true;
+
         $.ajax({
             url:'/verify-coupon',
             method:'post',
             data:{
                 coupon:couponCode,
+                userId: userId // Pass userId to the server
             },
             success:(response)=>{
                 console.log(response)
-                console.log(typeof(response.response))
-             if(typeof(response.response)==='number'){
-                let discountElement=document.createElement("input");
-                discountElement.type="number"
-                discountElement.name="discount"
-                discountElement.value=response.response
-                document.getElementById('coupon-section').appendChild(discountElement)
+                if(typeof(response.response)==='number'){
+                    // Coupon applied successfully
+                    let newTotal = response.response;
+                    let discountAmount = initialTotal - newTotal;
+                    $('.summary-value').text('Rs:' + newTotal.toFixed(2) + '/-');
 
-             }else{
-                let invalidCoupon=document.createElement("input");
-                invalidCoupon.type="text"
-                invalidCoupon.style.width='auto'
-                invalidCoupon.name="invalidCoupon"
-                invalidCoupon.value=response.response
-                invalidCoupon.style.color="red"
-                document.getElementById('coupon-section').appendChild(invalidCoupon)
 
-             }
+                    let discountElement = document.createElement("input");
+                    discountElement.type = "hidden"; // Hidden input for discount value
+                    discountElement.name = "discount";
+                    discountElement.value = discountAmount;
+                    couponMessageArea.appendChild(discountElement);
+
+                    let successMessage = document.createElement("span");
+                    successMessage.innerHTML = `Coupon Applied! Discount: Rs. ${discountAmount.toFixed(2)}/-`;
+                    successMessage.style.color = "green";
+                    couponMessageArea.appendChild(successMessage);
+
+                    let removeButton = document.createElement("button");
+                    removeButton.innerHTML = '<i class="fas fa-times"></i> Remove';
+                    removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ml-2');
+                    removeButton.onclick = function() { removeCoupon(userId); };
+                    couponMessageArea.appendChild(removeButton);
+
+                }else{
+                    // Coupon verification failed
+                    let errorMessage = document.createElement("span");
+                    errorMessage.innerHTML = response.response;
+                    errorMessage.style.color = "red";
+                    couponMessageArea.appendChild(errorMessage);
+
+                    // Re-enable input and button for error cases
+                    document.getElementById('coupon').disabled = false;
+                    document.querySelector('.redeem-coupon-btn').disabled = false;
+                }
+            },
+            error: (jqXHR, textStatus, errorThrown) => {
+                let errorMessage = document.createElement("span");
+                errorMessage.innerHTML = "Error verifying coupon. Please try again.";
+                errorMessage.style.color = "red";
+                couponMessageArea.appendChild(errorMessage);
+
+                document.getElementById('coupon').disabled = false;
+                document.querySelector('.redeem-coupon-btn').disabled = false;
             }
         })
+    }
+
+    function removeCoupon(userId){
+        // Clear message area
+        document.getElementById('coupon-message-area').innerHTML = '';
+        $('.summary-value').text('Rs:' + initialTotal.toFixed(2) + '/-');
+
+        // Re-enable coupon input and redeem button
+        document.getElementById('coupon').disabled = false;
+        document.getElementById('coupon').value = ''; // Clear coupon input
+        document.querySelector('.redeem-coupon-btn').disabled = false;
     }
        
 
