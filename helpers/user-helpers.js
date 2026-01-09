@@ -199,10 +199,33 @@ module.exports={
     },
     getReviews:(proId)=>{
         return new Promise(async(resolve,reject)=>{
-       let reviews=await db.get().collection(collections.REVIEW_COLLECTION).find({productId:proId}).toArray()
-    //    if(reviews){
-    //     let userReview=await db.get()
-    //    }
+            let reviews = await db.get().collection(collections.REVIEW_COLLECTION).aggregate([
+                {
+                    $match:{productId:proId}
+                },
+                {
+                    $lookup:{
+                        from: collections.USER_COLLECTION,
+                        localField:'userId',
+                        foreignField:'_id',
+                        as:'user'
+                    }
+                },
+                {
+                    $unwind:'$user' // Unwind the user array created by $lookup
+                },
+                {
+                    $project:{
+                        _id:1,
+                        productId:1,
+                        userId:1,
+                        ratingValue:1,
+                        userReview:1,
+                        date:1,
+                        user: { name: '$user.username' }
+                    }
+                }
+            ]).toArray()
             resolve(reviews)
         })
     },
@@ -249,8 +272,35 @@ module.exports={
     },
     checkReview:(userId,proId)=>{
         return new Promise(async(resolve,reject)=>{
-                   let review=await db.get().collection(collections.REVIEW_COLLECTION).findOne({productId:proId, userId:userId})
-                   resolve(review)
+            let review = await db.get().collection(collections.REVIEW_COLLECTION).aggregate([
+                {
+                    $match:{productId:proId, userId:objectId(userId)} // Match by product and user ID
+                },
+                {
+                    $lookup:{
+                        from: collections.USER_COLLECTION,
+                        localField:'userId',
+                        foreignField:'_id',
+                        as:'user'
+                    }
+                },
+                {
+                    $unwind:'$user' // Unwind the user array created by $lookup
+                },
+                {
+                    $project:{
+                        _id:1,
+                        productId:1,
+                        userId:1,
+                        ratingValue:1,
+                        userReview:1,
+                        date:1,
+                        user: { name: '$user.username' }
+                    }
+                }
+            ]).toArray()
+            // findOne returns a single document, aggregate returns an array. Return the first element.
+            resolve(review[0])
         })
     },
     hasUserOrderedProduct: (userId, productId) => {
@@ -332,9 +382,15 @@ module.exports={
     },
     submitReview:(reviewData)=>{
         return new Promise(async(resolve,reject)=>{
+            // Convert userId to ObjectId before inserting
+            if (reviewData.userId) {
+                reviewData.userId = objectId(reviewData.userId);
+            }
+            // Add current date to the review
+            reviewData.date = new Date();
             db.get().collection(collections.REVIEW_COLLECTION).insertOne(reviewData).then(()=>{
                 resolve()
-            })
+            }).catch(reject) // Add catch to handle potential insert errors
         })
     },
     getTotalAmount:(userId)=>{

@@ -95,9 +95,9 @@
                     <div class="review-header">
                         <div class="review-stars" data-rating="{{userReview.ratingValue}}">
                         </div>
+                        <span class="reviewer-name">{{userReview.user.name}}</span>
                         <span class="review-date">{{formatDate userReview.date}}</span>
                     </div>
-                    <h4 class="review-title-text">{{userReview.user.name}}</h4>
                     <p class="review-text">
                         {{userReview.userReview}}
                     </p>
@@ -129,9 +129,9 @@
             <div class="review-header">
                  <div class="review-stars" data-rating="{{this.ratingValue}}">
                 </div>
+                <span class="reviewer-name">{{this.user.name}}</span>
                 <span class="review-date">{{formatDate this.date}}</span>
             </div>
-            <h4 class="review-title-text">{{this.user.name}}</h4>
             <p class="review-text">
                 {{this.userReview}}
             </p>
