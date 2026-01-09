@@ -1,167 +1,240 @@
+<div class="container">
+    {{#if product}}
+    <div class="product-section">
+        <div class="product-image-section">
+            <div class="image-container">
+                {{#if product.imageUrls.[0]}}
+                    <img id="mainImage" src="{{product.imageUrls.[0]}}" alt="{{product.productName}}">
+                    {{#if product.imageUrls.[1]}}
+                    <button class="nav-button prev" onclick="changeImage(-1)">‹</button>
+                    <button class="nav-button next" onclick="changeImage(1)">›</button>
+                    {{/if}}
+                {{else}}
+                    <img id="mainImage" src="https://via.placeholder.com/400" alt="No image available">
+                {{/if}}
+            </div>
+        </div>
 
-<section>
-    <div class="container mt-5">
-    <div class="row">
-      {{#if product}}
-        <div class="col-md-3 p-3" >
-            <div class="card" style="width: 15rem; height:24rem;">
-  {{!-- <img class="card-img-top" src="/product-images//{{this.product._id}}.{{this.imgExt}}" alt="Card image cap" style="height:12rem;"> --}}
-                                    <td><img style="width: 100%; height:auto" src="{{product.imageUrls.[0]}}" alt="{{product.productName}}"  onload="checkStock()"></td>
+        <div class="product-details">
+            <h1 class="product-title">{{product.productName}}</h1>
+            
+            <div class="rating-section">
+                {{#if response.average}}
+                <span class="stars" data-rating="{{response.average}}"></span>
+                <span class="rating-text">{{response.average}} ({{response.totalReviews}} reviews)</span>
+                {{else}}
+                <span class="rating-text">No reviews yet.</span>
+                {{/if}}
+            </div>
 
-  <div class="card-body">
-    <h5 class="card-title">{{product.productName}}</h5>
-    <p class="card-text">Rs:{{product.productPrice}}/-</p>
-    {{!-- <p class="card-text">Quantity:{{product.quantity}}/-</p> --}}
-    {{!-- {{checkStock product.stockAmount}} --}}
-    <div id="stockAvailability" name="stockAvailability" >
+            <div class="price-section">
+                <span class="current-price">₹{{product.productPrice}}</span>
+            </div>
+
+            <h2 class="section-title">Description</h2>
+            <p class="description">
+                {{product.productDescription}}
+            </p>
+
+            <div class="quantity-section">
+                <span class="quantity-label">Quantity:</span>
+                <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="updateQuantity(-1)">-</button>
+                    <input type="text" class="quantity-input" value="1" id="quantityInput" readonly>
+                    <button class="quantity-btn" onclick="updateQuantity(1)">+</button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="cartButton" class="add-to-cart-btn" onclick="addToCart(event, '{{product._id}}')">
+                    <span>🛒</span>
+                    Add to Cart
+                </button>
+                <button class="icon-btn">♡</button>
+                <button class="icon-btn">⤴</button>
+            </div>
+             <div id="stockAvailability" name="stockAvailability" >
         <input type="number" id="stockAmount" name="stockAmount" style="display:none" value="{{product.stockAmount}}">
         <h2 id="runningOutOfStock" style="display: none; color:red">Running out of Stock!</h2>
         <h2 id="outOfStock" style="display:none; color:red">Out of Stock</h2>
          </div>
-    <p class="card-text">{{product.productDescription}}/-</p>
 
-                                    <button id="cartButton" class="btn btn-primary" onclick="addToCart(event, '{{product._id}}')">Add to Cart</button>
-
-  </div>
-</div>
+            <div class="shipping-info">
+                <span class="info-label">Free Shipping</span>
+                <span class="info-value">On orders over ₹500</span>
+                
+                <span class="info-label">Delivery</span>
+                <span class="info-value">3-5 business days</span>
+                
+                <span class="info-label">Returns</span>
+                <span class="info-value">30-day return policy</span>
+            </div>
         </div>
+    </div>
+    {{/if}}
 
+    <div class="reviews-section">
+        <h2 class="reviews-title">Customer Reviews</h2>
+
+        {{#if response.totalReviews}}
+        <div class="reviews-summary">
+            <span class="summary-label">Average Rating</span>
+            <span class="summary-value">
+                 <span class="stars" data-rating="{{response.average}}"></span>
+            </span>
+            
+            <span class="summary-label">Total Reviews</span>
+            <span class="summary-value">{{response.totalReviews}}</span>
+        </div>
         {{/if}}
 
-    </div>
-    </div>
+        {{#if hasOrdered}}
+            {{#if userReview}}
+                <h3 class="review-title">Your Review</h3>
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="review-stars" data-rating="{{userReview.ratingValue}}">
+                        </div>
+                        <span class="review-date">{{userReview.date}}</span>
+                    </div>
+                    <h4 class="review-title-text">{{userReview.user.name}}</h4>
+                    <p class="review-text">
+                        {{userReview.userReview}}
+                    </p>
+                </div>
+            {{else}}
+                <div class="write-review">
+                    <h3 class="review-title">Write a Review</h3>
+                    <form action="/submit-review" method="post" id="reviewForm">
+                        <div class="rating-input">
+                            <label class="rating-label">Rating:</label>
+                            <div class="star-rating">
+                                <span data-value="1">☆</span><span data-value="2">☆</span><span data-value="3">☆</span><span data-value="4">☆</span><span data-value="5">☆</span>
+                            </div>
+                            <input type="hidden" name="ratingValue" id="ratingValue" value="0">
+                            <input type="hidden" name="productId" value="{{product._id}}">
+                            <input type="hidden" name="userId" value="{{user._id}}">
+                        </div>
 
-        {{!-- <div class="displayRating">
-            
- <div class="ratingContainer">
-        <div class=" five"></div>
-                <div class=" four"></div>
+                        <textarea name="userReview" class="review-input review-textarea" placeholder="Comment"></textarea>
+                        
+                        <button type="submit" class="submit-review-btn">Submit Review</button>
+                    </form>
+                </div>
+            {{/if}}
+        {{/if}}
 
-        <div class=" three"></div>
-
-        <div class=" two"></div>
-
-        <div class=" one"></div>
-
-    </div>
-        </div> --}}
-  <div class="rating-summary">
-    <h2>{{response.average}}</h2>
-    <p>{{response.totalReviews}} ratings</p>
-
-    {{#each response.starRows}}
-    <div class="rating-row">
-        <span class="label">{{star}} star</span>
-        <div class="bar">
-            <div class="fill" style="width: {{percentage}}%;"></div>
+        {{#each reviews}}
+        <div class="review-item">
+            <div class="review-header">
+                 <div class="review-stars" data-rating="{{this.ratingValue}}">
+                </div>
+                <span class="review-date">{{formatDate this.date}}</span>
+            </div>
+            <h4 class="review-title-text">{{this.user.name}}</h4>
+            <p class="review-text">
+                {{this.userReview}}
+            </p>
         </div>
-        <span class="count">{{count}}</span>
+        {{/each}}
     </div>
-    {{/each}}
 </div>
-
-      
-{{#if hasOrdered}}
-    {{#if userReview}}
-        <div class="reviews">
-            <h3>Your Review</h3>
-            <div class="ratings">
-                <div class="stars" data-rating="{{userReview.ratingValue}}">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <div class="review">
-                <p>{{userReview.userReview}}</p>
-            </div>
-        </div>
-    {{else}}
-        <form action="/submit-review" method="post">
-            <div class="reviewBox">
-                <div class="ratingDiv">
-                  
-        <ul class="rating">
-        <li class="rating-item" data-rate="1"></li>
-        <li class="rating-item" data-rate="2"></li>
-        <li class="rating-item" data-rate="3"></li>
-        <li class="rating-item" data-rate="4"></li>
-        <li class="rating-item" data-rate="5"></li>
-        </ul>
-        <input type="number" name="ratingValue" id="ratingValue">
-        <input type="text" name="productId" value="{{product._id}}">
-        <input type="text" name="userId" value="{{user._id}}">
-
-                </div>
-                <div class="review">
-                    <input style="height:100px" type="textarea" id="userReview" name="userReview" placeholder="Enter Your Review">
-                </div>
-                <button type="submit" style="background-color: green;">Submit Review</button>
-            </div>
-        </form>
-    {{/if}}
-{{/if}}
-
-{{#each reviews}}
-    <div class="reviews">
-        <div class="ratings">
-{{!--           
-<ul class="rating">
-<li class="rating-item" data-rate="1"></li>
-<li class="rating-item" data-rate="2"></li>
-<li class="rating-item" data-rate="3"></li>
-<li class="rating-item" data-rate="4"></li>
-<li class="rating-item" data-rate="5"></li>
-</ul> --}}
-<div class="stars" data-rating="{{ratingValue}}">
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-</div>
-{{!-- <input type="number" name="ratingValue" id="ratingValue">
-<input type="text" name="productId" value="{{product._id}}">
-<input type="text" name="userId" value="{{user._id}}"> --}}
-
-        </div>
-        <div class="review">
-<p>
-{{this.userReview}}
-</p>        </div>
-        {{!-- <button type="submit" style="background-color: green;">Submit Review</button> --}}
-    </div>
-    {{/each}}
-</section>
 
 <script>
-    const container = document.querySelector('.rating');
-const items = container.querySelectorAll('.rating-item')
-container.onclick = e => {
-const elClass = e.target.classList;
-// change the rating if the user clicks on a different star
-if (!elClass.contains('active')) {
-items.forEach( // reset the active class on the star
-item => item.classList.remove('active')
-);
-elClass.add('active'); // add active class to the clicked star
-}
-let ratingValue=document.getElementById("ratingValue")
-ratingValue.value=e.target.getAttribute("data-rate")
-console.log(e.target.getAttribute("data-rate"));
+    document.addEventListener('DOMContentLoaded', function() {
+        // Image Slider
+        const images = [
+            {{#each product.imageUrls}}
+            "{{this}}",
+            {{/each}}
+        ];
+        let currentImageIndex = 0;
+        const mainImage = document.getElementById('mainImage');
 
-};
-    function checkStock(){
-            let stockAmount=document.getElementById("stockAmount").value
-
-        console.log('hi qun:',stockAmount)
-        if(stockAmount<=10 && stockAmount!=0){
-            document.getElementById("runningOutOfStock").style.display="block"
-        }else if(stockAmount==0){
-            document.getElementById("outOfStock").style.display="block"
-            document.getElementById("cartButton").disabled=true
+        window.changeImage = function(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) {
+                currentImageIndex = images.length - 1;
+            } else if (currentImageIndex >= images.length) {
+                currentImageIndex = 0;
+            }
+            if (mainImage) {
+                mainImage.src = images[currentImageIndex];
+            }
         }
-    }
+
+        // Quantity Controls
+        const quantityInput = document.getElementById('quantityInput');
+        window.updateQuantity = function(change) {
+            if (quantityInput) {
+                let quantity = parseInt(quantityInput.value, 10);
+                quantity += change;
+                if (quantity < 1) {
+                    quantity = 1;
+                }
+                quantityInput.value = quantity;
+            }
+        }
+
+        // Star Rating Input
+        const starRatingContainer = document.querySelector('.star-rating');
+        if (starRatingContainer) {
+            const stars = starRatingContainer.querySelectorAll('span');
+            const ratingValueInput = document.getElementById('ratingValue');
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.value, 10);
+                    ratingValueInput.value = rating;
+                    stars.forEach((s, i) => {
+                        s.innerHTML = i < rating ? '★' : '☆';
+                        if (i < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        function displayStars(container) {
+            const rating = parseFloat(container.dataset.rating);
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            let starHTML = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    starHTML += '<span>★</span>';
+                } else if (i === fullStars && halfStar) {
+                    starHTML += '<span>★</span>'; // Or use a half-star icon if available
+                } else {
+                    starHTML += '<span>☆</span>';
+                }
+            }
+            container.innerHTML = starHTML;
+        }
+
+        // Display existing ratings as stars
+        document.querySelectorAll('.stars[data-rating]').forEach(displayStars);
+        document.querySelectorAll('.review-stars[data-rating]').forEach(displayStars);
+
+        // Stock Check
+        function checkStock() {
+            let stockAmountElement = document.getElementById("stockAmount");
+            if (stockAmountElement) {
+                let stockAmount = parseInt(stockAmountElement.value, 10);
+                if (stockAmount <= 10 && stockAmount > 0) {
+                    document.getElementById("runningOutOfStock").style.display = "block";
+                } else if (stockAmount === 0) {
+                    document.getElementById("outOfStock").style.display = "block";
+                    const cartButton = document.getElementById("cartButton");
+                    if (cartButton) {
+                        cartButton.disabled = true;
+                    }
+                }
+            }
+        }
+        checkStock();
+    });
 </script>
