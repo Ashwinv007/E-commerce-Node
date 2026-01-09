@@ -26,7 +26,7 @@
                 <path d="M8.82494 15.5664C12.5481 15.5664 15.5664 12.5481 15.5664 8.82494C15.5664 5.10176 12.5481 2.08353 8.82494 2.08353C5.10176 2.08353 2.08353 5.10176 2.08353 8.82494C2.08353 12.5481 5.10176 15.5664 8.82494 15.5664Z" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M13.5137 13.8639L16.1568 16.5" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <input type="text" placeholder="Search essentials, groceries and more...">
+            <input type="text" id="search-input" placeholder="Search essentials, groceries and more...">
         </div>
         {{/if}}
     </div>
@@ -111,3 +111,34 @@
     </a>
 </section>
 {{/if}}
+<script>
+$(document).ready(function() {
+    $('#search-input').on('keyup', function() {
+        let searchTerm = $(this).val();
+        if (searchTerm.length > 0) {
+            $.ajax({
+                url: '/find-product/' + searchTerm,
+                method: 'GET',
+                success: function(response) {
+                    // response is now just the <section> or the error content
+                    if($('.smartphones').length) {
+                        $('.smartphones').replaceWith(response);
+                    } else if ($('#product-section').length) {
+                        $('#product-section').html(response)
+                    }
+                },
+                error: function() {
+                    if($('.smartphones').length) {
+                        $('.smartphones').html('<div>Error during search. Please try again.</div>');
+                    } else if ($('#product-section').length) {
+                        $('#product-section').html('<div>Error during search. Please try again.</div>');
+                    }
+                }
+            });
+        } else {
+            // Search box is empty, reload the page to show all products
+            window.location.href = '/products';
+        }
+    });
+});
+</script>

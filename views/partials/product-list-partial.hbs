@@ -1,0 +1,58 @@
+<div class="smartphones-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
+    {{#each products}}
+        <div class="card" style="width: 18rem;">
+            <a href="/view-product/{{this._id}}" style="text-decoration: none; color: inherit;">
+                <div class="mobileImage">
+                    <img src="{{this.imageUrls.[0]}}" alt="{{this.productName}}">
+                </div>
+                <div class="smartphone-details">
+                    <h3>{{this.productName}}</h3>
+                    <p class="price">₹ {{this.productPrice}}</p>
+                    <div id="stockAvailability_{{this._id}}">
+                        <input type="hidden" id="stockAmount_{{this._id}}" value="{{this.stockAmount}}">
+                        <p class="stock-message running-out" style="display: none; color:red">Running out of Stock!</p>
+                        <p class="stock-message out-of-stock" style="display: none; color:red">Out of Stock</p>
+                    </div>
+                </div>
+            </a>
+            <button id="{{this._id}}_cartButton" class="add-to-cart" onclick="addToCart('{{this._id}}')">Add to Cart</button>
+        </div>
+    {{/each}}
+</div>
+<script>
+    function checkStock(productId) {
+        let stockAmountInput = document.getElementById("stockAmount_" + productId);
+        if (!stockAmountInput) return;
+        let stockAmount = stockAmountInput.value;
+        let runningOutMsg = document.querySelector("#stockAvailability_" + productId + " .running-out");
+        let outOfStockMsg = document.querySelector("#stockAvailability_" + productId + " .out-of-stock");
+        let cartButton = document.getElementById(productId + "_cartButton");
+        if (stockAmount > 0 && stockAmount <= 10) {
+            if(runningOutMsg) runningOutMsg.style.display = "block";
+        } else if (stockAmount == 0) {
+            if(outOfStockMsg) outOfStockMsg.style.display = "block";
+            if(cartButton) cartButton.disabled = true;
+        }
+    }
+    function addToCart(productId) {
+        $.ajax({
+            url: '/add-to-cart/' + productId,
+            method: 'get',
+            success: (response) => {
+                if (response.status) {
+                    let count_span = $('.cart-badge');
+                    let count = parseInt(count_span.html()) || 0;
+                    count = count + 1;
+                    count_span.html(count).show();
+                } else {
+                    alert('Could not add to cart');
+                }
+            }
+        });
+    }
+    $(document).ready(function() {
+        {{#each products}}
+            checkStock('{{this._id}}');
+        {{/each}}
+    });
+</script>

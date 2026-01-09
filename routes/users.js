@@ -203,11 +203,11 @@ console.log('api call')
           if(matchingProducts.length===0){
                         console.log("No matching products found.");
 
-            res.render('user/error-products')
+            res.render('user/error-products',{layout:false})
 
 
           }else{
-            res.render('user/view-products', {matchingProducts, isHomepage: true})
+            res.render('user/view-products', {matchingProducts, isHomepage: true, layout: false})
 
           }
 
