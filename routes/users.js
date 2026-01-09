@@ -43,7 +43,15 @@ router.get('/products', verifyLogin, async function(req, res, next) {
     if (req.session.user) {
         cartCount = await userHelpers.getCartCount(req.session.user._id);
     }
-    productHelpers.getAllProducts().then((product) => {
+
+    let productsPromise;
+    if (req.query.category) {
+        productsPromise = productHelpers.getProductsByCategory(req.query.category);
+    } else {
+        productsPromise = productHelpers.getAllProducts();
+    }
+
+    productsPromise.then((product) => {
         res.render('user/view-products', { admin: false, product, user, cartCount, isHomepage: true, activeCategory: req.query.category  });
     });
 });

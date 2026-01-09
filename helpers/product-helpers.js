@@ -55,6 +55,20 @@ findProduct:(product_id)=>{
 
 })
   },
+  getProductsByCategory:(category)=>{
+    return new Promise(async(resolve,reject)=>{
+      let products = await db.get().collection(collections.PRODUCT_COLLECTION).find({Category:category}).toArray()
+      let i=0;
+      let filteredProducts=[];
+      while(i<products.length){
+        if(!products[i].suspend){
+          filteredProducts.push(products[i])
+        }
+        i++;
+      }
+      resolve(filteredProducts)
+    })
+  },
   getAllProducts:()=>{
     console.log('get all pro',)
     return new Promise(async(resolve,reject)=>{
