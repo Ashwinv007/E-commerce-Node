@@ -9,6 +9,13 @@ var session = require('express-session');
 var Handlebars=require('handlebars');
 const passport=require('./config/passport');
 
+Handlebars.registerHelper("formatDate", function(date) {
+  if (date) {
+    return new Date(date).toLocaleDateString();
+  }
+  return '';
+});
+
 Handlebars.registerHelper("inc", function(value, options){
   return parseInt(value) + 1;
 })

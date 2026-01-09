@@ -2745,7 +2745,7 @@
 
 .timeline-step:not(.completed) .timeline-title {
     color: var(--light);
-}            line-height: 1.6;
+            line-height: 1.6;
         }
 
         .container {
