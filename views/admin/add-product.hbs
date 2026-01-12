@@ -84,11 +84,20 @@
 <script>
    function viewImage(event){
     let productImagesContainer = document.getElementById('productImages');
-    productImagesContainer.innerHTML = ''; // Clear previous previews
-    
+    let submitBtn = document.getElementById("subBtn");
     let files = event.target.files;
 
-    if(files.length > 0){
+    // Always clear previews on change
+    productImagesContainer.innerHTML = ''; 
+    
+    if(files.length > 3){
+        alert("You can only upload a maximum of 3 files.");
+        event.target.value = ""; // Clear the file input
+        submitBtn.disabled = true;
+        return;
+    }
+    
+    if (files.length > 0) {
         let imgs = [];
         for(let i = 0; i < files.length; i++){
             imgs[i] = document.createElement('img');
@@ -99,15 +108,9 @@
             imgs[i].style.objectFit = 'cover';
             productImagesContainer.appendChild(imgs[i]);
         }
-    }
-
-    if(parseInt(files.length) > 3){
-        alert("You can only upload a maximum of 3 files");
-        document.getElementById("subBtn").disabled = true;
-    } else if (files.length > 0) {
-        document.getElementById("subBtn").disabled = false;
+        submitBtn.disabled = false;
     } else {
-        document.getElementById("subBtn").disabled = true;
+        submitBtn.disabled = true;
     }
   }
 </script>
