@@ -1,90 +1,117 @@
-<section>
-    <div class="container mt-4">
-        <div class="row">
-            <form  action="/admin/edit-product/{{product._id}}" method="POST" enctype="multipart/form-data">
-  <div class="form-group">
-    <label for="productName">Name</label>
-    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name" value="{{product.productName}}">
-  </div>
-  <div class="form-group">
-    <label for="Category">Category</label>
-        <input type="text" class="form-control" id="Category" name="Category" placeholder="Enter Category" value="{{product.Category}}">
-
-    
-  </div>
-  <div class="form-group">
-    <label for="productDescription">Description</label>
-                    <input type="text" name="productDescription" class="form-control" value="{{product.productDescription}}">
-  </div>
-  <div class="form-group">
-    <label for="productPrice">Price</label>
-    <input type="number" class="form-control" id="productPrice" name="productPrice" placeholder="Enter product price" step="0.01" value="{{product.productPrice}}" >
-     <br>
-    <input type="number" class="form-control" id="stockAmount" name="stockAmount" step="1" placeholder="Enter number of units" value="{{product.stockAmount}}">
-  </div>
-      <input id="sellerId" style="display:none" type="text" name="sellerId" value='{{admin._id}}'>
-
- <div class="form-group">
-    <div id="productImages" >
-
+<div class="page-container">
+    <div class="page-header">
+        <h1>Edit Product</h1>
+        <p>Update the details below for the product.</p>
     </div>
-    <label for="productImage">Image</label>
 
-    {{#each product.imageUrls}}
-    <img src="{{this}}" alt="Product image {{inc @index}}" class="prodImages" style="width: 100px; height: auto; margin: 0 5px 5px 0;">
-    {{/each}}
-    <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple >
-    {{!-- <input type="text" id="imgExt" style="display:none" name="imgExt" value=""> --}}
-  </div>
-  {{!-- <div class="form-group">
-    <label for="productImage">Image</label>
-<img src="/product-images/{{product._id}}.jpg" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3">
-<input type="file" class="form-control-file" name="productImage" onchange="viewImage(event)" accept="imaage/*">
-    <input type="text" id="imgExt" style="display:none" name="imgExt" value="">
+    <div class="product-form-card">
+        <form id="productForm" action="/admin/edit-product/{{product._id}}" method="post" enctype="multipart/form-data">
+            <h2 class="section-title">Product Information</h2>
+            
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" name="productName" placeholder="Enter product name" value="{{product.productName}}" required>
+                </div>
 
-  </div> --}}
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+                <div class="form-group full-width">
+                    <label for="category">Category</label>
+                    <select id="category" name="Category" required>
+                        <option value="">Select category</option>
+                        <option value="smartphones" {{#if (eq product.Category "smartphones")}}selected{{/if}}>Smartphones</option>
+                        <option value="electronics" {{#if (eq product.Category "electronics")}}selected{{/if}}>Electronics</option>
+                        <option value="fashion" {{#if (eq product.Category "fashion")}}selected{{/if}}>Fashion</option>
+                        <option value="home-kitchen" {{#if (eq product.Category "home-kitchen")}}selected{{/if}}>Home & Kitchen</option>
+                        <option value="beauty" {{#if (eq product.Category "beauty")}}selected{{/if}}>Beauty</option>
+                        <option value="sports" {{#if (eq product.Category "sports")}}selected{{/if}}>Sports, Toys & Luggage</option>
+                        <option value="groceries" {{#if (eq product.Category "groceries")}}selected{{/if}}>Groceries</option>
+                        <option value="furniture" {{#if (eq product.Category "furniture")}}selected{{/if}}>Furniture</option>
+                    </select>
+                </div>
 
-        </div>
+                <div class="form-group full-width">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="productDescription" placeholder="Enter product description" required>{{product.productDescription}}</textarea>
+                </div>
 
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <div class="price-input-wrapper" style="position: relative;">
+                            <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);">₹</span>
+                            <input type="number" id="price" name="productPrice" placeholder="" step="0.01" min="0" required style="padding-left: 30px;" value="{{product.productPrice}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="units">Number of Units</label>
+                        <input type="number" id="units" name="stockAmount" placeholder="0" min="0" step="1" required value="{{product.stockAmount}}">
+                    </div>
+                </div>
+
+                <input id="sellerId" style="display:none" type="text" name="sellerId" value='{{admin._id}}'>
+
+                <div class="form-group full-width">
+                    <label>Product Images</label>
+                     <div id="existingImages" style="margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 10px;">
+                        {{#each product.imageUrls}}
+                            <img src="{{this}}" alt="Product image {{inc @index}}" style="width: 100px; height: 100px; border-radius: 8px; object-fit: cover;">
+                        {{/each}}
+                    </div>
+                    <label>Upload New Images (optional)</label>
+                    <div id="productImages" style="margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 10px;">
+                        {{!-- Image previews will go here --}}
+                    </div>
+                    <div class="upload-area" onclick="document.getElementById('productImageInput').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="upload-text">
+                            <a href="javascript:void(0)">Click to upload</a> or drag and drop
+                        </div>
+                        <div class="upload-info">
+                            PNG, JPG, GIF up to 10MB
+                        </div>
+                    </div>
+                    <input type="file" id="productImageInput" name="productImage" onchange="viewImage(event)" accept="image/*" multiple style="display: none;">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="subBtn">
+                    <i class="fas fa-plus"></i>
+                    Update Product
+                </button>
+            </div>
+        </form>
     </div>
-</section>
+</div>
+
 <script>
    function viewImage(event){
-    let imgs=[];
-let files=event.target.files;
-console.log(files)
-    for(let i=0;i<files.length;i++){
-      imgs[i]=document.getElementsByClassName("prodImages")[i];
-      imgs[i].src=URL.createObjectURL(event.target.files[i])
-      document.getElementById('productImages').appendChild(imgs[i]);
-      imgs[i].classList.add("prodImages")
-    }
-    let  exts=[];
-    let extsRender=[]
-    console.log(files)
-    for(let i=0;i<files.length;i++){
-       exts[i]=files[i].name.split('.')[1];
-       extsRender[i]=document.createElement("input");
-       extsRender[i].type="text";
-       extsRender[i].className="ext_Stored"
-       extsRender[i].value=exts[i];
-       extsRender[i].name="extsRender"
-       document.getElementById('productImages').appendChild(extsRender[i]);
+    let productImagesContainer = document.getElementById('productImages');
+    let files = event.target.files;
 
-
-
-    }
-    if(parseInt(event.target.files.length)>3){
+    // Always clear previews on change
+    productImagesContainer.innerHTML = ''; 
     
-              alert("Your can only upload a maximum of 3 files");
-
-    }else{
-      document.getElementById("subBtn").disabled=false;
+    if(files.length > 3){
+        alert("You can only upload a maximum of 3 files.");
+        event.target.value = ""; // Clear the file input
+        return;
     }
-
+    
+    if (files.length > 0) {
+        let imgs = [];
+        for(let i = 0; i < files.length; i++){
+            imgs[i] = document.createElement('img');
+            imgs[i].src = URL.createObjectURL(files[i]);
+            imgs[i].style.height = '100px';
+            imgs[i].style.width = 'auto';
+            imgs[i].style.borderRadius = '8px';
+            imgs[i].style.objectFit = 'cover';
+            productImagesContainer.appendChild(imgs[i]);
+        }
     }
-
-   
+  }
 </script>
