@@ -1,60 +1,56 @@
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/admin">Admin Panel</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<header class="header">
+    <div class="header-left">
+        <button class="mobile-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="companyName">
+            <div class="companyLogo">
+                <a href="/admin" style="text-decoration: none; color: inherit;">
+                    <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0.75" y1="1.25" x2="25.25" y2="1.25" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="0.75" y1="10.25" x2="18.1591" y2="10.25" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="0.75" y1="19.25" x2="12.25" y2="19.25" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </div>
+            <a href="/admin" style="text-decoration: none; color: inherit;">
+                <h1 class="companyName">Dkart Admin</h1>
+            </a>
+        </div>
+    </div>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/admin">All Products <span class="sr-only">(current)</span></a>
-      </li>
-      {{#if superAdmin}}
-      <li class="nav-item">
-        <a class="nav-link" href="/admin/sellers">Sellers</a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="/admin/pending-sellers">Requests</a>
-      </li> 
-      {{else}}
-       <li class="nav-item">
-        <a class="nav-link" href="/admin/orders">All Orders</a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="/admin/users">All Users</a>
-      </li> 
-        <li class="nav-item">
-        <a class="nav-link" href="admin/coupons">Coupons</a>
-      </li> 
-      {{/if}}
-     
-     
-    </ul>
-    {{!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> --}}
-    <div class="btn-group">
-  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    {{#if admin}}
-    {{admin.companyName}}
-    {{else}}
-    Account
-    {{/if}}
-  </button>
-  <div class="dropdown-menu">
-    {{#if admin}}
-
-    <a class="dropdown-item" href="/admin/logout">Logout</a>
-    {{else}}
-        <a class="dropdown-item" href="/login">Login</a>
-
-
-  {{/if}}
-    <div class="dropdown-divider"></div>
-  </div>
-</div>
-  </div>
-</nav>
+    <div class="header-right">
+        {{#if admin}}
+            <div class="dropdown">
+                <div class="account-action dropdown-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <span class="account-text">{{admin.companyName}}</span>
+                </div>
+                <div class="dropdown-content">
+                    <a href="/admin">All Products</a>
+                    {{#if superAdmin}}
+                        <a href="/admin/sellers">Sellers</a>
+                        <a href="/admin/pending-sellers">Requests</a>
+                    {{else}}
+                        <a href="/admin/orders">All Orders</a>
+                        <a href="/admin/users">All Users</a>
+                        <a href="/admin/coupons">Coupons</a>
+                    {{/if}}
+                    <div class="dropdown-divider"></div>
+                    <a href="/admin/logout">Logout</a>
+                </div>
+            </div>
+        {{else}}
+            <div class="account-action" style="border-right: none; padding-right: 0;">
+                <a href="/admin/login" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <span class="account-text">Admin Login</span>
+                </a>
+            </div>
+        {{/if}}
+    </div>
 </header>
