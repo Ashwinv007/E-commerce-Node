@@ -1,84 +1,112 @@
-<section>
-    <div class="container mt-4">
-        <div class="row">
-            <form  action="/admin/add-product" method="post" enctype="multipart/form-data">
-  <div class="form-group">
-    <label for="productName">Name</label>
-    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name" required>
-  </div>
-  <div class="form-group">
-    <label for="Category">Category</label>
-        <input type="text" class="form-control" id="Category" name="Category" placeholder="Enter Category" required>
-
-    
-  </div>
-  <div class="form-group">
-    <label for="productDescription">Description</label>
-    <textarea class="form-control" id="productDescription" name="productDescription" rows="3" placeholder="Enter product description" required></textarea>
-  </div>
-  <div class="form-group">
-    <label for="productPrice">Price</label>
-    <input type="number" class="form-control" id="productPrice" name="productPrice" placeholder="Enter product price" step="0.01" required>
-    <br>
-    <input type="number" class="form-control" id="stockAmount" name="stockAmount" step="1" placeholder="Enter number of units">
-  </div>
-  <div>
-    <input id="sellerId" style="display:none" type="text" name="sellerId" value='{{admin._id}}'>
-
-  </div>
-  <div class="form-group">
-    <div id="productImages">
-
+<div class="page-container">
+    <div class="page-header">
+        <h1>Add New Product</h1>
+        <p>Fill in the details below to add a new product to your inventory.</p>
     </div>
-    <label for="productImage">Image</label>
-{{!-- <img src="" alt="" style="width: 100px; height: auto" id="imgview" class="pt-3"> --}}
 
-    <input type="file" class="form-control-file"   name="productImage" onchange="viewImage(event)" accept="image/*" multiple required>
-    {{!-- <input type="text" id="imgExt" style="display:none" name="imgExt" value=""> --}}
-  </div>
-  <button type="submit" class="btn btn-primary" disabled id="subBtn">Submit</button>
-</form>
+    <div class="product-form-card">
+        <form id="productForm" action="/admin/add-product" method="post" enctype="multipart/form-data">
+            <h2 class="section-title">Product Information</h2>
+            
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" name="productName" placeholder="Enter product name" required>
+                </div>
 
-        </div>
+                <div class="form-group full-width">
+                    <label for="category">Category</label>
+                    <select id="category" name="Category" required>
+                        <option value="">Select category</option>
+                        <option value="smartphones">Smartphones</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="home-kitchen">Home & Kitchen</option>
+                        <option value="beauty">Beauty</option>
+                        <option value="sports">Sports, Toys & Luggage</option>
+                        <option value="groceries">Groceries</option>
+                        <option value="furniture">Furniture</option>
+                    </select>
+                </div>
 
+                <div class="form-group full-width">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="productDescription" placeholder="Enter product description" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <div class="price-input-wrapper">
+                            <input type="number" id="price" name="productPrice" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="units">Number of Units</label>
+                        <input type="number" id="units" name="stockAmount" placeholder="0" min="0" step="1" required>
+                    </div>
+                </div>
+
+                <input id="sellerId" style="display:none" type="text" name="sellerId" value='{{admin._id}}'>
+
+                <div class="form-group full-width">
+                    <label>Product Image</label>
+                    <div id="productImages" style="margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 10px;">
+                        {{!-- Image previews will go here --}}
+                    </div>
+                    <div class="upload-area" onclick="document.getElementById('productImageInput').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="upload-text">
+                            <a href="javascript:void(0)">Click to upload</a> or drag and drop
+                        </div>
+                        <div class="upload-info">
+                            PNG, JPG, GIF up to 10MB
+                        </div>
+                    </div>
+                    <input type="file" id="productImageInput" name="productImage" onchange="viewImage(event)" accept="image/*" multiple required style="display: none;">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="subBtn" disabled>
+                    <i class="fas fa-plus"></i>
+                    Add Product
+                </button>
+            </div>
+        </form>
     </div>
-</section>
+</div>
 
 <script>
    function viewImage(event){
-    let imgs=[];
-let files=event.target.files;
-console.log(files)
-    for(let i=0;i<files.length;i++){
-      imgs[i]=document.createElement('img');
-      imgs[i].src=URL.createObjectURL(event.target.files[i])
-      document.getElementById('productImages').appendChild(imgs[i]);
-      imgs[i].classList.add("prodImages")
-    }
-    let  exts=[];
-    let extsRender=[]
-    console.log(files)
-    for(let i=0;i<files.length;i++){
-       exts[i]=files[i].name.split('.')[1];
-       extsRender[i]=document.createElement("input");
-       extsRender[i].type="text";
-       extsRender[i].className="ext_Stored"
-       extsRender[i].value=exts[i];
-       extsRender[i].name="extsRender"
-       document.getElementById('productImages').appendChild(extsRender[i]);
-
-
-
-    }
-    if(parseInt(event.target.files.length)>3){
+    let productImagesContainer = document.getElementById('productImages');
+    productImagesContainer.innerHTML = ''; // Clear previous previews
     
-              alert("Your can only upload a maximum of 3 files");
+    let files = event.target.files;
 
-    }else{
-      document.getElementById("subBtn").disabled=false;
+    if(files.length > 0){
+        let imgs = [];
+        for(let i = 0; i < files.length; i++){
+            imgs[i] = document.createElement('img');
+            imgs[i].src = URL.createObjectURL(files[i]);
+            imgs[i].style.height = '100px';
+            imgs[i].style.width = 'auto';
+            imgs[i].style.borderRadius = '8px';
+            imgs[i].style.objectFit = 'cover';
+            productImagesContainer.appendChild(imgs[i]);
+        }
     }
 
+    if(parseInt(files.length) > 3){
+        alert("You can only upload a maximum of 3 files");
+        document.getElementById("subBtn").disabled = true;
+    } else if (files.length > 0) {
+        document.getElementById("subBtn").disabled = false;
+    } else {
+        document.getElementById("subBtn").disabled = true;
     }
-
-   
+  }
 </script>
