@@ -242,7 +242,9 @@ verifyCoupon:(verifyCoupon,total,productList)=>{
         }
 
       ]).toArray()
-      console.log('resolvieng orders testing : '+orders[0].product[0].productName)
+      if (orders.length > 0 && orders[0].product && orders[0].product.length > 0) {
+        console.log('resolvieng orders testing : '+orders[0].product[0].productName)
+      }
       resolve(orders)
     })
   },
