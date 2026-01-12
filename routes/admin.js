@@ -367,8 +367,10 @@ router.post('/edit-product/:id', verifyLogin, async (req, res) => {
 router.get('/orders',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
   productHelpers.getAllOrders(admin._id).then((orders)=>{
-     console.log('New date here:::::'+orders[0].date)
-  console.log('username bug: '+JSON.stringify(orders[0],null,2))
+    if (orders && orders.length > 0) {
+      console.log('New date here:::::'+orders[0].date)
+      console.log('username bug: '+JSON.stringify(orders[0],null,2))
+    }
     res.render('admin/view-orders',{adminExist:true, admin,orders})
   })
 })
