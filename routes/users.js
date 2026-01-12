@@ -33,8 +33,9 @@ router.get('/',verifyLogin, async function(req, res, next) {
   if(req.session.user){
     cartCount = await userHelpers.getCartCount(req.session.user._id)
   }
+  let smartphones = await productHelpers.getProductsByCategory('Mobile')
   console.log(user);
-  res.render('index', {admin:false , user,cartCount, isHomepage: true})
+  res.render('index', {admin:false , user,cartCount, isHomepage: true, smartphones})
 });
 
 router.get('/products', verifyLogin, async function(req, res, next) {

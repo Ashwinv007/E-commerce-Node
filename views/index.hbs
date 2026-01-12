@@ -35,78 +35,21 @@
         
         <!-- Smartphone Cards Container -->
 <div class="smartphones-container">
-<!-- Single Card -->
-    
-<div class="card">
-    <a href="https://www.apple.com">
-    <div class="mobileImage">
-    <img src="/images/Galaxy_m13.png" alt="Apple iPhone 14">
-    <!-- <span class="discount">56% OFF</span> -->
+    {{#each smartphones}}
+    <div class="card">
+        <a href="/view-product/{{this._id}}">
+            <div class="mobileImage">
+                <img src="{{this.thumbnailUrl}}" alt="{{this.productName}}">
+            </div>
+            <div class="smartphone-details">
+                <h3>{{this.productName}}</h3>
+                <p class="price">₹ {{this.productPrice}}</p>
+                <button class="add-to-cart" onclick="addToCart(event, '{{this._id}}')">Add to Cart</button>
+            </div>
+        </a>
     </div>
-    <div class="smartphone-details">
-<h3>Apple iPhone 14 (128GB) - Midnight</h3>
-    <p class="price">₹ 69,900</p>
-    <button class="add-to-cart" onclick="addToCart(event,'demoProduct')">Add to Cart</button>
-    </div>
-    </a>
+    {{/each}}
 </div>
-
-
-<!-- Copy & change for more phones -->
-<div class="card">
-    <div class="mobileImage">
-    <img src="/images/galaxy_s22_ultra.png" alt="OnePlus Nord 2T">
-    </div>
-    <div class="smartphone-details">
-
-    <h3>OnePlus Nord 2T 5G (128GB) - Gray Shadow</h3>
-    <p class="price">₹ 27,999</p>
-
-    <button class="add-to-cart">Add to Cart</button>
-    </div>
-</div>
-
-<div class="card">
-    <div class="mobileImage">
-    <img src="/images/galaxy_s22_ultra_2.png" alt="Samsung Galaxy S22 Ultra">
-    </div>
-    <div class="smartphone-details">
-
-    <h3>Samsung Galaxy S22 Ultra 5G (256GB) - Phantom Black</h3>
-    <p class="price">₹ 1,05,999</p>
-
-    <button class="add-to-cart">Add to Cart</button>
-    </div>
-</div>
-
-<div class="card">
-    <div class="mobileImage">
-    <img src="/images/galaxy_m33.png" alt="Samsung Galaxy S22 Ultra">
-    </div>
-    <div class="smartphone-details">
-
-    <h3>Samsung Galaxy S22 Ultra 5G (256GB) - Phantom Black</h3>
-    <p class="price">₹ 1,05,999</p>
-
-    <button class="add-to-cart">Add to Cart</button>
-    </div>
-</div>
-
-<div class="card">
-    <div class="mobileImage">
-    <img src="/images/galaxy_m53.png" alt="Samsung Galaxy S22 Ultra">
-    </div>
-    <div class="smartphone-details">
-
-    <h3>Samsung Galaxy S22 Ultra 5G (256GB) - Phantom Black</h3>
-    <p class="price">₹ 1,05,999</p>
-
-    <button class="add-to-cart">Add to Cart</button>
-    </div>
-</div>
-
-            
-        </div>
     </section>
 
         <section class="top-categories">
