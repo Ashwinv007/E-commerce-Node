@@ -226,10 +226,10 @@ findProduct:(product_id)=>{
             });
           },
         
-          getTopProductsBySeller: (sellerId) => {
+          getTopCategoriesBySeller: (sellerId) => {
             return new Promise(async (resolve, reject) => {
                 try {
-                    const topProducts = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+                    const topCategories = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
                         { $unwind: '$products' },
                         {
                             $lookup: {
@@ -243,14 +243,14 @@ findProduct:(product_id)=>{
                         { $match: { 'productDetails.sellerId': sellerId } },
                         {
                             $group: {
-                                _id: '$productDetails.productName',
+                                _id: '$productDetails.Category',
                                 totalQuantity: { $sum: '$products.quantity' }
                             }
                         },
                         { $sort: { totalQuantity: -1 } },
                         { $limit: 5 }
                     ]).toArray();
-                    resolve(topProducts);
+                    resolve(topCategories);
                 } catch (error) {
                     reject(error);
                 }

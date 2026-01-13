@@ -155,18 +155,18 @@ router.get('/', verifyLogin,async function(req, res, next) {
     orders.forEach(order => customerIds.add(order.userId.toString()));
     let totalCustomers = customerIds.size;
 
-    // Top Products
-    let topProducts = await productHelpers.getTopProductsBySeller(sellerId);
-    let topProductNames = topProducts.map(p => p._id);
-    let topProductQuantities = topProducts.map(p => p.totalQuantity);
+    // Top Categories
+    let topCategories = await productHelpers.getTopCategoriesBySeller(sellerId);
+    let topCategoryNames = topCategories.map(c => c._id);
+    let topCategoryQuantities = topCategories.map(c => c.totalQuantity);
 
     res.render('admin/seller-dashboard',{
         adminExist:true, admin, sellerRevenue: Math.round(sellerRevenue), pendingSellerRevenue: Math.round(pendingSellerRevenue), totalOrders, totalCustomers,
         codCount, onlineCount, pendingCount, shippedCount, deliveredCount, cancelledCount,
         salesLabels: JSON.stringify(salesLabels),
         salesData: JSON.stringify(salesData),
-        topProductNames: JSON.stringify(topProductNames),
-        topProductQuantities: JSON.stringify(topProductQuantities)
+        topCategoryNames: JSON.stringify(topCategoryNames),
+        topCategoryQuantities: JSON.stringify(topCategoryQuantities)
     })   
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller',{adminExist:true,admin})
