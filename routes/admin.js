@@ -39,25 +39,7 @@ router.get('/products', verifyLogin,function(req, res, next) {
   let admin=req.session.admin
   if(admin.role=='seller'){
     productHelpers.getAllProductsBySeller((req.session.admin._id).toString()).then(async(product)=>{
-      let orders=await productHelpers.getAllOrders(req.session.admin._id)
-      let sellerRevenue = 0;
-      let pendingSellerRevenue = 0;
-      for(let order of orders){
-        if(order.status==='placed'){
-          if(order.paymentMethod!=='COD'){
-            sellerRevenue+=order.sellerShare || 0
-          }else{
-            if(order.deliveryDetails.trackOrder.delivered.status){
-              sellerRevenue+=order.sellerShare || (order.totalAmount * 0.9)
-            }else{
-              pendingSellerRevenue+=order.totalAmount*0.9
-            }
-          }
-        }
-      }
-
-      res.render('admin/products',{adminExist:true,admin,product,sellerRevenue,pendingSellerRevenue})    
-
+      res.render('admin/products',{adminExist:true,admin,product})
     })
   }else{
     res.redirect('/admin');
@@ -93,12 +75,30 @@ router.get('/all-products', verifyLogin,function(req, res, next) {
   }
 });
 
-router.get('/', verifyLogin,function(req, res, next) {
+router.get('/', verifyLogin,async function(req, res, next) {
   let admin=req.session.admin
   console.log('<<<<<<<<<<<<<<<<<<<?????????')
   console.log(admin)
   if(admin.role=='seller'){
-    res.render('admin/seller-dashboard',{adminExist:true,admin})    
+    let orders=await productHelpers.getAllOrders((req.session.admin._id).toString())
+    let sellerRevenue = 0;
+    let pendingSellerRevenue = 0;
+    if(orders){
+      for(let order of orders){
+        if(order.status==='placed'){
+          if(order.paymentMethod!=='COD'){
+            sellerRevenue+=order.sellerShare || 0
+          }else{
+            if(order.deliveryDetails.trackOrder.delivered.status){
+              sellerRevenue+=order.sellerShare || (order.totalAmount * 0.9)
+            }else{
+              pendingSellerRevenue+=order.totalAmount*0.9
+            }
+          }
+        }
+      }
+    }
+    res.render('admin/seller-dashboard',{adminExist:true,admin,sellerRevenue,pendingSellerRevenue})    
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller',{adminExist:true,admin})
   }else{
