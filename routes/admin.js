@@ -102,7 +102,24 @@ router.get('/', verifyLogin,async function(req, res, next) {
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller',{adminExist:true,admin})
   }else{
-    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true})
+        let orders=await productHelpers.getAllOrdersForAdmin()
+          let platformRevenue = 0;
+          let pendingRevenue = 0;
+          for(let order of orders){
+            if(order.status==='placed'){
+
+              if(order.paymentMethod!=='COD'){
+                platformRevenue+=order.platformFee || 0
+              }else{
+                if(order.deliveryDetails.trackOrder.delivered.status){
+                  platformRevenue+=order.totalAmount*0.1
+                }else{
+                  pendingRevenue+=order.totalAmount*0.1
+                }
+              }
+            }
+          }
+    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue})
   }
 
 });
