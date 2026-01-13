@@ -1,71 +1,55 @@
-<section id="ordersList">
-    <div class="container">
-        {{!-- <div class="row mt-4">
-            <a href="admin/add-product" class = 'btn btn-success ml-auto'>Add Product</a>
-        </div> --}}
-        <table class="table mt-5" >
-  <thead>
-    <tr>
-    <th scope="col">Image</th>
-
-      <th scope="col">Date</th>
-      <th scope="col">User</th>
-      <th scope="col">Address</th>
-      <th scope="col">Pincode</th>
-    <th scope="col">Mobile</th>
-      <th scope="col">Amount</th>
-
-      <th scope="col">Payment</th>
-      <th scope="col">Status</th>
-      <th scope="col">Update</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    {{#each orders}}
-    <tr>
-      {{!-- <th scope="row">1</th> --}}
-<td><img style="width: 50px; height 50px" src="{{this.product.[0].thumbnailUrl}}" alt=""></td>
-      
-      <td>{{getStringDate this.date}}</td>
-      <td>{{setIndex this.user}}</td>
-      <td>{{this.deliveryDetails.address}}</td>
-      <td>{{this.deliveryDetails.pincode}}</td>
-            <td>{{this.deliveryDetails.mobile}}</td>
-                  {{!-- <td><img style="width: 50px; height 50px" src="/product-images/{{this._id}}.jpg" alt=""></td> --}}
-            <td>{{this.totalAmount}}</td>
-            <td>{{this.paymentMethod}}</td>
-            <td>{{this.status}}</td>
-
-          
-
-<td>
-  <div id="trackProduct">
-  {{#if this.deliveryDetails.trackOrder.stage_od}}
-  <button class="btn btn-primary" onclick="updateTrackStatus('{{this._id}}','ship')">Ship Product</button>
-  {{!-- <a href class ="btn btn-primary">Ship Product</a> --}}
-
-  {{else if this.deliveryDetails.trackOrder.stage_ship}}
-    <button class="btn btn-warning" onclick="updateTrackStatus('{{this._id}}','OAD')">Out For Delivery</button>
-
-{{else if this.deliveryDetails.trackOrder.stage_oad}}
-    {{!-- <a href="/updateProductStatus/{{this._id}}/OAD" class ="btn btn-primary">Out for delivery</a> --}}
-  <button class="btn btn-success" onclick="updateTrackStatus('{{this._id}}','delivered')">Mark Delivered</button>
-{{else}}
-<p>Delivered</p>
-  {{!-- <a href="/updateProductStatus/{{this._id}}/delivered" class ="btn btn-primary">Mark Delivered</a> --}}
-  {{/if}}
-   {{!-- <a href="/admin/delete-product/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to delete {{this.productName}}?')">Delete</a> </td> --}}
- 
-  {{!-- <a href="/track-order-delivery/{{this._id}}" class ="btn btn-info">Track Order</a> --}}
-  </div>
-</td>
-    </tr>
-    {{/each}}
-  
-
-  </tbody>
-</table>
+<section id="ordersList" class="orders-section">
+    <div class="page-container">
+        <div class="page-header">
+            <h1>All Orders</h1>
+            <p>Manage and track customer orders</p>
+        </div>
+        <div class="orders-container">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Pincode</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr>
+                        <td><img class="order-product-image" src="{{this.product.[0].thumbnailUrl}}" alt=""></td>
+                        <td>{{getStringDate this.date}}</td>
+                        <td>{{setIndex this.user}}</td>
+                        <td>{{this.deliveryDetails.address}}</td>
+                        <td>{{this.deliveryDetails.pincode}}</td>
+                        <td>{{this.deliveryDetails.mobile}}</td>
+                        <td>₹{{this.totalAmount}}</td>
+                        <td>{{this.paymentMethod}}</td>
+                        <td><span class="status-badge status-{{this.status}}">{{this.status}}</span></td>
+                        <td>
+                            <div id="trackProduct">
+                                {{#if this.deliveryDetails.trackOrder.stage_od}}
+                                <button class="action-btn ship" onclick="updateTrackStatus('{{this._id}}','ship')">Ship Product</button>
+                                {{else if this.deliveryDetails.trackOrder.stage_ship}}
+                                <button class="action-btn oad" onclick="updateTrackStatus('{{this._id}}','OAD')">Out For Delivery</button>
+                                {{else if this.deliveryDetails.trackOrder.stage_oad}}
+                                <button class="action-btn delivered" onclick="updateTrackStatus('{{this._id}}','delivered')">Mark Delivered</button>
+                                {{else}}
+                                <p class="delivered-text">Delivered</p>
+                                {{/if}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 

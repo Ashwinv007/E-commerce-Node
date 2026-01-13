@@ -40,7 +40,7 @@ router.get('/', verifyLogin,function(req, res, next) {
   console.log('<<<<<<<<<<<<<<<<<<<?????????')
   console.log(admin)
   if(admin.role=='seller'){
-    productHelpers.getAllProductsBySeller(req.session.admin._id).then(async(product)=>{
+    productHelpers.getAllProductsBySeller((req.session.admin._id).toString()).then(async(product)=>{
       let orders=await productHelpers.getAllOrders(req.session.admin._id)
       let sellerRevenue = 0;
       let pendingSellerRevenue = 0;
@@ -199,6 +199,7 @@ router.get('/add-product', verifyLogin,function(req,res){
 })
 
 router.post('/add-product', verifyLogin, (req, res) => {
+  req.body.sellerId = req.session.admin._id
   productHelpers.addProduct(req.body, async (id) => {
     try {
       if (!req.files || !req.files.productImage) {
@@ -366,7 +367,7 @@ router.post('/edit-product/:id', verifyLogin, async (req, res) => {
 });
 router.get('/orders',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
-  productHelpers.getAllOrders(admin._id).then((orders)=>{
+  productHelpers.getAllOrders((admin._id).toString()).then((orders)=>{
     if (orders && orders.length > 0) {
       console.log('New date here:::::'+orders[0].date)
       console.log('username bug: '+JSON.stringify(orders[0],null,2))
@@ -382,7 +383,7 @@ router.post('/check-coupon',verifyLogin,async(req,res)=>{
 
 router.get('/users',verifyLogin,async(req,res)=>{
   let admin=req.session.admin
-  adminHelpers.getAllUsers(admin._id).then((orders)=>{
+  adminHelpers.getAllUsers((admin._id).toString()).then((orders)=>{
     res.render('admin/view-users',{adminExist:true, admin, orders})
   })
 })

@@ -1999,10 +1999,394 @@ body {
             color: var(--primary);
         }
 
-        .otp-back-to-login:hover i {
-            transform: translateX(-3px);
-        }
-        
+
+
+.otp-back-to-login:hover i {
+
+    transform: translateX(-3px);
+
+}
+
+
+
+/* Orders Page Styling */
+
+.orders-section {
+
+    padding: 2rem;
+
+    background-color: var(--background2);
+
+}
+
+
+
+.page-container {
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+}
+
+
+
+.page-header {
+
+    text-align: center;
+
+    margin-bottom: 2.5rem;
+
+}
+
+
+
+.page-header h1 {
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+    color: var(--heading);
+
+    margin-bottom: 0.5rem;
+
+}
+
+
+
+.page-header p {
+
+    color: var(--text);
+
+    font-size: 1rem;
+
+}
+
+
+
+.orders-container {
+
+    background: var(--white);
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    overflow: hidden;
+
+}
+
+
+
+.orders-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+
+.orders-table th,
+
+.orders-table td {
+
+    padding: 1rem 1.25rem;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+
+    vertical-align: middle;
+
+    font-size: 0.95rem;
+
+    color: var(--text);
+
+}
+
+
+
+.orders-table th {
+
+    background-color: var(--background1);
+
+    font-weight: 600;
+
+    color: var(--heading);
+
+    font-size: 0.9rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+
+.orders-table tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+
+.orders-table tbody tr:hover {
+
+    background-color: var(--background2);
+
+}
+
+
+
+.order-product-image {
+
+    width: 60px;
+
+    height: 60px;
+
+    object-fit: cover;
+
+    border-radius: 8px;
+
+    border: 1px solid var(--border);
+
+}
+
+
+
+.status-badge {
+
+    display: inline-block;
+
+    padding: 0.35rem 0.75rem;
+
+    border-radius: 16px;
+
+    font-weight: 600;
+
+    font-size: 0.8rem;
+
+    text-transform: capitalize;
+
+}
+
+
+
+.status-pending, .status-placed {
+
+    background-color: rgba(243, 156, 18, 0.15);
+
+    color: #d35400;
+
+}
+
+
+
+.status-shipped, .status-ship {
+
+    background-color: rgba(52, 152, 219, 0.15);
+
+    color: #2980b9;
+
+}
+
+
+
+.status-delivered {
+
+    background-color: rgba(46, 204, 113, 0.15);
+
+    color: #27ae60;
+
+}
+
+
+
+.status-cancelled {
+
+    background-color: rgba(231, 76, 60, 0.15);
+
+    color: #c0392b;
+
+}
+
+
+
+.status-OAD {
+
+    background-color: rgba(142, 68, 173, 0.15);
+
+    color: #8e44ad;
+
+}
+
+
+
+.action-btn {
+
+    padding: 0.5rem 1rem;
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-weight: 500;
+
+    font-size: 0.85rem;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+
+    border: 1px solid transparent;
+
+    display: inline-block;
+
+    text-align: center;
+
+}
+
+
+
+.action-btn.view {
+
+    background-color: var(--primary);
+
+    color: var(--white);
+
+    border-color: var(--primary);
+
+}
+
+.action-btn.view:hover {
+
+    background-color: #006a99;
+
+}
+
+
+
+.action-btn.track {
+
+    background-color: transparent;
+
+    border-color: #2980b9;
+
+    color: #2980b9;
+
+}
+
+.action-btn.track:hover {
+
+    background-color: #2980b9;
+
+    color: var(--white);
+
+}
+
+
+
+.action-btn.cancel {
+
+    background-color: transparent;
+
+    border-color: var(--red);
+
+    color: var(--red);
+
+}
+
+.action-btn.cancel:hover {
+
+    background-color: var(--red);
+
+    color: var(--white);
+
+}
+
+
+
+.action-btn.reorder {
+
+    background-color: transparent;
+
+    border-color: var(--green);
+
+    color: var(--green);
+
+}
+
+.action-btn.reorder:hover {
+
+    background-color: var(--green);
+
+    color: var(--white);
+
+}
+
+
+
+.action-btn.ship {
+
+    background-color: #3498db;
+
+    color: white;
+
+}
+
+.action-btn.ship:hover {
+
+    background-color: #2980b9;
+
+}
+
+
+
+.action-btn.oad {
+
+    background-color: #f39c12;
+
+    color: white;
+
+}
+
+.action-btn.oad:hover {
+
+    background-color: #e67e22;
+
+}
+
+
+
+.action-btn.delivered {
+
+    background-color: #2ecc71;
+
+    color: white;
+
+}
+
+.action-btn.delivered:hover {
+
+    background-color: #27ae60;
+
+}
+
+
+
+.delivered-text {
+
+    font-weight: 600;
+
+    color: var(--green);
+
+}
+
         @media (max-width: 480px) {
             .otp-verification-container {
                 padding: 2rem 1.5rem;
