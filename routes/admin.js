@@ -119,7 +119,10 @@ router.get('/', verifyLogin,async function(req, res, next) {
               }
             }
           }
-    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue})
+    let users = await adminHelpers.getAllUsersList()
+    let totalCustomers = users.length
+    let totalOrders = orders.length
+    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue,totalOrders,totalCustomers})
   }
 
 });
