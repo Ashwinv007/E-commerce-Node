@@ -32,7 +32,6 @@
     </div>
 
     <div class="header-right">
-    <div class="header-right">
         {{#if user}}
             <div class="dropdown">
                 <div class="account-action dropdown-toggle">
@@ -73,7 +72,6 @@
             {{/if}}
         </a>
     </div>
-    </div>
 </header>
 {{#if isHomepage}}
 <section class="categories">
@@ -111,6 +109,66 @@
     </a>
 </section>
 {{/if}}
+
+<style>
+    .dropdown .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1000;
+        right: 0;
+    }
+
+    .dropdown-content.show {
+        display: block;
+    }
+
+    /* Disable the default hover effect if it exists */
+    .dropdown:hover > .dropdown-content {
+        display: none;
+    }
+    .dropdown-toggle:hover + .dropdown-content.show {
+         display: block;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownToggle = document.querySelector('.dropdown .dropdown-toggle');
+
+        if (dropdownToggle) {
+            dropdownToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                let content = this.parentElement.querySelector('.dropdown-content');
+                
+                // Close any other open dropdowns
+                document.querySelectorAll('.dropdown-content.show').forEach(openDropdown => {
+                    if (openDropdown !== content) {
+                        openDropdown.classList.remove('show');
+                    }
+                });
+
+                content.classList.toggle('show');
+            });
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        });
+    });
+</script>
+
 <script>
 $(document).ready(function() {
     $('#search-input').on('keyup', function() {
