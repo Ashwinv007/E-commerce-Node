@@ -98,7 +98,12 @@ router.get('/', verifyLogin,async function(req, res, next) {
         }
       }
     }
-    res.render('admin/seller-dashboard',{adminExist:true,admin,sellerRevenue,pendingSellerRevenue})    
+    let totalOrders = orders.length;
+    let customerIds = new Set();
+    orders.forEach(order => customerIds.add(order.userId.toString()));
+    let totalCustomers = customerIds.size;
+
+    res.render('admin/seller-dashboard',{adminExist:true,admin,sellerRevenue,pendingSellerRevenue,totalOrders,totalCustomers})    
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller',{adminExist:true,admin})
   }else{
