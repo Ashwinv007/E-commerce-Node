@@ -80,30 +80,94 @@ router.get('/', verifyLogin,async function(req, res, next) {
   console.log('<<<<<<<<<<<<<<<<<<<?????????')
   console.log(admin)
   if(admin.role=='seller'){
-    let orders=await productHelpers.getAllOrders((req.session.admin._id).toString())
+    const sellerId = req.session.admin._id.toString();
+    let orders = await productHelpers.getAllOrdersBySeller_dashboard(sellerId);
+
     let sellerRevenue = 0;
     let pendingSellerRevenue = 0;
+    let codCount = 0;
+    let onlineCount = 0;
+    let pendingCount = 0;
+    let shippedCount = 0;
+    let deliveredCount = 0;
+    let cancelledCount = 0;
+    const sales = new Map();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
     if(orders){
       for(let order of orders){
-        if(order.status==='placed'){
-          if(order.paymentMethod!=='COD'){
-            sellerRevenue+=order.sellerShare || 0
-          }else{
-            if(order.deliveryDetails.trackOrder.delivered.status){
-              sellerRevenue+=order.sellerShare || (order.totalAmount * 0.9)
-            }else{
-              pendingSellerRevenue+=order.totalAmount*0.9
+        let orderRevenueForSeller = 0;
+        
+        let sellerProductsInThisOrder = order.product.filter(p => p.sellerId === sellerId);
+        if (sellerProductsInThisOrder.length === 0) continue;
+
+        for (const sellerProduct of sellerProductsInThisOrder) {
+            const productInOrder = order.products.find(p => p.item.toString() === sellerProduct._id.toString());
+            if (productInOrder) {
+                orderRevenueForSeller += productInOrder.quantity * sellerProduct.productPrice;
             }
-          }
+        }
+
+        if(order.status !== 'cancelled'){
+            if(order.deliveryDetails?.trackOrder?.delivered?.status){
+              sellerRevenue += orderRevenueForSeller * 0.9; // Assuming 90% share
+            }else{
+              pendingSellerRevenue += orderRevenueForSeller * 0.9; // Assuming 90% share
+            }
+        }
+
+        // For charts
+        if (order.paymentMethod === 'COD') codCount++; else onlineCount++;
+
+        if (order.status === 'cancelled') {
+          cancelledCount++;
+        } else if (order.deliveryDetails?.trackOrder?.delivered?.status) {
+          deliveredCount++;
+        } else if (order.deliveryDetails?.trackOrder?.shipped?.status || order.deliveryDetails?.trackOrder?.outForDelivery?.status) {
+          shippedCount++;
+        } else if (order.status === 'placed') {
+          pendingCount++;
+        }
+
+        const orderDate = new Date(order.date);
+        if (orderDate >= sevenDaysAgo && order.status !== 'cancelled') {
+            const day = orderDate.toISOString().split('T')[0];
+            sales.set(day, (sales.get(day) || 0) + orderRevenueForSeller);
         }
       }
     }
+
+    // Format sales data for chart
+    const salesLabels = [];
+    const salesData = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const day = d.toISOString().split('T')[0];
+        salesLabels.push(d.toLocaleDateString('en-US', { weekday: 'short' }));
+        salesData.push(sales.get(day) || 0);
+    }
+    
     let totalOrders = orders.length;
     let customerIds = new Set();
     orders.forEach(order => customerIds.add(order.userId.toString()));
     let totalCustomers = customerIds.size;
 
-    res.render('admin/seller-dashboard',{adminExist:true,admin,sellerRevenue,pendingSellerRevenue,totalOrders,totalCustomers})    
+    // Top Products
+    let topProducts = await productHelpers.getTopProductsBySeller(sellerId);
+    let topProductNames = topProducts.map(p => p._id);
+    let topProductQuantities = topProducts.map(p => p.totalQuantity);
+
+    res.render('admin/seller-dashboard',{
+        adminExist:true, admin, sellerRevenue: Math.round(sellerRevenue), pendingSellerRevenue: Math.round(pendingSellerRevenue), totalOrders, totalCustomers,
+        codCount, onlineCount, pendingCount, shippedCount, deliveredCount, cancelledCount,
+        salesLabels: JSON.stringify(salesLabels),
+        salesData: JSON.stringify(salesData),
+        topProductNames: JSON.stringify(topProductNames),
+        topProductQuantities: JSON.stringify(topProductQuantities)
+    })   
   }else if(admin.role=='pending_Seller'){
     res.render('admin/pending-seller',{adminExist:true,admin})
   }else{

@@ -220,9 +220,68 @@ findProduct:(product_id)=>{
           }
         },
         { $sort: { totalQuantity: -1 } },
-        { $limit: 5 }
-      ]).toArray();
-      resolve(topCategories);
-    });
-  },
-}
+                { $limit: 5 }
+              ]).toArray();
+              resolve(topCategories);
+            });
+          },
+        
+          getTopProductsBySeller: (sellerId) => {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const topProducts = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+                        { $unwind: '$products' },
+                        {
+                            $lookup: {
+                                from: collections.PRODUCT_COLLECTION,
+                                localField: 'products.item',
+                                foreignField: '_id',
+                                as: 'productDetails'
+                            }
+                        },
+                        { $unwind: '$productDetails' },
+                        { $match: { 'productDetails.sellerId': sellerId } },
+                        {
+                            $group: {
+                                _id: '$productDetails.productName',
+                                totalQuantity: { $sum: '$products.quantity' }
+                            }
+                        },
+                        { $sort: { totalQuantity: -1 } },
+                        { $limit: 5 }
+                    ]).toArray();
+                    resolve(topProducts);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+          },
+          
+          getAllOrdersBySeller_dashboard:(sellerId)=>{
+            return new Promise(async(resolve,reject)=>{
+              let orders = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+                {
+                  $lookup:{
+                    from:collections.USER_COLLECTION,
+                    localField:'userId',
+                    foreignField:'_id',
+                    as:'user'
+                  }
+                },
+                {
+                  $lookup:{
+                    from:collections.PRODUCT_COLLECTION,
+                    localField:'products.item',
+                    foreignField:'_id',
+                    as:'product'
+                  }
+                },
+                {
+                  $match:{'product.sellerId':sellerId}
+                }
+              ]).toArray()
+              resolve(orders)
+            })
+          }
+        }
+        
