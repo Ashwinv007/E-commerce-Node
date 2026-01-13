@@ -35,10 +35,8 @@ const verifyLogin=async (req,res,next)=>{
 
 /* GET users listing. */
 
-router.get('/', verifyLogin,function(req, res, next) {
+router.get('/products', verifyLogin,function(req, res, next) {
   let admin=req.session.admin
-  console.log('<<<<<<<<<<<<<<<<<<<?????????')
-  console.log(admin)
   if(admin.role=='seller'){
     productHelpers.getAllProductsBySeller((req.session.admin._id).toString()).then(async(product)=>{
       let orders=await productHelpers.getAllOrders(req.session.admin._id)
@@ -58,12 +56,17 @@ router.get('/', verifyLogin,function(req, res, next) {
         }
       }
 
-      res.render('admin/seller-dashboard',{adminExist:true,admin,product,sellerRevenue,pendingSellerRevenue})    
+      res.render('admin/products',{adminExist:true,admin,product,sellerRevenue,pendingSellerRevenue})    
 
     })
-  }else if(admin.role=='pending_Seller'){
-    res.render('admin/pending-seller',{adminExist:true,admin})
   }else{
+    res.redirect('/admin');
+  }
+});
+
+router.get('/all-products', verifyLogin,function(req, res, next) {
+  let admin=req.session.admin
+  if(admin.role!=='seller' && admin.role!=='pending_Seller'){
         productHelpers.getAllProducts().then(async(product)=>{
           let orders=await productHelpers.getAllOrdersForAdmin()
           let platformRevenue = 0;
@@ -83,14 +86,23 @@ router.get('/', verifyLogin,function(req, res, next) {
             }
           }
 
-res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,product,platformRevenue,pendingRevenue})
+          res.render('admin/all-products',{adminExist:true,admin,superAdmin:true,product,platformRevenue,pendingRevenue})
         })
+  }else{
+      res.redirect('/admin');
+  }
+});
 
-  //      productHelpers.getAllProducts().then((product)=>{
-  //   res.render('admin/view-products', {adminExist:true ,admin, product})
-
-
-  //  })
+router.get('/', verifyLogin,function(req, res, next) {
+  let admin=req.session.admin
+  console.log('<<<<<<<<<<<<<<<<<<<?????????')
+  console.log(admin)
+  if(admin.role=='seller'){
+    res.render('admin/seller-dashboard',{adminExist:true,admin})    
+  }else if(admin.role=='pending_Seller'){
+    res.render('admin/pending-seller',{adminExist:true,admin})
+  }else{
+    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true})
   }
 
 });

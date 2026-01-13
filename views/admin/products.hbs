@@ -1,0 +1,106 @@
+<section id="ordersList" class="orders-section">
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Seller Dashboard</h1>
+            <p>Manage your products and view revenue</p>
+        </div>
+
+        <div class="revenue-container">
+            <div class="revenue-item">
+                <div class="stat-card">
+                    <h2>Seller Revenue</h2>
+                    <p class="stat-value">{{sellerRevenue}}</p>
+                </div>
+            </div>
+            <div class="revenue-item">
+                <div class="stat-card">
+                    <h2>Pending Seller Revenue</h2>
+                    <p class="stat-value">{{pendingSellerRevenue}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-product-container">
+            <a href="/admin/add-product" class="action-btn view">Add Product</a>
+        </div>
+
+        <div class="orders-container">
+            <table class="orders-table" id="productsTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each product}}
+                    <tr>
+                        <td>{{inc @index}}</td>
+                        <td>{{this.productName}}</td>
+                        <td>{{this.productDescription}}</td>
+                        <td>{{this.Category}}</td>
+                        <td>{{this.productPrice}}</td>
+                        <td><img class="order-product-image" src="{{this.thumbnailUrl}}" alt=""></td>
+                        <td>
+                            <a href="/admin/edit-product/{{this._id}}" class="action-btn track">Edit</a>
+                            <a href="/admin/delete-product/{{this._id}}" class="action-btn cancel" onclick="return confirm('Are you sure to delete {{this.productName}}?')">Delete</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<style>
+    .revenue-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .revenue-item {
+        width: 50%;
+        padding: 0 15px;
+    }
+    .add-product-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1.5rem;
+        margin-right: 1.5rem;
+    }
+    .add-product-container a {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .stat-card {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1rem;
+    }
+    .stat-card h2 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+    }
+    .stat-card .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+</style>
+
+<script>
+  $(document).ready(function () {
+    $('#productsTable').DataTable();
+  });
+</script>
