@@ -29,11 +29,12 @@
                     <span class="account-text">{{admin.companyName}}</span>
                 </div>
                 <div class="dropdown-content">
-                    <a href="/admin">All Products</a>
                     {{#if superAdmin}}
+                        <a href="/admin/all-products">All Products</a>
                         <a href="/admin/sellers">Sellers</a>
                         <a href="/admin/pending-sellers">Requests</a>
                     {{else}}
+                        <a href="/admin/products">All Products</a>
                         <a href="/admin/orders">All Orders</a>
                         <a href="/admin/users">All Users</a>
                         <a href="/admin/coupons">Coupons</a>
@@ -54,3 +55,62 @@
         {{/if}}
     </div>
 </header>
+
+<style>
+    .dropdown .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1000;
+        right: 0;
+    }
+
+    .dropdown-content.show {
+        display: block;
+    }
+
+    /* Disable the default hover effect if it exists */
+    .dropdown:hover > .dropdown-content {
+        display: none;
+    }
+    .dropdown-toggle:hover + .dropdown-content.show {
+         display: block;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownToggle = document.querySelector('.dropdown .dropdown-toggle');
+
+        if (dropdownToggle) {
+            dropdownToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                let content = this.parentElement.querySelector('.dropdown-content');
+                
+                // Close any other open dropdowns
+                document.querySelectorAll('.dropdown-content.show').forEach(openDropdown => {
+                    if (openDropdown !== content) {
+                        openDropdown.classList.remove('show');
+                    }
+                });
+
+                content.classList.toggle('show');
+            });
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        });
+    });
+</script>
