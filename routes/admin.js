@@ -112,18 +112,33 @@ router.get('/', verifyLogin,async function(req, res, next) {
           let pendingRevenue = 0;
           let codCount = 0;
           let onlineCount = 0;
+          let pendingCount = 0;
+          let shippedCount = 0;
+          let deliveredCount = 0;
+          let cancelledCount = 0;
           for(let order of orders){
             if (order.paymentMethod === 'COD') {
               codCount++;
             } else {
               onlineCount++;
             }
+
+            if (order.status === 'cancelled') {
+              cancelledCount++;
+            } else if (order.deliveryDetails?.trackOrder?.delivered?.status) {
+              deliveredCount++;
+            } else if (order.deliveryDetails?.trackOrder?.shipped?.status || order.deliveryDetails?.trackOrder?.outForDelivery?.status) {
+              shippedCount++;
+            } else if (order.status === 'placed') {
+              pendingCount++;
+            }
+            
             if(order.status==='placed'){
 
               if(order.paymentMethod!=='COD'){
                 platformRevenue+=order.platformFee || 0
               }else{
-                if(order.deliveryDetails.trackOrder.delivered.status){
+                if(order.deliveryDetails?.trackOrder?.delivered?.status){
                   platformRevenue+=order.totalAmount*0.1
                 }else{
                   pendingRevenue+=order.totalAmount*0.1
@@ -137,7 +152,7 @@ router.get('/', verifyLogin,async function(req, res, next) {
     let topCategories = await productHelpers.getTopSellingCategories();
     let topCategoryNames = topCategories.map(cat => cat._id);
     let topCategoryQuantities = topCategories.map(cat => cat.totalQuantity);
-    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue,totalOrders,totalCustomers,codCount,onlineCount,topCategoryNames:JSON.stringify(topCategoryNames),topCategoryQuantities:JSON.stringify(topCategoryQuantities)})
+    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue,totalOrders,totalCustomers,codCount,onlineCount,topCategoryNames:JSON.stringify(topCategoryNames),topCategoryQuantities:JSON.stringify(topCategoryQuantities), pendingCount, shippedCount, deliveredCount, cancelledCount})
   }
 
 });

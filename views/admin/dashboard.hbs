@@ -208,7 +208,7 @@
                     labels: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
                     datasets: [{
                         label: 'Order Status',
-                        data: [15, 25, 50, 5],
+                        data: [{{pendingCount}}, {{shippedCount}}, {{deliveredCount}}, {{cancelledCount}}],
                         backgroundColor: [
                             'rgba(255, 206, 86, 0.7)',
                             'rgba(75, 192, 192, 0.7)',
@@ -319,7 +319,7 @@
                     labels: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
                     datasets: [{
                         label: 'Order Status',
-                        data: [15, 25, 50, 5],
+                        data: [{{pendingCount}}, {{shippedCount}}, {{deliveredCount}}, {{cancelledCount}}],
                         backgroundColor: [
                             'rgba(255, 206, 86, 0.7)',
                             'rgba(75, 192, 192, 0.7)',
