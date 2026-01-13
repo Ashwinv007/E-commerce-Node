@@ -184,10 +184,10 @@
             new Chart(productsCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+                    labels: {{{topCategoryNames}}},
                     datasets: [{
                         label: 'Units Sold',
-                        data: [45, 30, 25, 15],
+                        data: {{{topCategoryQuantities}}},
                         backgroundColor: 'rgba(153, 102, 255, 0.7)'
                     }]
                 },

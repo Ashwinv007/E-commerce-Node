@@ -200,4 +200,29 @@ findProduct:(product_id)=>{
     });
   },
 
+  getTopSellingCategories: () => {
+    return new Promise(async (resolve, reject) => {
+      const topCategories = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+        { $unwind: '$products' },
+        {
+          $lookup: {
+            from: collections.PRODUCT_COLLECTION,
+            localField: 'products.item',
+            foreignField: '_id',
+            as: 'productDetails'
+          }
+        },
+        { $unwind: '$productDetails' },
+        {
+          $group: {
+            _id: '$productDetails.Category',
+            totalQuantity: { $sum: '$products.quantity' }
+          }
+        },
+        { $sort: { totalQuantity: -1 } },
+        { $limit: 5 }
+      ]).toArray();
+      resolve(topCategories);
+    });
+  },
 }

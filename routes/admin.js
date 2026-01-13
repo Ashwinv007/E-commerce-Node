@@ -131,10 +131,13 @@ router.get('/', verifyLogin,async function(req, res, next) {
               }
             }
           }
-    let users = await adminHelpers.getAllUsersList()
-    let totalCustomers = users.length
-    let totalOrders = orders.length
-    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue,totalOrders,totalCustomers,codCount,onlineCount})
+    let users = await adminHelpers.getAllUsersList();
+    let totalCustomers = users.length;
+    let totalOrders = orders.length;
+    let topCategories = await productHelpers.getTopSellingCategories();
+    let topCategoryNames = topCategories.map(cat => cat._id);
+    let topCategoryQuantities = topCategories.map(cat => cat.totalQuantity);
+    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue,totalOrders,totalCustomers,codCount,onlineCount,topCategoryNames:JSON.stringify(topCategoryNames),topCategoryQuantities:JSON.stringify(topCategoryQuantities)})
   }
 
 });
