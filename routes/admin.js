@@ -110,7 +110,14 @@ router.get('/', verifyLogin,async function(req, res, next) {
         let orders=await productHelpers.getAllOrdersForAdmin()
           let platformRevenue = 0;
           let pendingRevenue = 0;
+          let codCount = 0;
+          let onlineCount = 0;
           for(let order of orders){
+            if (order.paymentMethod === 'COD') {
+              codCount++;
+            } else {
+              onlineCount++;
+            }
             if(order.status==='placed'){
 
               if(order.paymentMethod!=='COD'){
@@ -127,7 +134,7 @@ router.get('/', verifyLogin,async function(req, res, next) {
     let users = await adminHelpers.getAllUsersList()
     let totalCustomers = users.length
     let totalOrders = orders.length
-    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue,totalOrders,totalCustomers})
+    res.render('admin/dashboard',{adminExist:true,admin,superAdmin:true,platformRevenue,pendingRevenue,totalOrders,totalCustomers,codCount,onlineCount})
   }
 
 });
