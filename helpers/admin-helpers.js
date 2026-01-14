@@ -206,20 +206,8 @@ verifyCoupon:(verifyCoupon,total,productList)=>{
  getAllUsers:(sellerId)=>{
     return new Promise(async(resolve,reject)=>{
       let orders =await db.get().collection(collections.ORDER_COLLECTION).aggregate([
-        // {
-        //   $match:{sellerId:sellerId}
-        // },
         {
           $match:{status:'placed'}
-        },
-      
-        {
-          $lookup:{
-            from:collections.USER_COLLECTION,
-            localField:'userId',
-            foreignField:'_id',
-            as:'user'
-          }
         },
         {
           $lookup:{
@@ -229,18 +217,28 @@ verifyCoupon:(verifyCoupon,total,productList)=>{
             as:'product'
           }
         },
-        // {
-        //   $lookup:{
-        //     from:collections.PRODUCT_COLLECTION,
-        //     localField:'products.item',
-        //     foreignField:'_id',
-        //     as:'product'
-        //   }
-        // },
         {
           $match:{'product.sellerId':sellerId}
+        },
+        {
+            $group: {
+                _id: "$userId",
+                doc: { "$first": "$$ROOT" }
+            }
+        },
+        {
+            $replaceRoot: {
+                newRoot: "$doc"
+            }
+        },
+        {
+          $lookup:{
+            from:collections.USER_COLLECTION,
+            localField:'userId',
+            foreignField:'_id',
+            as:'user'
+          }
         }
-
       ]).toArray()
       if (orders.length > 0 && orders[0].product && orders[0].product.length > 0) {
         console.log('resolvieng orders testing : '+orders[0].product[0].productName)
