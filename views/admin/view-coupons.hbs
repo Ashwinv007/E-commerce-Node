@@ -1,49 +1,62 @@
-<section>
-    <div class="container">
-        <div class="row mt-4">
-            <a href="/admin/add-coupon" class = 'btn btn-success ml-auto'>Add Coupon</a>
+<section id="ordersList" class="orders-section">
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Coupons</h1>
+            <p>Manage your coupons</p>
         </div>
-        <table class="table mt-5" id="productsTable">
-  <thead>
-    <tr>
-      <th scope="col">No</th>
-      <th scope="col">Coupon Name</th>
-      <th scope="col">Start Date</th>
-    <th scope="col">End Date</th>
-      <th scope="col">OfferPrice</th>
-      {{!-- <th scope="col">Image</th> --}}
-      <th scope="col">Options</th>
 
-    </tr>
-  </thead>
-  <tbody>
-    {{#each coupons}}
-    <tr>
-      <th scope="row">{{inc @index}}</th>
-      <td>{{this.couponName}}</td>
-      <td>{{this.startDate}}</td>
-      <td>{{this.endDate}}</td>
-            <td>{{this.offerPrice}}</td>
-                  {{!-- <td><img style="width: 50px; height 50px" src="/product-images/{{this._id}}.{{this.imgExt}}" alt=""></td> --}}
-                                    {{!-- <td><img style="width: 50px; height 50px" src="/product-images/thumb{{this._id}}0.{{this.extsRender}}" alt=""></td> --}}
+        <div class="add-product-container">
+            <a href="/admin/add-coupon" class="action-btn view">Add Coupon</a>
+        </div>
 
-<td>
-  <a href="/admin/edit-coupon/{{this._id}}" class ="btn btn-primary">Edit</a>
-   <a href="/admin/delete-coupon/{{this._id}}" class ="btn btn-danger" onclick="return confirm('Are you sure to delete {{this.productName}}?')">Delete</a> </td>
-
-    </tr>
-    {{/each}}
-  
-
-  </tbody>
-</table>
+        <div class="orders-container">
+            <table class="orders-table" id="couponsTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Coupon Name</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Offer Price</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each coupons}}
+                    <tr>
+                        <td>{{inc @index}}</td>
+                        <td>{{this.couponName}}</td>
+                        <td>{{this.startDate}}</td>
+                        <td>{{this.endDate}}</td>
+                        <td>{{this.offerPrice}}</td>
+                        <td>
+                            <a href="/admin/edit-coupon/{{this._id}}" class="action-btn track">Edit</a>
+                            <a href="/admin/delete-coupon/{{this._id}}" class="action-btn cancel" onclick="return confirm('Are you sure to delete {{this.couponName}}?')">Delete</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 
-<script>
-  $( function () {
-    $('#productsTable').DataTable();
-} );
+<style>
+    .add-product-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1.5rem;
+        margin-right: 1.5rem;
+    }
+    .add-product-container a {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+</style>
 
+<script>
+  $(document).ready(function () {
+    $('#couponsTable').DataTable();
+  });
 </script>
 
