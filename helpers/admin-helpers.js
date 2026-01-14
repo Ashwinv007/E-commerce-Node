@@ -91,22 +91,30 @@ getAllSellers:(choice)=>{
         resolve(sellerArray)
     })
 },
-getCoupons:(adminId)=>{
+getCoupons:(admin)=>{
   return new Promise(async(resolve,reject)=>{
- if(adminId){
-    let coupons=await db.get().collection(collections.COUPON_COLLECTION).aggregate([
-      {
-        $match:{sellerId:adminId._id}
+    if(admin){
+      if(admin.role === 'seller'){
+        let coupons=await db.get().collection(collections.COUPON_COLLECTION).aggregate([
+          {
+            $match:{sellerId:(admin._id).toString()}
+          }
+        ]).toArray()
+        console.log('hello cop (seller)...',coupons)
+        resolve(coupons)
+      } else if (admin.role === 'admin') {
+        let coupons=await db.get().collection(collections.COUPON_COLLECTION).find().toArray()
+        console.log('hello cop (super admin)...',coupons)
+        resolve(coupons)
+      } else {
+        console.log('Unrecognized admin role. Returning empty array.')
+        resolve([])
       }
-    ]).toArray()
-    console.log('hello cop...',coupons)
-    resolve(coupons)
-  }else{
-    let coupons=await db.get().collection(collections.COUPON_COLLECTION).find().toArray()
-    resolve(coupons)
-  }
+    } else {
+      console.log('No admin object provided. Returning empty array.')
+      resolve([])
+    }
   })
- 
 },
 addCoupon:(couponDetails)=>{
   return new Promise(async(resolve,reject)=>{
