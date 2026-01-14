@@ -1,0 +1,22 @@
+@media (max-width: 1279px) {
+  body.admin-page {
+    display: block; /* Override grid layout */
+  }
+
+  .admin-page .header,
+  .admin-page .main-content,
+  .admin-page .footer {
+    display: none;
+  }
+
+  body.admin-page::after {
+    content: 'Please open this in Desktop';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: var(--text-primary, #333);
+    text-align: center;
+  }
+}
