@@ -73,6 +73,71 @@
         </a>
     </div>
 </header>
+<div class="mobile-overlay"></div>
+<div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-header">
+        <h2 class="mobile-nav-title">Menu</h2>
+        <button class="mobile-nav-close" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="mobile-nav-content">
+        <!-- Search Bar for Mobile -->
+        {{#if isHomepage}}
+        <div class="search-bar mobile-search-bar">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.82494 15.5664C12.5481 15.5664 15.5664 12.5481 15.5664 8.82494C15.5664 5.10176 12.5481 2.08353 8.82494 2.08353C5.10176 2.08353 2.08353 5.10176 2.08353 8.82494C2.08353 12.5481 5.10176 15.5664 8.82494 15.5664Z" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13.5137 13.8639L16.1568 16.5" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input type="text" id="mobile-search-input" placeholder="Search essentials, groceries and more...">
+        </div>
+        {{/if}}
+
+        <!-- Account and Cart for Mobile -->
+        <div class="mobile-nav-actions">
+            {{#if user}}
+                <div class="dropdown">
+                    <div class="account-action dropdown-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                        <span class="account-text">{{user.username}}</span>
+                    </div>
+                    <div class="dropdown-content">
+                        <a href="/orders">Orders</a>
+                        {{#if sellerAccount}}
+                            <a href="/admin">Admin dashboard</a>
+                        {{else}}
+                            <a href="/admin/seller-register">Become a Seller</a>
+                        {{/if}}
+                        <div class="dropdown-divider"></div>
+                        <a href="/logout">Logout</a>
+                    </div>
+                </div>
+            {{else}}
+                <div class="account-action" style="border-right: none; padding-right: 0;">
+                    <a href="/login" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                        <span class="account-text">Sign In</span>
+                    </a>
+                </div>
+            {{/if}}
+
+            <a href="/cart" class="cart-action" style="text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                </svg>
+                <span class="cart-text">Cart</span>
+                {{#if cartCount}}
+                    <span class="cart-badge" style="background: var(--primary); color: white; border-radius: 50%; padding: 0.1em 0.4em; font-size: 0.8rem; margin-left: 5px;">{{cartCount}}</span>
+                {{/if}}
+            </a>
+        </div>
+    </div>
+</div>
+
 {{#if isHomepage}}
 <section class="categories">
     <a href="/products?category=Groceries" class="{{#if (eq activeCategory 'Groceries')}}category-active{{else}}category{{/if}}" style="text-decoration: none;">
@@ -198,5 +263,68 @@ $(document).ready(function() {
             window.location.href = '/products';
         }
     });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    const closeMenu = document.getElementById('closeMenu');
+    const mobileOverlay = document.querySelector('.mobile-overlay');
+
+    function openMenu() {
+        mobileNav.classList.add('active');
+        mobileOverlay.classList.add('active');
+    }
+
+    function closeMenuFunc() {
+        mobileNav.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+    }
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', openMenu);
+    }
+
+    if (closeMenu) {
+        closeMenu.addEventListener('click', closeMenuFunc);
+    }
+
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', closeMenuFunc);
+    }
+
+    // Handle search for mobile as well
+    const mobileSearchInput = $('#mobile-search-input');
+    if (mobileSearchInput.length) {
+        mobileSearchInput.on('keyup', function() {
+            let searchTerm = $(this).val();
+            if (searchTerm.length > 0) {
+                $.ajax({
+                    url: '/find-product/' + searchTerm,
+                    method: 'GET',
+                    success: function(response) {
+                        if($('.smartphones').length) {
+                            $('.smartphones').replaceWith(response);
+                        } else if ($('#product-section').length) {
+                            $('#product-section').html(response)
+                        }
+                        // Close the menu after search
+                        closeMenuFunc();
+                    },
+                    error: function() {
+                        if($('.smartphones').length) {
+                            $('.smartphones').html('<div>Error during search. Please try again.</div>');
+                        } else if ($('#product-section').length) {
+                            $('#product-section').html('<div>Error during search. Please try again.</div>');
+                        }
+                    }
+                });
+            } else {
+                 window.location.href = '/products';
+            }
+        });
+    }
 });
 </script>
