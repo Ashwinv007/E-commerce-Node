@@ -82,14 +82,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const dropdownToggle = document.querySelector('.dropdown .dropdown-toggle');
+        const dropdownToggles = document.querySelectorAll('.dropdown .dropdown-toggle');
 
-        if (dropdownToggle) {
+        dropdownToggles.forEach(function(dropdownToggle) {
             dropdownToggle.addEventListener('click', function(event) {
                 event.stopPropagation();
                 let content = this.parentElement.querySelector('.dropdown-content');
                 
-                // Close any other open dropdowns
                 document.querySelectorAll('.dropdown-content.show').forEach(openDropdown => {
                     if (openDropdown !== content) {
                         openDropdown.classList.remove('show');
@@ -98,9 +97,8 @@
 
                 content.classList.toggle('show');
             });
-        }
+        });
 
-        // Close the dropdown if the user clicks outside of it
         window.addEventListener('click', function(event) {
             if (!event.target.closest('.dropdown')) {
                 var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -112,5 +110,16 @@
                 }
             }
         });
+
+        const menuToggle = document.getElementById('menuToggle');
+        const body = document.querySelector('body');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                if (window.innerWidth < 1280) {
+                    body.classList.toggle('sidebar-active'); 
+                }
+            });
+        }
     });
 </script>

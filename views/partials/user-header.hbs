@@ -2,13 +2,12 @@
     <div class="header-left">
         <div class="companyName" id="menuToggle" style="cursor: pointer;">
             <div class="companyLogo">
-                <a href="/" style="text-decoration: none; color: inherit;">
                     <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <line x1="0.75" y1="1.25" x2="25.25" y2="1.25" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round"/>
                         <line x1="0.75" y1="10.25" x2="18.1591" y2="10.25" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round"/>
                         <line x1="0.75" y1="19.25" x2="12.25" y2="19.25" stroke="#008ECC" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
-                </a>
+                
             </div>
             <a href="/" style="text-decoration: none; color: inherit;">
                 <h1 class="companyName">Dkart</h1>
@@ -198,9 +197,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const dropdownToggle = document.querySelector('.dropdown .dropdown-toggle');
+        const dropdownToggles = document.querySelectorAll('.dropdown .dropdown-toggle');
 
-        if (dropdownToggle) {
+        dropdownToggles.forEach(function(dropdownToggle) {
             dropdownToggle.addEventListener('click', function(event) {
                 event.stopPropagation();
                 let content = this.parentElement.querySelector('.dropdown-content');
@@ -214,7 +213,7 @@
 
                 content.classList.toggle('show');
             });
-        }
+        });
 
         // Close the dropdown if the user clicks outside of it
         window.addEventListener('click', function(event) {

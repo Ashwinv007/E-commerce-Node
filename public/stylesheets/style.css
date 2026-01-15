@@ -3367,6 +3367,7 @@ body {
         }
 
 /* Mobile Navigation Styles */
+
 .mobile-nav {
     position: fixed;
     top: 0;
@@ -3383,6 +3384,31 @@ body {
 
 .mobile-nav.active {
     left: 0;
+}
+
+@media (max-width: 768px) {
+    .mobile-nav {
+        width: 100vw;
+        left: -100vw;
+    }
+
+    .mobile-nav.active {
+        left: 0;
+    }
+
+    .mobile-nav .dropdown .dropdown-content {
+        position: relative;
+        left: 0;
+        right: auto;
+        width: 100%;
+        box-shadow: none;
+        border-top: 1px solid var(--border);
+        margin-top: 0.5rem;
+    }
+
+    .mobile-nav .dropdown-content a {
+        padding-left: 2rem;
+    }
 }
 
 .mobile-nav-header {
@@ -3523,5 +3549,35 @@ body {
     }
     .companyName h1 {
         display: block; /* Explicitly show Dkart text */
+    }
+}
+
+@media (max-width: 1400px) {
+    .title, .smartphones-container, .top-categories-container, .brands-container, .essentials-container {
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .smartphones, .top-categories, .brand-section, .essentials-section {
+        padding: 2rem;
+    }
+    .title, .smartphones-container, .top-categories-container, .brands-container, .essentials-container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+@media (max-width: 490px) {
+    .smartphones, .top-categories, .brand-section, .essentials-section {
+        padding: 1rem;
+    }
+    .title, .smartphones-container, .top-categories-container, .brands-container, .essentials-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .title hr{
+        width: 60%;
     }
 }
