@@ -615,15 +615,11 @@ body {
 
 }
 .brands-container{
-    /* display:flex;
-    gap:2rem;
-    overflow-x:auto;
-    scrollbar-width: none; */
-     display:flex;
-    gap:5rem;
-    /* overflow-x:auto; */
-    /* scrollbar-width: none; */
-    padding:1rem 14rem
+    display: flex;
+    gap: 5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 1rem 14rem;
 }
 
 .brand-card{
@@ -3657,6 +3653,18 @@ body {
     }
 
     .brands-container {
-        flex-direction: column;
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    .brand-card {
+        width: 150px;
+        flex-shrink: 0;
+    }
+
+    .brandImage {
+        width: 100%;
+        height: auto;
     }
 }
