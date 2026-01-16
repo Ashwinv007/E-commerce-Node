@@ -2004,6 +2004,27 @@ body {
     .brand-section {
         display: none;
     }
+    .title h2 {
+        font-size: 1.5rem; /* Adjust as needed for 480px */
+    }
+    .title {
+        padding: 1rem 2rem; /* Adjust padding for smaller screens */
+    }
+    .title hr {
+        width: 85%; /* Adjust hr width for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .title h2 {
+        font-size: 1.8rem; /* Adjust as needed for 768px */
+    }
+    .title {
+        padding: 1rem 4rem; /* Adjust padding for medium screens */
+    }
+    .title hr {
+        width: 80%; /* Adjust hr width for medium screens */
+    }
 }
 
 /* Orders Page Styling */
