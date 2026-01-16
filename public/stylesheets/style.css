@@ -3615,12 +3615,14 @@ body {
         gap: 1rem;
         padding-top: 1rem;
         padding-bottom: 1rem;
+        align-items: flex-start;
     }
 
     .header-left, .header-right {
         flex-direction: column;
         gap: 1rem;
         width: 100%;
+        align-items: flex-start;
     }
 
     .search-bar {
