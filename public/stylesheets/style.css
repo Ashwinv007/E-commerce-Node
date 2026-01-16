@@ -3533,6 +3533,7 @@ body {
     }
     .mobile-nav {
         width: 100%;
+        left: -100%;
     }
     .categories {
         gap: 0.5rem;
