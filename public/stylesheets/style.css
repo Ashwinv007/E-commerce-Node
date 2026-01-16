@@ -1995,8 +1995,15 @@ body {
             color: var(--primary);
         }
 
+
 .otp-back-to-login:hover i {
     transform: translateX(-3px);
+}
+
+@media (max-width: 480px) {
+    .brand-section {
+        display: none;
+    }
 }
 
 /* Orders Page Styling */
