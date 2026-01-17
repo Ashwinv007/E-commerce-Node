@@ -1,23 +1,23 @@
-<div class="container">
+<main class="product-page">
     {{#if product}}
-    <div class="product-section">
-        <div class="product-image-section">
+    <section class="product-hero">
+        <div class="product-image">
             <div class="image-container">
                 {{#if product.imageUrls.[0]}}
-                    <img id="mainImage" src="{{product.imageUrls.[0]}}" alt="{{product.productName}}">
-                    {{#if product.imageUrls.[1]}}
-                    <button class="nav-button prev" onclick="changeImage(-1)">‹</button>
-                    <button class="nav-button next" onclick="changeImage(1)">›</button>
-                    {{/if}}
+                <img id="mainImage" src="{{product.imageUrls.[0]}}" alt="{{product.productName}}">
+                {{#if product.imageUrls.[1]}}
+                <button class="nav-button prev" onclick="changeImage(-1)">‹</button>
+                <button class="nav-button next" onclick="changeImage(1)">›</button>
+                {{/if}}
                 {{else}}
-                    <img id="mainImage" src="https://source.unsplash.com/random/400x400/?product" alt="No image available">
+                <img id="mainImage" src="https://source.unsplash.com/random/400x400/?product"
+                    alt="No image available">
                 {{/if}}
             </div>
         </div>
-
-        <div class="product-details">
+        <div class="product-info">
             <h1 class="product-title">{{product.productName}}</h1>
-            
+
             <div class="rating-section">
                 {{#if response.average}}
                 <span class="stars" data-rating="{{response.average}}"></span>
@@ -45,89 +45,92 @@
                 </div>
             </div>
 
-            <div class="action-buttons">
-                <button id="cartButton" class="add-to-cart-btn" onclick="addToCart(event, '{{product._id}}')">
+            <div class="product-actions">
+                <button id="cartButton" class="add-to-cart-btn add-to-cart"
+                    onclick="addToCart(event, '{{product._id}}')">
                     <span>🛒</span>
                     Add to Cart
                 </button>
-                <button class="icon-btn">♡</button>
-                <button class="icon-btn">⤴</button>
             </div>
-             <div id="stockAvailability" name="stockAvailability" >
-        <input type="number" id="stockAmount" name="stockAmount" style="display:none" value="{{product.stockAmount}}">
-        <h2 id="runningOutOfStock" style="display: none; color:red">Running out of Stock!</h2>
-        <h2 id="outOfStock" style="display:none; color:red">Out of Stock</h2>
-         </div>
-
-            <div class="shipping-info">
-                <span class="info-label">Free Shipping</span>
-                <span class="info-value">On orders over ₹500</span>
-                
-                <span class="info-label">Delivery</span>
-                <span class="info-value">3-5 business days</span>
-                
-                <span class="info-label">Returns</span>
-                <span class="info-value">30-day return policy</span>
+            <div id="stockAvailability" name="stockAvailability">
+                <input type="number" id="stockAmount" name="stockAmount" style="display:none"
+                    value="{{product.stockAmount}}">
+                <h2 id="runningOutOfStock" style="display: none; color:red">Running out of Stock!</h2>
+                <h2 id="outOfStock" style="display:none; color:red">Out of Stock</h2>
             </div>
         </div>
-    </div>
+    </section>
     {{/if}}
 
-    <div class="reviews-section">
+    <section class="product-meta">
+        <div class="shipping-info">
+            <span class="info-label">Free Shipping</span>
+            <span class="info-value">On orders over ₹500</span>
+
+            <span class="info-label">Delivery</span>
+            <span class="info-value">3-5 business days</span>
+
+            <span class="info-label">Returns</span>
+            <span class="info-value">30-day return policy</span>
+        </div>
+    </section>
+
+    <section class="product-reviews">
         <h2 class="reviews-title">Customer Reviews</h2>
 
         {{#if response.totalReviews}}
         <div class="reviews-summary">
             <span class="summary-label">Average Rating</span>
             <span class="summary-value">
-                 <span class="stars" data-rating="{{response.average}}"></span>
+                <span class="stars" data-rating="{{response.average}}"></span>
             </span>
-            
+
             <span class="summary-label">Total Reviews</span>
             <span class="summary-value">{{response.totalReviews}}</span>
         </div>
         {{/if}}
 
         {{#if hasOrdered}}
-            {{#if userReview}}
-                <h3 class="review-title">Your Review</h3>
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="review-stars" data-rating="{{userReview.ratingValue}}">
-                        </div>
-                        <span class="reviewer-name">{{userReview.user.name}}</span>
-                        <span class="review-date">{{formatDate userReview.date}}</span>
+        {{#if userReview}}
+        <h3 class="review-title">Your Review</h3>
+        <div class="review-item">
+            <div class="review-header">
+                <div class="review-stars" data-rating="{{userReview.ratingValue}}">
+                </div>
+                <span class="reviewer-name">{{userReview.user.name}}</span>
+                <span class="review-date">{{formatDate userReview.date}}</span>
+            </div>
+            <p class="review-text">
+                {{userReview.userReview}}
+            </p>
+        </div>
+        {{else}}
+        <div class="write-review">
+            <h3 class="review-title">Write a Review</h3>
+            <form action="/submit-review" method="post" id="reviewForm">
+                <div class="rating-input">
+                    <label class="rating-label">Rating:</label>
+                    <div class="star-rating">
+                        <span data-value="1">☆</span><span data-value="2">☆</span><span data-value="3">☆</span><span
+                            data-value="4">☆</span><span data-value="5">☆</span>
                     </div>
-                    <p class="review-text">
-                        {{userReview.userReview}}
-                    </p>
+                    <input type="hidden" name="ratingValue" id="ratingValue" value="0">
+                    <input type="hidden" name="productId" value="{{product._id}}">
+                    <input type="hidden" name="userId" value="{{user._id}}">
                 </div>
-            {{else}}
-                <div class="write-review">
-                    <h3 class="review-title">Write a Review</h3>
-                    <form action="/submit-review" method="post" id="reviewForm">
-                        <div class="rating-input">
-                            <label class="rating-label">Rating:</label>
-                            <div class="star-rating">
-                                <span data-value="1">☆</span><span data-value="2">☆</span><span data-value="3">☆</span><span data-value="4">☆</span><span data-value="5">☆</span>
-                            </div>
-                            <input type="hidden" name="ratingValue" id="ratingValue" value="0">
-                            <input type="hidden" name="productId" value="{{product._id}}">
-                            <input type="hidden" name="userId" value="{{user._id}}">
-                        </div>
 
-                        <textarea name="userReview" class="review-input review-textarea" placeholder="Comment"></textarea>
-                        
-                        <button type="submit" class="submit-review-btn">Submit Review</button>
-                    </form>
-                </div>
-            {{/if}}
+                <textarea name="userReview" class="review-input review-textarea" placeholder="Comment"></textarea>
+
+                <button type="submit" class="submit-review-btn">Submit Review</button>
+            </form>
+        </div>
+        {{/if}}
         {{/if}}
 
         {{#each reviews}}
         <div class="review-item">
             <div class="review-header">
-                 <div class="review-stars" data-rating="{{this.ratingValue}}">
+                <div class="review-stars" data-rating="{{this.ratingValue}}">
                 </div>
                 <span class="reviewer-name">{{this.user.name}}</span>
                 <span class="review-date">{{formatDate this.date}}</span>
@@ -137,11 +140,11 @@
             </p>
         </div>
         {{/each}}
-    </div>
-</div>
+    </section>
+</main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Image Slider
         const images = [
             {{#each product.imageUrls}}
@@ -151,7 +154,7 @@
         let currentImageIndex = 0;
         const mainImage = document.getElementById('mainImage');
 
-        window.changeImage = function(direction) {
+        window.changeImage = function (direction) {
             currentImageIndex += direction;
             if (currentImageIndex < 0) {
                 currentImageIndex = images.length - 1;
@@ -165,7 +168,7 @@
 
         // Quantity Controls
         const quantityInput = document.getElementById('quantityInput');
-        window.updateQuantity = function(change) {
+        window.updateQuantity = function (change) {
             if (quantityInput) {
                 let quantity = parseInt(quantityInput.value, 10);
                 quantity += change;
