@@ -905,7 +905,7 @@ body {
 
         /* Responsive design */
         @media (max-width: 768px) {
-            body {
+            .main-content {
                 padding: 1rem;
             }
 
@@ -1192,7 +1192,7 @@ body {
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            body {
+            .main-content {
                 padding: 1rem;
             }
 
@@ -1687,7 +1687,7 @@ body {
         }
 
         @media (max-width: 768px) {
-            body {
+            .main-content {
                 padding: 1rem;
             }
 
