@@ -867,19 +867,15 @@ body {
         /* Checkout button */
         .checkout-btn {
             width: 100%;
+            padding: 1rem;
             background: var(--primary);
             color: var(--white);
             border: none;
-            padding: 1rem;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: background 0.3s ease, transform 0.1s ease;
+            transition: all 0.3s ease, transform 0.1s ease;
             margin-bottom: 1rem;
         }
 
@@ -2023,7 +2019,7 @@ body {
         padding: 1rem 4rem; /* Adjust padding for medium screens */
     }
     .title hr {
-        width: 80%; /* Adjust hr width for medium screens */
+        display: none; /* Hide the grey hr */
     }
 }
 
@@ -3696,5 +3692,10 @@ body {
     .brandImage {
         width: 100%;
         height: auto;
+    }
+}
+@media (max-width: 768px) {
+    .title a {
+        display: none;
     }
 }
