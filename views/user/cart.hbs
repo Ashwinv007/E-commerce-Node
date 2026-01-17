@@ -1,104 +1,115 @@
-<section id="cartProductList">
-    {{#if products.length}}
-    <div class="order-summary-card">
-        <!-- Header with item count -->
-        <div class="summary-header">
-            <i class="fas fa-shopping-cart"></i>
-            <h2>Order Summary</h2>
-            <span class="item-badge">{{products.length}} items</span>
-        </div>
-
-        <!-- Price Breakdown -->
-        <div class="price-breakdown">
-            <!-- Subtotal -->
-            <div class="price-row">
-                <span class="price-label">Subtotal</span>
-                <span class="price-value">RS {{totalValue}}</span>
-            </div>
-
-            <!-- Shipping with Free badge -->
-            <div class="price-row">
-                <span class="price-label">Shipping</span>
-                <div>
-                    <span class="free-badge">Free!</span>
-                    <span class="original-price">RS 0.00</span>
-                </div>
-            </div>
-
-            <!-- Discount -->
-            <div class="price-row">
-                <span class="price-label">Discount</span>
-                <span class="price-value discount-value">-RS 0.00</span>
-            </div>
-        </div>
-
-        <!-- Total Section -->
-        <div class="total-section">
-            <div class="total-row">
-                <span class="total-label">Total</span>
-                <span class="total-value" id="total">RS {{totalValue}}</span>
-            </div>
-        </div>
-
-        <!-- Checkout Button -->
-        <a href="/place-order" class="checkout-btn">
-            <i class="fas fa-credit-card"></i>
-            Proceed to Checkout
-        </a>
-
-        <!-- Security Badge -->
-        <div class="security-badge">
-            <i class="fas fa-lock"></i>
-            <span>Secure checkout with SSL encryption</span>
-        </div>
-    </div>
-    {{/if}}
-
+<section class="cart-page" id="cartProductList">
     <div class="cart-container">
-        {{#each products}}
-        <!-- Cart Item -->
-        <div class="cart-item">
-            <!-- Remove Button - Top Right -->
-            <button class="remove-btn" onclick="removeProductFromCart('{{this._id}}','{{this.product._id}}','{{../user._id}}','{{this.product.productName}}',-1)" title="Remove item">
-                <i class="fas fa-times"></i>
-            </button>
+        <section class="cart-items">
+            {{#if products.length}}
+                {{#each products}}
+                <div class="cart-item">
+                    <!-- Remove Button - Top Right -->
+                    <button class="remove-btn" onclick="removeProductFromCart('{{this._id}}','{{this.product._id}}','{{../user._id}}','{{this.product.productName}}',-1)" title="Remove item">
+                        <i class="fas fa-times"></i>
+                    </button>
 
-            <div class="product-image-container">
-                <span class="category-badge">{{this.product.category}}</span>
-                <img src="{{this.product.thumbnailUrl}}" alt="{{this.product.productName}}">
-            </div>
+                    <div class="product-image-container">
+                        <span class="category-badge">{{this.product.category}}</span>
+                        <img src="{{this.product.thumbnailUrl}}" alt="{{this.product.productName}}">
+                    </div>
 
-            <div class="product-details">
-                <h3 class="product-name">{{this.product.productName}}</h3>
-                <div class="stock-status">
-                    <i class="fas fa-check-circle"></i>
-                    <span>In Stock</span>
-                </div>
-                <div class="price-container">
-                    <span class="current-price">RS {{this.product.productPrice}}</span>
-                </div>
-            </div>
+                    <div class="product-details">
+                        <h3 class="product-name">{{this.product.productName}}</h3>
+                        <div class="stock-status">
+                            <i class="fas fa-check-circle"></i>
+                            <span>In Stock</span>
+                        </div>
+                        <div class="price-container">
+                            <span class="current-price">RS {{this.product.productPrice}}</span>
+                        </div>
+                    </div>
 
-            <div class="cart-controls">
-                <div class="quantity-controls">
-                    <span class="quantity-label">Qty:</span>
-                    <div class="quantity-wrapper">
-                        <button class="quantity-btn" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <div class="quantity-display" id="{{this.product._id}}">{{this.quantity}}</div>
-                        <button class="quantity-btn" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                    <div class="cart-controls">
+                        <div class="quantity-controls">
+                            <span class="quantity-label">Qty:</span>
+                            <div class="quantity-wrapper">
+                                <button class="quantity-btn" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <div class="quantity-display" id="{{this.product._id}}">{{this.quantity}}</div>
+                                <button class="quantity-btn" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="subtotal">
+                            <div class="subtotal-label">Subtotal:</div>
+                            <div class="subtotal-price">RS {{multiply this.product.productPrice this.quantity}}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="subtotal">
-                    <div class="subtotal-label">Subtotal:</div>
-                    <div class="subtotal-price">RS {{multiply this.product.productPrice this.quantity}}</div>
+                {{/each}}
+            {{else}}
+                 <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Looks like you haven't added anything to your cart yet.</p>
+                </div>
+            {{/if}}
+        </section>
+
+        {{#if products.length}}
+        <aside class="order-summary">
+            <div class="order-summary-card">
+                <!-- Header with item count -->
+                <div class="summary-header">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Order Summary</h2>
+                    <span class="item-badge">{{products.length}} items</span>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div class="price-breakdown">
+                    <!-- Subtotal -->
+                    <div class="price-row">
+                        <span class="price-label">Subtotal</span>
+                        <span class="price-value">RS {{totalValue}}</span>
+                    </div>
+
+                    <!-- Shipping with Free badge -->
+                    <div class="price-row">
+                        <span class="price-label">Shipping</span>
+                        <div>
+                            <span class="free-badge">Free!</span>
+                            <span class="original-price">RS 0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Discount -->
+                    <div class="price-row">
+                        <span class="price-label">Discount</span>
+                        <span class="price-value discount-value">-RS 0.00</span>
+                    </div>
+                </div>
+
+                <!-- Total Section -->
+                <div class="total-section">
+                    <div class="total-row">
+                        <span class="total-label">Total</span>
+                        <span class="total-value" id="total">RS {{totalValue}}</span>
+                    </div>
+                </div>
+
+                <!-- Checkout Button -->
+                <a href="/place-order" class="checkout-btn">
+                    <i class="fas fa-credit-card"></i>
+                    Proceed to Checkout
+                </a>
+
+                <!-- Security Badge -->
+                <div class="security-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure checkout with SSL encryption</span>
                 </div>
             </div>
-        </div>
-        {{/each}}
+        </aside>
+        {{/if}}
     </div>
 </section>
 

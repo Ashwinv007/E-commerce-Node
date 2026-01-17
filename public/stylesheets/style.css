@@ -752,10 +752,10 @@ body {
             border-radius: 12px;
             border: 1px solid var(--border);
             width: 100%;
-            max-width: 50%;
             padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin: 2rem auto;
+            display: flex; /* Added for vertical stacking */
+            flex-direction: column; /* Added for vertical stacking */
         }
 
         /* Header with badge */
@@ -877,6 +877,10 @@ body {
             cursor: pointer;
             transition: all 0.3s ease, transform 0.1s ease;
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .checkout-btn:hover {
@@ -896,6 +900,7 @@ body {
             gap: 0.5rem;
             color: var(--light);
             font-size: 0.875rem;
+            margin-top: 1rem;
         }
 
         .security-badge i {
@@ -922,12 +927,6 @@ body {
             }
         }
 
-
-        .cart-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
         /* Cart Item Card */
         .cart-item {
             background: var(--white);
@@ -936,6 +935,7 @@ body {
             padding: 1.5rem;
             margin-bottom: 1rem;
             display: flex;
+            flex-direction: column;
             gap: 1.5rem;
             position: relative;
             transition: box-shadow 0.3s ease;
