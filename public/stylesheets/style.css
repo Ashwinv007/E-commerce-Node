@@ -573,9 +573,9 @@ body {
 .top-categories-container{
     display:flex;
     gap:4.5rem;
-    overflow-x:auto;
-    scrollbar-width: none;
-    padding:1rem 14rem
+    flex-wrap: wrap;
+    justify-content: center;
+    padding:1rem 14rem;
 }
 
 
@@ -3577,7 +3577,7 @@ body {
     }
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 2500px) {
     .title, .smartphones-container, .top-categories-container, .brands-container, .essentials-container {
         padding-left: 4rem;
         padding-right: 4rem;
