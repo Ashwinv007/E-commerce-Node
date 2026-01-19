@@ -3538,6 +3538,10 @@ body {
         font-size: 0.9rem;
         padding: 0.4rem 0.8rem;
     }
+
+    .brand-section {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
