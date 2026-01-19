@@ -30,7 +30,7 @@
                         <td>₹{{this.totalAmount}}</td>
                         <td>{{this.paymentMethod}}</td>
                         <td><span class="status-badge status-{{this.status}}">{{this.status}}</span></td>
-                        <td><a href="/view-order-products/{{this._id}}" class="action-btn view">View Products</a></td>
+                        <td><a href="/view-product/{{this.productDetails._id}}" class="action-btn view">View Products</a></td>
                         {{#if this.userAction}}
                             <td><a href="/track-order-delivery/{{this._id}}" class="action-btn track">Track Order</a></td>
                             <td><button onclick="cancelOrderedProducts('{{this._id}}')" class="action-btn cancel">Cancel</button></td>
