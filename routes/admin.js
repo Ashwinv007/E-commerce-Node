@@ -325,7 +325,7 @@ router.get('/add-product', verifyLogin,function(req,res){
 })
 
 router.post('/add-product', verifyLogin, (req, res) => {
-  req.body.sellerId = req.session.admin._id
+  req.body.sellerId = (req.session.admin._id).toString();
   productHelpers.addProduct(req.body, async (id) => {
     try {
       if (!req.files || !req.files.productImage) {
