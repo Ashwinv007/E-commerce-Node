@@ -1,46 +1,47 @@
-<section class="smartphones" style="padding: 2rem;">
+<section class="smartphones">
     <div class="title">
         <h2>{{#if matchingProducts}}Search Results{{else}}All Products{{/if}}</h2>
+        <hr>
     </div>
-    <div class="smartphones-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
+    <div class="smartphones-container">
         {{#if matchingProducts}}
             {{#each matchingProducts}}
-                <div class="card" style="width: 18rem;">
-                    <a href="/view-product/{{this._id}}" style="text-decoration: none; color: inherit;">
+                <div class="card">
+                    <a href="/view-product/{{this._id}}">
                         <div class="mobileImage">
                             <img src="{{this.imageUrls.[0]}}" alt="{{this.productName}}">
                         </div>
                         <div class="smartphone-details">
-                            <h3>{{this.productName}}</h3>
+                            <h3 style="white-space: nowrap; overflow: hidden;">{{this.productName}}</h3>
                             <p class="price">₹ {{this.productPrice}}</p>
                             <div id="stockAvailability_{{this._id}}">
                                 <input type="hidden" id="stockAmount_{{this._id}}" value="{{this.stockAmount}}">
                                 <p class="stock-message running-out" style="display: none; color:red">Running out of Stock!</p>
                                 <p class="stock-message out-of-stock" style="display: none; color:red">Out of Stock</p>
                             </div>
+                            <button id="{{this._id}}_cartButton" class="add-to-cart" onclick="addToCart(event, '{{this._id}}')">Add to Cart</button>
                         </div>
                     </a>
-                    <button id="{{this._id}}_cartButton" class="add-to-cart" onclick="addToCart('{{this._id}}')">Add to Cart</button>
                 </div>
             {{/each}}
         {{else}}
             {{#each product}}
-                <div class="card" style="width: 18rem;">
-                    <a href="/view-product/{{this._id}}" style="text-decoration: none; color: inherit;">
+                <div class="card">
+                    <a href="/view-product/{{this._id}}">
                         <div class="mobileImage">
                             <img src="{{this.imageUrls.[0]}}" alt="{{this.productName}}">
                         </div>
                         <div class="smartphone-details">
-                            <h3>{{this.productName}}</h3>
+                            <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{this.productName}}</h3>
                             <p class="price">₹ {{this.productPrice}}</p>
                             <div id="stockAvailability_{{this._id}}">
                                 <input type="hidden" id="stockAmount_{{this._id}}" value="{{this.stockAmount}}">
                                 <p class="stock-message running-out" style="display: none; color:red">Running out of Stock!</p>
                                 <p class="stock-message out-of-stock" style="display: none; color:red">Out of Stock</p>
                             </div>
+                            <button id="{{this._id}}_cartButton" class="add-to-cart" onclick="addToCart(event, '{{this._id}}')">Add to Cart</button>
                         </div>
                     </a>
-                    <button id="{{this._id}}_cartButton" class="add-to-cart" onclick="addToCart('{{this._id}}')">Add to Cart</button>
                 </div>
             {{/each}}
         {{/if}}
@@ -74,22 +75,5 @@
             if(outOfStockMsg) outOfStockMsg.style.display = "block";
             if(cartButton) cartButton.disabled = true;
         }
-    }
-
-    function addToCart(productId) {
-        $.ajax({
-            url: '/add-to-cart/' + productId,
-            method: 'get',
-            success: (response) => {
-                if (response.status) {
-                    let count_span = $('.cart-badge');
-                    let count = parseInt(count_span.html()) || 0;
-                    count = count + 1;
-                    count_span.html(count).show();
-                } else {
-                    alert('Could not add to cart');
-                }
-            }
-        });
     }
 </script>
