@@ -8,7 +8,7 @@
             <table class="orders-table">
                 <thead>
                     <tr>
-                        <th scope="col">Image</th>
+                        {{!-- <th scope="col">Image</th> --}}
                         <th scope="col">Date</th>
                         <th scope="col">User</th>
                         <th scope="col">Address</th>
@@ -23,7 +23,7 @@
                 <tbody>
                     {{#each orders}}
                     <tr>
-                        <td><img class="order-product-image" src="{{this.product.[0].thumbnailUrl}}" alt=""></td>
+                        {{!-- <td><img class="order-product-image" src="{{this.product.[0].thumbnailUrl}}" alt=""></td> --}}
                         <td>{{getStringDate this.date}}</td>
                         <td>{{setIndex this.user}}</td>
                         <td>{{this.deliveryDetails.address}}</td>
