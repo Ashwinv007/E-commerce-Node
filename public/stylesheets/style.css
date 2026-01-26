@@ -477,10 +477,11 @@ body {
     display:flex;
     flex-direction:column;
     flex:1;                    
-    gap:0.5rem;
+    /* gap:0.5rem; */
 }
 
 .smartphone-details h3{
+    margin-bottom:0.5rem;
     font-size:0.85rem;
     line-height:1.2;
     overflow:hidden;
@@ -491,6 +492,7 @@ body {
 
 /* Price styling */
 .price {
+  margin-bottom:0.75rem;
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--heading);
