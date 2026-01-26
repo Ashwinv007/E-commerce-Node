@@ -67,16 +67,14 @@
         right: 0;
     }
 
-    .dropdown-content.show {
-        display: block;
-    }
-
-    /* Disable the default hover effect if it exists */
-    .dropdown:hover > .dropdown-content {
+    /* Disable the hover effect from the global stylesheet */
+    .dropdown:hover .dropdown-content {
         display: none;
     }
-    .dropdown-toggle:hover + .dropdown-content.show {
-         display: block;
+
+    /* Show dropdown on click. This overrides the rule above because it appears later. */
+    .dropdown .dropdown-content.show {
+        display: block;
     }
 </style>
 
