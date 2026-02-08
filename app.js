@@ -123,6 +123,11 @@ app.use(session({
     sameSite: "lax"
   }
 }))
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal server error" });
+});
+
 // db.connect((err)=>{
 //   if (err)console.log('Error connecting to database' + err)
 //   else console.log('Connected to database')
