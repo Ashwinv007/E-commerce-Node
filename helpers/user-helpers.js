@@ -338,9 +338,20 @@ module.exports={
 
         return new Promise(async(resolve,reject)=>{
             let cart = await db.get().collection(collections.CART_COLLECTION).findOne({user:objectId(userId)})
-            let productIndex = cart.products.findIndex(product => product.item.toString() === details.product)
-            let productInCart = cart.products[productIndex]
-            let currentQuantity = productInCart.quantity
+            // let productIndex = cart.products.findIndex(product => product.item.toString() === details.product)
+            // let productInCart = cart.products[productIndex]
+            // let currentQuantity = productInCart.quantity
+
+            let productIndex = cart.products.findIndex(
+  product => product.item.toString() === details.product
+)
+
+if (productIndex === -1) {
+  return resolve({ error: "Product not found in cart" })
+}
+
+let productInCart = cart.products[productIndex]
+let currentQuantity = productInCart.quantity || 0
 
             // Get product price
             const productDetails = await productHelpers.findProduct(details.product);
